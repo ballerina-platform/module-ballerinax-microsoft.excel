@@ -116,8 +116,7 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
     import ballerina/config;
     import ballerina/log;
     import ballerina/time;
-    import ballerinax/microsoft.sheets1 as sheets;
-    import ballerinax/microsoft.onedrive1 as onedrive;
+    import ballerinax/microsoft.sheets as sheets;
 
     // Create the Microsoft Graph Client configuration by reading the config file.
     sheets:MicrosoftGraphConfiguration msGraphConfig = {
