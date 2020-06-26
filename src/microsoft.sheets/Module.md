@@ -41,11 +41,11 @@ TRUST_STORE_PASSWORD=""
 ```
 
 **Example Code**
-Creating a `microsoft.sheets1:MSSpreadsheetClient` by giving the HTTP client config details. The module `microsoft.sheets1` 
+Creating a `microsoft.sheets:MSSpreadsheetClient` by giving the HTTP client config details. The module `microsoft.sheets` 
 is referred as the module prefix `sheets`.
 
 ```
-    import ballerinax/microsoft.sheets1 as sheets;
+    import ballerinax/microsoft.sheets as sheets;
 
     sheets:MicrosoftGraphConfiguration msGraphConfig = {
         baseUrl: config:getAsString("MS_BASE_URL"),
