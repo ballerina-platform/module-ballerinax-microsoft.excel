@@ -103,7 +103,9 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
 3. Create a new Ballerina project by executing the following command.
 
 	```shell
-	<PROJECT_ROOT_DIRECTORY>$ ballerina init
+	<PROJECT_ROOT_DIRECTORY>$ ballerina new project_name
+	<PROJECT_ROOT_DIRECTORY>$ cd project_name
+	<PROJECT_ROOT_DIRECTORY>$ ballerina add module_name
 	```
 
 4. Import the Microsoft Graph connector to your Ballerina program as follows.
