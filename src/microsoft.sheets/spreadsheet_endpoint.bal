@@ -19,8 +19,6 @@ import ballerina/log;
 import ballerina/oauth2;
 
 # Microsoft Spreadsheet Client Object.
-# + msSpreadsheetClient - HTTP client endpoint for the spreadsheet API
-# + microsoftGraphConfig - Configurations for accessing spreadsheet API
 public type MsSpreadsheetClient client object {
     private http:Client msSpreadsheetClient;
     private MicrosoftGraphConfiguration microsoftGraphConfig;
@@ -71,9 +69,6 @@ public type MsSpreadsheetClient client object {
 };
 
 # Workbook Client Object.
-# + workbookClient - HTTP client endpoint for the workbook
-# + properties - Workbook specific properties
-# + microsoftGraphConfig - Configurations for accessing spreadsheet API
 public type Workbook client object {
     private http:Client workbookClient;
     private WorkbookProperties properties = {"path": "", "workbookName": ""};
@@ -217,9 +212,6 @@ public type Workbook client object {
 };
 
 # Worksheet Client Object.
-# + worksheetClient - HTTP client endpoint for the worksheet
-# + properties - worksheet specific properties
-# + microsoftGraphConfig - Configurations for accessing spreadsheet API
 public type Worksheet client object {
     private http:Client worksheetClient;
     private WorksheetProperties properties;
@@ -362,8 +354,6 @@ public type Worksheet client object {
 };
 
 # Table Client Object.
-# + tableClient - HTTP client endpoint for the table
-# + properties - table specific properties
 public type Table client object {
     private http:Client tableClient;
     private TableProperties properties;
