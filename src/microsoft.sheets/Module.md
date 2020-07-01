@@ -23,7 +23,7 @@ This module contains operations to perform CRUD (Create, Read, Update, and Delet
 Instantiate the connector by giving authentication details in an HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Microsoft Graph API uses OAuth 2.0 to authenticate and authorize requests. 
 
 **Obtaining configuration information**
-The Microsoft Sheets connector can be minimally instantiated in the HTTP client config using the access token (`\<MS_ACCESS_TOKEN>`), the client ID (`\<MS_CLIENT_ID>`), the client secret (`\<MS_CLIENT_SECRET>`), and the refresh token (`\<MS_REFRESH_TOKEN>`). Specific details on obtaining these values are mentioned in the [README](https://github.com/ballerina-platform/module-microsoftgraph/blob/master/README.md).
+The Microsoft Sheets connector can be minimally instantiated in the HTTP client config using the access token (`<MS_ACCESS_TOKEN>`), the client ID (`<MS_CLIENT_ID>`), the client secret (`<MS_CLIENT_SECRET>`), and the refresh token (`<MS_REFRESH_TOKEN>`). Specific details on obtaining these values are mentioned in the [README](https://github.com/ballerina-platform/module-ballerinax-microsoft.sheets/blob/master/README.md).
 
 **Add project configurations file**
 
@@ -41,7 +41,7 @@ TRUST_STORE_PASSWORD=""
 ```
 
 **Example Code**
-Creating a `microsoft.sheets:MSSpreadsheetClient` by giving the HTTP client config details. The `microsoft.sheets` module 
+Creating a `microsoft.sheets:MsSpreadsheetClient` by giving the HTTP client config details. The `microsoft.sheets` module 
 is referred by the `sheets` module prefix.
 
 ```
@@ -50,7 +50,7 @@ is referred by the `sheets` module prefix.
     sheets:MicrosoftGraphConfiguration msGraphConfig = {
         baseUrl: config:getAsString("MS_BASE_URL"),
         msInitialAccessToken: config:getAsString("MS_ACCESS_TOKEN"),
-        msClientID: config:getAsString("MS_CLIENT_ID"),
+        msClientId: config:getAsString("MS_CLIENT_ID"),
         msClientSecret: config:getAsString("MS_CLIENT_SECRET"),
         msRefreshToken: config:getAsString("MS_REFRESH_TOKEN"),
         msRefreshURL: config:getAsString("MS_REFRESH_URL"),
@@ -68,7 +68,7 @@ is referred by the `sheets` module prefix.
         }
     };
 
-    sheets:MSSpreadsheetClient msSpreadsheetClient = new(msGraphConfig);
+    sheets:MsSpreadsheetClient msSpreadsheetClient = new(msGraphConfig);
 ```
 
 Open an existing workbook named `Book.xlsx` (no need of specifying the `.xlsx` workbook extension here).
