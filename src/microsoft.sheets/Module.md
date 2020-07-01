@@ -23,7 +23,7 @@ This module contains operations to perform CRUD (Create, Read, Update, and Delet
 Instantiate the connector by giving authentication details in an HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Microsoft Graph API uses OAuth 2.0 to authenticate and authorize requests. 
 
 **Obtaining configuration information**
-The Microsoft Sheets connector can be minimally instantiated in the HTTP client config using the access token (`<MS_ACCESS_TOKEN>`), the client ID (`<MS_CLIENT_ID>`), the client secret (`<MS_CLIENT_SECRET>`), and the refresh token (`<MS_REFRESH_TOKEN>`). Specific details on obtaining these values are mentioned in the [README](https://github.com/miyurud/module-ballerinax-microsoft.sheets/blob/master/README.md).
+The Microsoft Sheets connector can be minimally instantiated in the HTTP client config using the access token (`<MS_ACCESS_TOKEN>`), the client ID (`<MS_CLIENT_ID>`), the client secret (`<MS_CLIENT_SECRET>`), and the refresh token (`<MS_REFRESH_TOKEN>`). Specific details on obtaining these values are mentioned in the [README](https://github.com/ballerina-platform/module-ballerinax-microsoft.sheets/blob/master/README.md).
 
 **Add project configurations file**
 
