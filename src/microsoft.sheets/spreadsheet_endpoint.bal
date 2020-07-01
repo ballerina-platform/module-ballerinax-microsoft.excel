@@ -21,16 +21,16 @@ import ballerina/oauth2;
 # Microsoft Spreadsheet Client Object.
 # + msSpreadsheetClient - HTTP client endpoint for the spreadsheet API
 # + microsoftGraphConfig - Configurations for accessing spreadsheet API
-public type MSSpreadsheetClient client object {
-    http:Client msSpreadsheetClient;
-    MicrosoftGraphConfiguration microsoftGraphConfig;
+public type MsSpreadsheetClient client object {
+    private http:Client msSpreadsheetClient;
+    private MicrosoftGraphConfiguration microsoftGraphConfig;
 
     public function init(MicrosoftGraphConfiguration msGraphConfig) {
         self.microsoftGraphConfig = msGraphConfig;
         oauth2:OutboundOAuth2Provider oauth2Provider3 = new ({
             accessToken: msGraphConfig.msInitialAccessToken,
             refreshConfig: {
-                clientId: msGraphConfig.msClientID,
+                clientId: msGraphConfig.msClientId,
                 clientSecret: msGraphConfig.msClientSecret,
                 refreshToken: msGraphConfig.msRefreshToken,
                 refreshUrl: msGraphConfig.msRefreshURL,
@@ -64,7 +64,7 @@ public type MSSpreadsheetClient client object {
     # + workbookName - Name of the Workbook
     # + return - A Workbook client object on success, else returns an error
     public remote function openWorkbook(string path, string workbookName) returns Workbook|Error {
-        Workbook workBook = new (self.microsoftGraphConfig, path, workbookName);
+        Workbook workBook = new (self.msSpreadsheetClient, path, workbookName);
 
         return workBook;
     }
@@ -75,45 +75,12 @@ public type MSSpreadsheetClient client object {
 # + properties - Workbook specific properties
 # + microsoftGraphConfig - Configurations for accessing spreadsheet API
 public type Workbook client object {
-    http:Client workbookClient;
-    WorkbookProperties properties = {"path": "", "workbookName": ""};
-    MicrosoftGraphConfiguration microsoftGraphConfig;
-
-    public function init(MicrosoftGraphConfiguration msGraphConfig, string path, string workbookName) {
-        self.microsoftGraphConfig = msGraphConfig;
+    private http:Client workbookClient;
+    private WorkbookProperties properties = {"path": "", "workbookName": ""};
+    
+    public function init(http:Client wbClient, string path, string workbookName) {
+        self.workbookClient = wbClient;
         self.properties = {"path": path, "workbookName": workbookName};
-
-        oauth2:OutboundOAuth2Provider oauth2Provider3 = new ({
-            accessToken: msGraphConfig.msInitialAccessToken,
-            refreshConfig: {
-                clientId: msGraphConfig.msClientID,
-                clientSecret: msGraphConfig.msClientSecret,
-                refreshToken: msGraphConfig.msRefreshToken,
-                refreshUrl: msGraphConfig.msRefreshURL,
-                clientConfig: {
-                    secureSocket: {
-                        trustStore: {
-                            path: msGraphConfig.trustStorePath,
-                            password: msGraphConfig.trustStorePassword
-                        }
-                    }
-                }
-            }
-        });
-
-        http:BearerAuthHandler oauth2Handler3 = new (oauth2Provider3);
-
-        self.workbookClient = new (msGraphConfig.baseUrl, {
-                auth: {
-                    authHandler: oauth2Handler3
-                },
-                secureSocket: {
-                    trustStore: {
-                        path: msGraphConfig.trustStorePath,
-                        password: msGraphConfig.trustStorePassword
-                    }
-                }
-            });
     }
 
     # Get the properties of the workbook.
@@ -169,7 +136,7 @@ public type Workbook client object {
         int position = <int>sheetPosition;
 
         //Populate a new worksheet object using the information from the properties as well as from the received JSON object
-        Worksheet workSheet = new (self.microsoftGraphConfig, self.properties.path,
+        Worksheet workSheet = new (self.workbookClient, self.properties.path,
             self.properties.workbookName, sheetId, worksheetName, position);
         return workSheet;
     }
@@ -224,7 +191,7 @@ public type Workbook client object {
         int position = <int>sheetPosition;
 
         //Populate a new worksheet object using the information from the properties as well as from the received JSON object
-        Worksheet workSheet = new (self.microsoftGraphConfig, self.properties.path,
+        Worksheet workSheet = new (self.workbookClient, self.properties.path,
             self.properties.workbookName, sheetId, worksheetName, position);
         return workSheet;
     }
@@ -254,13 +221,12 @@ public type Workbook client object {
 # + properties - worksheet specific properties
 # + microsoftGraphConfig - Configurations for accessing spreadsheet API
 public type Worksheet client object {
-    http:Client worksheetClient;
-    WorksheetProperties properties;
-    MicrosoftGraphConfiguration microsoftGraphConfig;
+    private http:Client worksheetClient;
+    private WorksheetProperties properties;
 
-    public function init(MicrosoftGraphConfiguration msGraphConfig, string path, string workbookName, string sheetId,
+    public function init(http:Client wsClient, string path, string workbookName, string sheetId,
         string worksheetName, int position) {
-        self.microsoftGraphConfig = msGraphConfig;
+        self.worksheetClient = wsClient;
         self.properties = {
             path: path,
             workbookName: workbookName,
@@ -268,37 +234,6 @@ public type Worksheet client object {
             worksheetName: worksheetName,
             position: position
         };
-        oauth2:OutboundOAuth2Provider oauth2Provider3 = new ({
-            accessToken: msGraphConfig.msInitialAccessToken,
-            refreshConfig: {
-                clientId: msGraphConfig.msClientID,
-                clientSecret: msGraphConfig.msClientSecret,
-                refreshToken: msGraphConfig.msRefreshToken,
-                refreshUrl: msGraphConfig.msRefreshURL,
-                clientConfig: {
-                    secureSocket: {
-                        trustStore: {
-                            path: msGraphConfig.trustStorePath,
-                            password: msGraphConfig.trustStorePassword
-                        }
-                    }
-                }
-            }
-        });
-
-        http:BearerAuthHandler oauth2Handler3 = new (oauth2Provider3);
-
-        self.worksheetClient = new (msGraphConfig.baseUrl, {
-                auth: {
-                    authHandler: oauth2Handler3
-                },
-                secureSocket: {
-                    trustStore: {
-                        path: msGraphConfig.trustStorePath,
-                        password: msGraphConfig.trustStorePassword
-                    }
-                }
-            });
     }
 
     # Get the properties of the Worksheet.
@@ -348,16 +283,16 @@ public type Worksheet client object {
 
         string createdTableName = <string>nameItem;
 
-        json|error newTableID = payload.id;
+        json|error newTableId = payload.id;
 
-        if !(newTableID is string) {
-            typedesc<any|error> typeOfTableId = typeof newTableID;
+        if !(newTableId is string) {
+            typedesc<any|error> typeOfTableId = typeof newTableId;
             return TypeConversionError("Invalid table ID; expected a `string` found " + typeOfTableId.toString());
         }
 
         //Populate a new Table object using the information from the properties as well as from the received JSON object
-        Table resultsTable = <@untainted>new (self.microsoftGraphConfig, self.properties.path,
-            self.properties.workbookName, self.properties.sheetId, self.properties.worksheetName, newTableID.toString(),
+        Table resultsTable = <@untainted>new (self.worksheetClient, self.properties.path,
+            self.properties.workbookName, self.properties.sheetId, self.properties.worksheetName, newTableId.toString(),
             address, createdTableName);
 
         if (createdTableName == tableName) {
@@ -418,7 +353,7 @@ public type Worksheet client object {
         //Address is not returned from the above API call. Hence the address is initialized to an empty string
         string address = "";
 
-        Table resultsTable = <@untainted>new (self.microsoftGraphConfig, self.properties.path,
+        Table resultsTable = <@untainted>new (self.worksheetClient, self.properties.path,
             self.properties.workbookName, self.properties.sheetId, self.properties.worksheetName,
             sheetIdentifier, address, tableName);
 
@@ -430,52 +365,21 @@ public type Worksheet client object {
 # + tableClient - HTTP client endpoint for the table
 # + properties - table specific properties
 public type Table client object {
-    http:Client tableClient;
-    TableProperties properties;
+    private http:Client tableClient;
+    private TableProperties properties;
 
-    public function init(MicrosoftGraphConfiguration msGraphConfig, string path, string workbookName, string sheetId,
-        string worksheetName, string tableID, string address, string tableName) {
+    public function init(http:Client tblClient, string path, string workbookName, string sheetId,
+        string worksheetName, string tableId, string address, string tableName) {
+        self.tableClient = tblClient;
         self.properties = {
             "path": path,
             "workbookName": workbookName,
             "sheetId": sheetId,
             "worksheetName": worksheetName,
-            "tableID": tableID,
+            "tableId": tableId,
             "address": address,
             "tableName": tableName
         };
-
-        oauth2:OutboundOAuth2Provider oauth2Provider3 = new ({
-            accessToken: msGraphConfig.msInitialAccessToken,
-            refreshConfig: {
-                clientId: msGraphConfig.msClientID,
-                clientSecret: msGraphConfig.msClientSecret,
-                refreshToken: msGraphConfig.msRefreshToken,
-                refreshUrl: msGraphConfig.msRefreshURL,
-                clientConfig: {
-                    secureSocket: {
-                        trustStore: {
-                            path: msGraphConfig.trustStorePath,
-                            password: msGraphConfig.trustStorePassword
-                        }
-                    }
-                }
-            }
-        });
-
-        http:BearerAuthHandler oauth2Handler3 = new (oauth2Provider3);
-
-        self.tableClient = new (msGraphConfig.baseUrl, {
-                auth: {
-                    authHandler: oauth2Handler3
-                },
-                secureSocket: {
-                    trustStore: {
-                        path: msGraphConfig.trustStorePath,
-                        password: msGraphConfig.trustStorePassword
-                    }
-                }
-            });
     }
 
     # Get the properties of the table.
@@ -557,7 +461,7 @@ public type Table client object {
 # Microsoft Graph client configuration.
 # + baseUrl - The Microsoft Graph endpoint URL
 # + msInitialAccessToken - Initial access token
-# + msClientID - Microsoft client identifier
+# + msClientId - Microsoft client identifier
 # + msClientSecret - client secret
 # + msRefreshToken - refresh token
 # + msRefreshURL - refresh URL
@@ -568,7 +472,7 @@ public type Table client object {
 public type MicrosoftGraphConfiguration record {
     string baseUrl;
     string msInitialAccessToken;
-    string msClientID;
+    string msClientId;
     string msClientSecret;
     string msRefreshToken;
     string msRefreshURL;

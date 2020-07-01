@@ -21,7 +21,7 @@ import ballerina/test;
 MicrosoftGraphConfiguration msGraphConfig = {
     baseUrl: config:getAsString("MS_BASE_URL"),
     msInitialAccessToken: config:getAsString("MS_ACCESS_TOKEN"),
-    msClientID: config:getAsString("MS_CLIENT_ID"),
+    msClientId: config:getAsString("MS_CLIENT_ID"),
     msClientSecret: config:getAsString("MS_CLIENT_SECRET"),
     msRefreshToken: config:getAsString("MS_REFRESH_TOKEN"),
     msRefreshURL: config:getAsString("MS_REFRESH_URL"),
@@ -39,9 +39,9 @@ MicrosoftGraphConfiguration msGraphConfig = {
     }
 };
 
-MSSpreadsheetClient msSpreadsheetClient = new (msGraphConfig);
-Workbook workBook = new (msGraphConfig, "", "");
-Worksheet worksheet = new (msGraphConfig, "", "", "", "", 0);
+MsSpreadsheetClient msSpreadsheetClient = new (msGraphConfig);
+Workbook workBook = new (new (config:getAsString("MS_BASE_URL")), "", "");
+Worksheet worksheet = new (new (config:getAsString("MS_BASE_URL")), "", "", "", "", 0);
 
 @test:Config {}
 function testOpenWorkBook() {
@@ -53,7 +53,7 @@ function testOpenWorkBook() {
             msg = "Failed to open the workbook.");
         workBook = wb;
     } else {
-        test:assertFail(msg = <string>wb.detail()["message"]);
+        test:assertFail(msg = wb.message());
     }
 }
 
@@ -68,7 +68,7 @@ function testCreateSpreadsheet() {
             msg = "Failed to create the worksheet.");
         worksheet = ws;
     } else {
-        test:assertFail(msg = <string>ws.detail()["message"]);
+        test:assertFail(msg = ws.message());
     }
 }
 
@@ -82,7 +82,7 @@ function testCreateTable() {
         test:assertEquals(tbl.getProperties().tableName, config:getAsString("TABLE_NAME"),
             msg = "Failed to create the table.");
     } else {
-        test:assertFail(msg = <string>tbl.detail()["message"]);
+        test:assertFail(msg = tbl.message());
     }
 }
 
@@ -95,6 +95,6 @@ function testRemoveSpreadsheet() {
     if (result is ()) {
         test:assertEquals(result, (), msg = "Failed to delete worksheet");
     } else {
-        test:assertFail(msg = <string>result.detail()["message"]);
+        test:assertFail(msg = result.message());
     }
 }
