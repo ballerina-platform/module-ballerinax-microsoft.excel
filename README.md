@@ -36,7 +36,7 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
 
     !["Figure 2: Accounts type selection"](images/step2.jpg)
     
-    4. Copy the Application (client) ID (\<MS_CLIENT_ID>). This is the unique identifier for your app.
+    4. Copy the Application (client) ID (`<MS_CLIENT_ID>`). This is the unique identifier for your app.
     
     5. In the application's list of pages (under the **Manage** tab in left hand side menu), select **Authentication**.
     Under **Platform configurations**, click **Add a platform**.
@@ -51,10 +51,10 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
 
     !["Figure 4: Update security configurations"](images/step4.jpg)
 
-    8. Under **Certificates & Secrets**, create a new client secret (\<MS_CLIENT_SECRET>). This requires providing a description and a period of expiry. Next, click **Add**.
+    8. Under **Certificates & Secrets**, create a new client secret (`<MS_CLIENT_SECRET>`). This requires providing a description and a period of expiry. Next, click **Add**.
 
     9. Next, you need to obtain an access token and a refresh token to invoke the Microsoft Graph API.
-    First, in a new browser, enter the below URL by replacing the \<MS_CLIENT_ID> with the application ID.
+    First, in a new browser, enter the below URL by replacing the `<MS_CLIENT_ID>` with the application ID.
 
     ```
     https://login.microsoftonline.com/common/oauth2/v2.0/authorize?response_type=code&client_id=<MS_CLIENT_ID>&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient&scope=Files.ReadWrite openid User.Read Mail.Send Mail.ReadWrite offline_access
@@ -66,7 +66,7 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
 
     `https://login.microsoftonline.com/common/oauth2/nativeclient?code=M95780001-0fb3-d138-6aa2-0be59d402f32`
 
-    12. Copy the code parameter (`M95780001-0fb3-d138-6aa2-0be59d402f32` in the above example) and in a new terminal, enter the following cURL command by replacing the `\<MS_CODE>` with the code received from the above step. The `\<MS_CLIENT_ID>` and `\<MS_CLIENT_SECRET>` parameters are the same as above.
+    12. Copy the code parameter (`M95780001-0fb3-d138-6aa2-0be59d402f32` in the above example) and in a new terminal, enter the following cURL command by replacing the `<MS_CODE>` with the code received from the above step. The `<MS_CLIENT_ID>` and `<MS_CLIENT_SECRET>` parameters are the same as above.
 
     ```
     curl -X POST --header "Content-Type: application/x-www-form-urlencoded" --header "Host:login.microsoftonline.com" -d "client_id=<MS_CLIENT_ID>&client_secret=<MS_CLIENT_SECRET>&grant_type=authorization_code&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient&code=<MS_CODE>&scope=Files.ReadWrite openid User.Read Mail.Send Mail.ReadWrite offline_access" https://login.microsoftonline.com/common/oauth2/v2.0/token
@@ -85,7 +85,7 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
     }
     ```
 
-    13. Set the path to your Ballerina distribution's trust store as the `\<TURST_STORE_PATH>`. This is by default located in the following path.
+    13. Set the path to your Ballerina distribution's trust store as the `<TURST_STORE_PATH>`. This is by default located in the following path.
 
     `$BALLERINA_HOME/distributions/ballerina-<BALLERINA_VERSION>/bre/security/ballerinaTruststore.p12`
 
@@ -135,7 +135,7 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
         }
     };
 
-    sheets:MSSpreadsheetClient msSpreadsheetClient = new(msGraphConfig);
+    sheets:MsSpreadsheetClient msSpreadsheetClient = new(msGraphConfig);
     
     string WORK_BOOK_NAME = "MyShop";
     string WORK_SHEET_NAME = "Sales";
