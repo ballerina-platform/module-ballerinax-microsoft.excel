@@ -24,7 +24,7 @@ MicrosoftGraphConfiguration msGraphConfig = {
     msClientId: config:getAsString("MS_CLIENT_ID"),
     msClientSecret: config:getAsString("MS_CLIENT_SECRET"),
     msRefreshToken: config:getAsString("MS_REFRESH_TOKEN"),
-    msRefreshURL: config:getAsString("MS_REFRESH_URL"),
+    msRefreshUrl: config:getAsString("MS_REFRESH_URL"),
     trustStorePath: config:getAsString("TRUST_STORE_PATH"),
     trustStorePassword: config:getAsString("TRUST_STORE_PASSWORD"),
     bearerToken: config:getAsString("MS_ACCESS_TOKEN"),

@@ -31,7 +31,7 @@ public type MsSpreadsheetClient client object {
                 clientId: msGraphConfig.msClientId,
                 clientSecret: msGraphConfig.msClientSecret,
                 refreshToken: msGraphConfig.msRefreshToken,
-                refreshUrl: msGraphConfig.msRefreshURL,
+                refreshUrl: msGraphConfig.msRefreshUrl,
                 clientConfig: {
                     secureSocket: {
                         trustStore: {
@@ -454,7 +454,7 @@ public type Table client object {
 # + msClientId - Microsoft client identifier
 # + msClientSecret - client secret
 # + msRefreshToken - refresh token
-# + msRefreshURL - refresh URL
+# + msRefreshUrl - refresh URL
 # + trustStorePath - trust store path
 # + trustStorePassword - trust store password
 # + bearerToken - bearer token
@@ -465,7 +465,7 @@ public type MicrosoftGraphConfiguration record {
     string msClientId;
     string msClientSecret;
     string msRefreshToken;
-    string msRefreshURL;
+    string msRefreshUrl;
     string trustStorePath;
     string trustStorePassword;
     string bearerToken;
