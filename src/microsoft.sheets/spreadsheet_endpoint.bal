@@ -45,8 +45,8 @@ public type MsSpreadsheetClient client object {
                     authHandler: oauth2Handler3
                 },
                 followRedirects: {
-                    enabled: true,
-                    maxCount: 100
+                    enabled: msGraphConfig.followRedirects,
+                    maxCount: msGraphConfig.maxRedirectsCount
                 },
                 secureSocket: {
                 }
@@ -465,10 +465,9 @@ public type Table client object {
 # + msClientSecret - client secret
 # + msRefreshToken - refresh token
 # + msRefreshUrl - refresh URL
-# + trustStorePath - trust store path
-# + trustStorePassword - trust store password
 # + bearerToken - bearer token
-# + clientConfig - OAuth2 direct token configuration
+# + followRedirects - flag to indicate redirection preference
+# + maxRedirectsCount - maximum number of redirects to follow
 public type MicrosoftGraphConfiguration record {
     string baseUrl;
     string msInitialAccessToken;
@@ -477,4 +476,6 @@ public type MicrosoftGraphConfiguration record {
     string msRefreshToken;
     string msRefreshUrl;
     string bearerToken;
+    boolean followRedirects;
+    int maxRedirectsCount;
 };
