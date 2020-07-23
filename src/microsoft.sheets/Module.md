@@ -16,7 +16,7 @@ This module contains operations to perform CRUD (Create, Read, Update, and Delet
 ## Compatibility
 |                     |    Version     |
 |:-------------------:|:--------------:|
-| Ballerina Language  | Swan Lake Preview1   |
+| Ballerina Language  | Swan Lake Preview 2   |
 | Microsoftgraph REST API | v1.0          |
 
 ## Sample
@@ -27,7 +27,7 @@ The Microsoft Sheets connector can be minimally instantiated in the HTTP client 
 
 **Add project configurations file**
 
-Add the project configuration file by creating a `ballerina.conf` file under the root path of the project structure. This file should have the following configurations below. Add the tokens obtained in the previous step to the `ballerina.conf` file. Make sure to configure the path to the Ballerina trust store and to set the trust store password.
+Add the project configuration file by creating a `ballerina.conf` file under the root path of the project structure. This file should have the following configurations below. Add the tokens obtained in the previous step to the `ballerina.conf` file. `<FOLLOW_REDIRECTS>` should be set to true if the default redirection mechanism of Ballerina HTTP module is to be used. `<MAX_REDIRECTS_COUNT>` should be set to an appropriate number for redirection. For example, if the redirection has to be followed upto five hops the value of `<MAX_REDIRECTS_COUNT>` should be set to 5. These two redirection related flags allows for custom handling of redirection responses (if any) thrown by the Microsoft Graph API.
 
 ```
 MS_BASE_URL="https://graph.microsoft.com"
@@ -36,8 +36,8 @@ MS_CLIENT_SECRET="<MS_CLIENT_SECRET>"
 MS_REFRESH_TOKEN="<MS_REFRESH_TOKEN>"
 MS_REFRESH_URL="https://login.microsoftonline.com/common/oauth2/v2.0/token"
 MS_ACCESS_TOKEN="<MS_ACCESS_TOKEN>"
-TRUST_STORE_PATH=""
-TRUST_STORE_PASSWORD=""
+FOLLOW_REDIRECTS=""
+MAX_REDIRECTS_COUNT=""
 ```
 
 **Example Code**
@@ -53,19 +53,10 @@ is referred by the `sheets` module prefix.
         msClientId: config:getAsString("MS_CLIENT_ID"),
         msClientSecret: config:getAsString("MS_CLIENT_SECRET"),
         msRefreshToken: config:getAsString("MS_REFRESH_TOKEN"),
-        msRefreshURL: config:getAsString("MS_REFRESH_URL"),
-        trustStorePath: config:getAsString("TRUST_STORE_PATH"),
-        trustStorePassword: config:getAsString("TRUST_STORE_PASSWORD"),
+        msRefreshUrl: config:getAsString("MS_REFRESH_URL"),
         bearerToken: config:getAsString("MS_ACCESS_TOKEN"),
-        clientConfig: {
-            accessToken: config:getAsString("MS_ACCESS_TOKEN"),
-            refreshConfig: {
-                clientId: config:getAsString("MS_CLIENT_ID"),
-                clientSecret: config:getAsString("MS_CLIENT_SECRET"),
-                refreshToken: config:getAsString("MS_REFRESH_TOKEN"),
-                refreshUrl: config:getAsString("MS_REFRESH_URL")
-            }
-        }
+        followRedirects: config:getAsBoolean("FOLLOW_REDIRECTS"),
+        maxRedirectsCount: config:getAsInt("MAX_REDIRECTS_COUNT")
     };
 
     sheets:MsSpreadsheetClient msSpreadsheetClient = new(msGraphConfig);
