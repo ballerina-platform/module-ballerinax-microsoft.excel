@@ -5,24 +5,24 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
 ## Compatibility
 |                     |    Version     |
 |:-------------------:|:--------------:|
-| Ballerina Language  | Swan Lake Preview1   |
+| Ballerina Language  | Swan Lake Preview 2   |
 | Microsoftgraph REST API | v1.0          |
 
 ## Getting started
 
 1.  Download and install Ballerina. For instructions, go to [Installing Ballerina](https://ballerina.io/learn/installing-ballerina/).
 
-2.  Provide the following configuration information in the `ballerina.conf` file to use the Microsoft Graph API.
+2.  Provide the following configuration information in the `ballerina.conf` file to use the Microsoft Sheets connector.
 
        - MS_CLIENT_ID
        - MS_CLIENT_SECRET
        - MS_ACCESS_TOKEN
        - MS_REFRESH_TOKEN
-       - TRUST_STORE_PATH
-       - TRUST_STORE_PASSWORD
        - WORK_BOOK_NAME
        - WORK_SHEET_NAME
        - TABLE_NAME
+       - FOLLOW_REDIRECTS
+       - MAX_REDIRECTS_COUNT
 
     Follow the steps below to obtain the configuration information mentioned above.
 
@@ -85,13 +85,7 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
     }
     ```
 
-    13. Set the path to your Ballerina distribution's trust store as the `<TURST_STORE_PATH>`. This is by default located in the following path.
-
-    `$BALLERINA_HOME/distributions/ballerina-<BALLERINA_VERSION>/bre/security/ballerinaTruststore.p12`
-
-    The default `TRUST_STORE_PASSWORD` is set to "ballerina".
-
-    14. The `WORK_BOOK_NAME`, `WORK_SHEET_NAME`, and `TABLE_NAME` correspond to the workbook file name (without the .xlsx extension), worksheet name, and table name respectively. Make sure you create a workbook with the same `WORK_BOOK_NAME` as on Microsoft OneDrive before using the connector.
+    13. The `WORK_BOOK_NAME`, `WORK_SHEET_NAME`, and `TABLE_NAME` correspond to the workbook file name (without the `.xlsx` extension), worksheet name, and table name respectively. Make sure you create a workbook with the same `WORK_BOOK_NAME` as on Microsoft OneDrive before using the connector.
 
 3. Create a new Ballerina project by executing the command below.
 
@@ -101,7 +95,7 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
 	<PROJECT_ROOT_DIRECTORY>$ ballerina add module_name
 	```
 
-4. Import the Microsoft Graph connector to your Ballerina program as follows.
+4. Import the Microsoft Sheets connector to your Ballerina program as follows.
 
     The following sample program creates a new worksheet on an existing workbook on Microsoft OneDrive. Prior to running this application, create a workbook on your Microsoft OneDrive account with the name "MyShop.xlsx". There needs to be at least one worksheet (i.e., a tab) on the workbook for this sample program to work. 
 
@@ -117,22 +111,13 @@ The `ballerinax/module-ballerinax-microsoft.sheets` module contains operations t
     sheets:MicrosoftGraphConfiguration msGraphConfig = {
         baseUrl: config:getAsString("MS_BASE_URL"),
         msInitialAccessToken: config:getAsString("MS_ACCESS_TOKEN"),
-        msClientID: config:getAsString("MS_CLIENT_ID"),
+        msClientId: config:getAsString("MS_CLIENT_ID"),
         msClientSecret: config:getAsString("MS_CLIENT_SECRET"),
         msRefreshToken: config:getAsString("MS_REFRESH_TOKEN"),
-        msRefreshURL: config:getAsString("MS_REFRESH_URL"),
-        trustStorePath: config:getAsString("TRUST_STORE_PATH"),
-        trustStorePassword: config:getAsString("TRUST_STORE_PASSWORD"),
+        msRefreshUrl: config:getAsString("MS_REFRESH_URL"),
         bearerToken: config:getAsString("MS_ACCESS_TOKEN"),
-        clientConfig: {
-            accessToken: config:getAsString("MS_ACCESS_TOKEN"),
-            refreshConfig: {
-                clientId: config:getAsString("MS_CLIENT_ID"),
-                clientSecret: config:getAsString("MS_CLIENT_SECRET"),
-                refreshToken: config:getAsString("MS_REFRESH_TOKEN"),
-                refreshUrl: config:getAsString("MS_REFRESH_URL")
-            }
-        }
+        followRedirects: config:getAsBoolean("FOLLOW_REDIRECTS"),
+        maxRedirectsCount: config:getAsInt("MAX_REDIRECTS_COUNT")
     };
 
     sheets:MsSpreadsheetClient msSpreadsheetClient = new(msGraphConfig);

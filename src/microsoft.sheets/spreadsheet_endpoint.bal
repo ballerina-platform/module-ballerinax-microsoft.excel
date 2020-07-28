@@ -34,10 +34,6 @@ public type MsSpreadsheetClient client object {
                 refreshUrl: msGraphConfig.msRefreshUrl,
                 clientConfig: {
                     secureSocket: {
-                        trustStore: {
-                            path: msGraphConfig.trustStorePath,
-                            password: msGraphConfig.trustStorePassword
-                        }
                     }
                 }
             }
@@ -48,11 +44,11 @@ public type MsSpreadsheetClient client object {
                 auth: {
                     authHandler: oauth2Handler3
                 },
+                followRedirects: {
+                    enabled: msGraphConfig.followRedirects,
+                    maxCount: msGraphConfig.maxRedirectsCount
+                },
                 secureSocket: {
-                    trustStore: {
-                        path: msGraphConfig.trustStorePath,
-                        password: msGraphConfig.trustStorePassword
-                    }
                 }
             });
     }
@@ -154,6 +150,8 @@ public type Workbook client object {
         http:Response httpResponse = <http:Response>response;
 
         if (httpResponse.statusCode != http:STATUS_CREATED) {
+            log:printDebug("Error occurred while creating the worksheet. HTTP Status Code: " + 
+            httpResponse.statusCode.toJsonString() + ", Reason : " + httpResponse.reasonPhrase);
             return HttpResponseHandlingError("Error occurred while creating the worksheet.");
         }
 
@@ -203,6 +201,8 @@ public type Workbook client object {
             if (httpResponse.statusCode == http:STATUS_NO_CONTENT) {
                 return ();
             } else {
+                log:printDebug("Error occurred while deleting the worksheet. HTTP Status Code: " + 
+                httpResponse.statusCode.toJsonString() + ", Reason : " + httpResponse.reasonPhrase);
                 return HttpResponseHandlingError("Error occurred while deleting the worksheet.");
             }
         } else {
@@ -253,6 +253,8 @@ public type Worksheet client object {
         http:Response httpResponse = <http:Response>response;
 
         if (httpResponse.statusCode != http:STATUS_CREATED) {
+            log:printDebug("Error occurred while creating the table. HTTP Status Code: " + 
+            httpResponse.statusCode.toJsonString() + ", Reason : " + httpResponse.reasonPhrase);
             return HttpResponseHandlingError("Error occurred while creating the table.");
         }
 
@@ -291,7 +293,7 @@ public type Worksheet client object {
             return resultsTable;
         }
 
-        log:printInfo("Table created (" + createdTableName + ") carries different name than what " +
+        log:printDebug("Table created (" + createdTableName + ") carries different name than what " +
             "was passed as the table name (" + tableName + "). Now patching the table with the correct " +
             "table name.");
 
@@ -321,6 +323,8 @@ public type Worksheet client object {
         http:Response httpResponse = <http:Response>response;
 
         if (httpResponse.statusCode != http:STATUS_OK) {
+            log:printDebug("Error occurred while inserting data into table. HTTP Status Code: " + 
+            httpResponse.statusCode.toJsonString() + ", Reason : " + httpResponse.reasonPhrase);
             return HttpResponseHandlingError("Error occurred while inserting data into table.");
         }
 
@@ -393,6 +397,8 @@ public type Table client object {
             if (httpResponse.statusCode == http:STATUS_CREATED) {
                 return ();
             } else {
+                log:printDebug("Error occurred while inserting data into table. HTTP Status Code: " + 
+                httpResponse.statusCode.toJsonString() + ", Reason : " + httpResponse.reasonPhrase);
                 return HttpResponseHandlingError("Error occurred while inserting data into table.");
             }
         } else {
@@ -416,6 +422,8 @@ public type Table client object {
                 self.properties.tableName = newTableName;
                 return ();
             } else {
+                log:printDebug("Error occurred while renaming the table. HTTP Status Code: " + 
+                httpResponse.statusCode.toJsonString() + ", Reason : " + httpResponse.reasonPhrase);
                 return HttpResponseHandlingError("Error occurred while renaming the table.");
             }
         } else {
@@ -440,6 +448,8 @@ public type Table client object {
             if (httpResponse.statusCode == http:STATUS_OK) {
                 return ();
             } else {
+                log:printDebug("Error occurred while setting the table header. HTTP Status Code: " + 
+                httpResponse.statusCode.toJsonString() + ", Reason : " + httpResponse.reasonPhrase);
                 return HttpResponseHandlingError("Error occurred while setting the table header.");
             }
         } else {
@@ -455,10 +465,9 @@ public type Table client object {
 # + msClientSecret - client secret
 # + msRefreshToken - refresh token
 # + msRefreshUrl - refresh URL
-# + trustStorePath - trust store path
-# + trustStorePassword - trust store password
 # + bearerToken - bearer token
-# + clientConfig - OAuth2 direct token configuration
+# + followRedirects - flag to indicate redirection preference
+# + maxRedirectsCount - maximum number of redirects to follow
 public type MicrosoftGraphConfiguration record {
     string baseUrl;
     string msInitialAccessToken;
@@ -466,8 +475,7 @@ public type MicrosoftGraphConfiguration record {
     string msClientSecret;
     string msRefreshToken;
     string msRefreshUrl;
-    string trustStorePath;
-    string trustStorePassword;
     string bearerToken;
-    oauth2:DirectTokenConfig clientConfig;
+    boolean followRedirects;
+    int maxRedirectsCount;
 };
