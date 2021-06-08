@@ -10,7 +10,14 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: Ballerina Build
-              uses: ballerina-platform/ballerina-action/@swan-lake-release
+              uses: ballerina-platform/ballerina-action/@nightly
               with:
-                  args:
-                      build -a -c --skip-tests
+                args:
+                    build -c 
+              env:
+                WORKING_DIR: ./excel
+                REFRESH_URL: ${{ secrets.REFRESH_URL }}
+                REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+                CLIENT_ID: ${{ secrets.CLIENT_ID }}
+                CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+                WORKBOOK_PATH: ${{ secrets.WORKBOOK_PATH }}

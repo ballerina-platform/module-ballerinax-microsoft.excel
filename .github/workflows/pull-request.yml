@@ -1,0 +1,18 @@
+name: CI_pull_request
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Ballerina Build
+        uses: ballerina-platform/ballerina-action/@nightly
+        with:
+          args:
+            build -c --skip-tests
+        env:
+          WORKING_DIR: ./excel
