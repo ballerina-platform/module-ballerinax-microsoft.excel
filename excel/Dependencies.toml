@@ -1,0 +1,14 @@
+[[dependency]]
+org = "ballerina"
+name = "http"
+version = "1.1.0-alpha8"
+
+[[dependency]]
+org = "ballerina"
+name = "os"
+version = "0.8.0-alpha8"
+
+[[dependency]]
+org = "ballerina"
+name = "log"
+version = "1.1.0-alpha8"

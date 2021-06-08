@@ -1,8 +1,0 @@
-[project]
-org-name= "ballerinax"
-version= "0.10.0"
-
-[build-options]
-observability-included=true
-
-[dependencies]
