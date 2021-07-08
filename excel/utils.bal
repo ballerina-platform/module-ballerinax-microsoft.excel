@@ -16,7 +16,7 @@
 
 import ballerina/http;
 
-isolated function createRequestPath(string[] pathParameters, string workbookIdOrPath, Query? query = ()) 
+isolated function createRequestPath(string[] pathParameters, string workbookIdOrPath, string? query = ()) 
 returns string|error {
     string path = EMPTY_STRING;
     string[] baseParameters = workbookIdOrPath.endsWith(".xlsx") ? [ME, DRIVE, ROOT + COLON, workbookIdOrPath + COLON, 
@@ -24,7 +24,7 @@ returns string|error {
 
     path = check createPath(path, baseParameters);
     path = check createPath(path, pathParameters);
-    path = query is Query ? addQueryParameters(path, query) : path;
+    path = query is string ? (path + query) : path;
     return path;
 }
 
@@ -39,38 +39,6 @@ isolated function createPath(string currentpath, string[] pathParameters) return
         }
     }
     return path;
-}
-
-isolated function addQueryParameters(string path, Query query) returns string {
-    string queryPath = path + QUESTION_MARK;
-    if (query?.count is boolean) {
-        queryPath = queryPath + DOLLAR_SIGN + COUNT + EQUAL_SIGN + query?.count.toString();
-    }
-    if (query?.expand is string) {
-        queryPath = queryPath + DOLLAR_SIGN + EXPAND + EQUAL_SIGN + query?.expand.toString();
-    }
-    if (query?.filter is string) {
-        queryPath = queryPath + DOLLAR_SIGN + FILTER + EQUAL_SIGN + query?.filter.toString();
-    }
-    if (query?.format is string) {
-        queryPath = queryPath + DOLLAR_SIGN + FORMAT + EQUAL_SIGN + query?.count.toString();
-    }
-    if (query?.orderBy is string) {
-        queryPath = queryPath + DOLLAR_SIGN + ORDER_BY + EQUAL_SIGN + query?.orderBy.toString();
-    }
-    if (query?.search is string) {
-        queryPath = queryPath + DOLLAR_SIGN + SEARCH + EQUAL_SIGN + query?.search.toString();
-    }
-    if (query?.'select is string) {
-        queryPath = queryPath + DOLLAR_SIGN + SELECT + EQUAL_SIGN + query?.'select.toString();
-    }
-    if (query?.skip is int) {
-        queryPath = queryPath + DOLLAR_SIGN + SKIP + EQUAL_SIGN + query?.skip.toString();
-    }
-    if (query?.top is int) {
-        queryPath = queryPath + DOLLAR_SIGN + TOP + EQUAL_SIGN + query?.top.toString();
-    }
-    return queryPath;
 }
 
 isolated function setOptionalParamsToPath(string currentPath, int? width, int? height, string? fittingMode) 
@@ -106,27 +74,27 @@ isolated function handleResponse(http:Response httpResponse) returns map<json>|e
 
 isolated function getWorksheetArray(http:Response response) returns Worksheet[]|error {
     map<json> handledResponse = check handleResponse(response);
-    return check handledResponse["value"].cloneWithType(WorkSheetArray);
+    return check handledResponse[VALUE].cloneWithType(WorkSheetArray);
 }
 
 isolated function getRowArray(http:Response response) returns Row[]|error {
     map<json> handledResponse = check handleResponse(response);
-    return check handledResponse["value"].cloneWithType(RowArray);
+    return check handledResponse[VALUE].cloneWithType(RowArray);
 }
 
 isolated function getColumnArray(http:Response response) returns Column[]|error {
     map<json> handledResponse = check handleResponse(response);
-    return check handledResponse["value"].cloneWithType(ColumnArray);
+    return check handledResponse[VALUE].cloneWithType(ColumnArray);
 }
 
 isolated function getTableArray(http:Response response) returns Table[]|error {
     map<json> handledResponse = check handleResponse(response);
-    return check handledResponse["value"].cloneWithType(TableArray);
+    return check handledResponse[VALUE].cloneWithType(TableArray);
 }
 
 isolated function getChartArray(http:Response response) returns Chart[]|error {
     map<json> handledResponse = check handleResponse(response);
-    return check handledResponse["value"].cloneWithType(ChartArray);
+    return check handledResponse[VALUE].cloneWithType(ChartArray);
 }
 
 type WorkSheetArray Worksheet[];

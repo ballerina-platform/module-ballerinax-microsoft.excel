@@ -49,6 +49,7 @@ const string HEIGHT = "height";
 const string FITTING_MODE = "fittingMode";
 const string SET_DATA = "setData";
 const string SET_POSITION = "setPosition";
+const string VALUE = "value";
 
 // Symbols
 const string QUESTION_MARK = "?";

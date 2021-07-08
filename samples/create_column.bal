@@ -19,12 +19,11 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:Column column = {
-        index: 3,
-        values: [["a3"], ["c3"], ["aa"]]
-    };
+    json values = [["a3"], ["c3"], ["aa"]];
+    int columnIndex = 1;
     
-    excel:Column|error response = excelClient->createRow(workbookIdOrPath, "sheetName", "tableName", column);
+    excel:Column|error response = excelClient->createColumn(workbookIdOrPath, "sheetName", "tableName", values, 
+    columnIndex);
     if (response is excel:Column) {
         log:printInfo(response.toString());
     }

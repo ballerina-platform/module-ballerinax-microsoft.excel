@@ -19,9 +19,7 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:TableConfiguration 'table = {address: "A1:C3"};
-
-    excel:Table|error response = excelClient->addTable(workbookIdOrPath, "testSheet", 'table);
+    excel:Table|error response = excelClient->addTable(workbookIdOrPath, "worksheetName", "A1:C3");
     if (response is excel:Table) {
         log:printInfo(response.toString());
     }

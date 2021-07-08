@@ -5,18 +5,14 @@ Ballerina Microsoft Excel Connector
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-microsoft.excel.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/commits/master)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-[Microsoft Excel](https://www.microsoft.com/en-ww/microsoft-365/excel) is a spreadsheet application developed by Microsoft as part of its web version of Office365.
+The `microsoft.excel` is a [Ballerina](https://ballerina.io/) connector for Microsoft Excel.
 
-This provides operations for connecting and interacting with Microsoft Graph API Excel endpoints over the network. 
-For more information, go to the module. 
+[Microsoft Excel](https://www.microsoft.com/en-ww/microsoft-365/excel) is a spreadsheet application developed by Microsoft in the Office365.
+
+This connector provides operations for connecting and interacting with Microsoft Graph API Excel endpoints over the network. 
+For more information about configuration and operations, go to the module. 
+
     - [`microsoft.excel`](https://docs.central.ballerina.io/ballerinax/microsoft.excel/latest).
-
-# Prerequisites
-- Microsoft Office365 Account
-- Access to Azure Portal
-- Java 11 installed - Java Development Kit (JDK) with version 11 is required
-- [Ballerina SL Beta 1](https://ballerina.io/learn/user-guide/getting-started/setting-up-ballerina/installation-options/) installed 
-    - Ballerina Swan Lake Beta 1 is required
 
 # Building from the Source
 ## Setting Up the Prerequisites
@@ -29,10 +25,10 @@ For more information, go to the module.
 
         > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
 
-2. Download and install [Ballerina SLBeta 1](https://ballerina.io/). 
+2. Download and install [Ballerina Alpha 5](https://ballerina.io/). 
 
 ## Building the Source
-Execute the commands below to build from the source after installing Ballerina SL Beta 1 version.
+Execute the commands below to build from the source after installing Ballerina SL Alpha 5 version.
 
 1. To build the package:
     ```    
