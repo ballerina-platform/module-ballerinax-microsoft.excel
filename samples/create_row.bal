@@ -19,12 +19,7 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:Row row = {
-        index: 1,
-        values: [[1, 2, 3]]
-    };
-
-    excel:Row|error response = excelClient->createRow(workbookIdOrPath, "sheetName", "tableName", row);
+    excel:Row|error response = excelClient->createRow(workbookIdOrPath, "sheetName", "tableName", [[1, 2, 3]], 4);
     if (response is excel:Row) {
         log:printInfo(response.toString());
     }

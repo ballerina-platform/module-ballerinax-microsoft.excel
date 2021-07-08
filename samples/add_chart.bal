@@ -19,13 +19,8 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:ChartConfiguration chart = {
-        'type: "ColumnStacked",
-        sourceData: "A1:B2",
-        seriesBy: excel:AUTO
-    };
-
-    excel:Chart|error response = excelClient->addChart(workbookIdOrPath, "testSheet", chart);
+    excel:Chart|error response = excelClient->addChart(workbookIdOrPath, "worksheetName", "ColumnStacked", "A1:B2",
+    excel:AUTO);
     if (response is excel:Chart) {
         log:printInfo(response.toString());
     }

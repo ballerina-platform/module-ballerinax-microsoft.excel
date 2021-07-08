@@ -24,7 +24,8 @@ public function main() {
         left: 99
     };
 
-    excel:Worksheet|error response = excelClient->updateChart(workbookIdOrPath, "worksheetName", "chartName", updateChart);
+    excel:Worksheet|error response = excelClient->updateChart(workbookIdOrPath, "worksheetName", "chartName", 
+    updateChart);
     if (response is excel:Worksheet) {
         log:printInfo(response.toString());
     }

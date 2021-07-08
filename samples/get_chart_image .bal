@@ -19,8 +19,8 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:ChartImage|error response = excelClient->getChartImage(workbookIdOrPath, "worksheetName", "chartName");
-    if (response is excel:Worksheet) {
+    string|error response = excelClient->getChartImage(workbookIdOrPath, "worksheetName", "chartName");
+    if (response is string) {
         log:printInfo(response.toString());
     }
 }

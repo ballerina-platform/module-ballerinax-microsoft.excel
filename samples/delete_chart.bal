@@ -19,7 +19,7 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    error? response = excelClient->deleteChart(workbookIdOrPath, "worksheetName", "tableName");
+    error? response = excelClient->deleteChart(workbookIdOrPath, "worksheetName", "chartName");
     if !(response is error) {
         log:printInfo("Chart deleted");
     }

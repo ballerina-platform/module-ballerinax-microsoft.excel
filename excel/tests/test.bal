@@ -118,8 +118,7 @@ function testDeleteWorksheet() {
 @test:Config {dependsOn: [testGetWorksheet]}
 function testAddTable() {
     log:printInfo("excelClient -> addTable()");
-    TableConfiguration 'table = {address: "A1:C3"};
-    Table|error response = excelClient->addTable(workBookId, worksheetName, 'table);
+    Table|error response = excelClient->addTable(workBookId, worksheetName, "A1:C3");
     if (response is Table) {
         tableName = response?.name ?: EMPTY_STRING;
         test:assertNotEquals(tableName, EMPTY_STRING, "Table is not created");
@@ -172,17 +171,13 @@ function testUpdateTable() {
 }
 
 int rowInputIndex = 0;
-Row row = {
-    index: rowInputIndex,
-    values: [[1, 2, 3]]
-};
 
 @test:Config {dependsOn: [testUpdateTable]}
 function testCreateRow() {
     log:printInfo("excelClient -> createRow()");
-    Row|error response = excelClient->createRow(workBookId, worksheetName, tableName, row);
+    Row|error response = excelClient->createRow(workBookId, worksheetName, tableName, [[1, 2, 3]], rowInputIndex);
     if (response is Row) {
-        int responseIndex = response?.index ?: 1;
+        int responseIndex = response.index;
         test:assertEquals(responseIndex, rowInputIndex, "Row is not added");
     } else {
         test:assertFail(response.toString());
@@ -194,7 +189,7 @@ function testListRows() {
     log:printInfo("excelClient -> listRows()");
     Row[]|error response = excelClient->listRows(workBookId, worksheetName, tableName);
     if (response is Row[]) {
-        int responseIndex = response[0]?.index ?: 1;
+        int responseIndex = response[0].index;
         test:assertEquals(responseIndex, rowInputIndex, "Found 0 rows");
     } else {
         test:assertFail(response.toString());
@@ -211,18 +206,15 @@ function testDeleteRow() {
 }
 
 int columnInputIndex = 3;
-Column column = {
-    index: columnInputIndex,
-    values: [["a3"], ["c3"], ["aa"]]
-};
 
 @test:Config {dependsOn: [testUpdateTable]}
 function testCreateColumn() {
     log:printInfo("excelClient -> createColumn()");
-    Row|error response = excelClient->createColumn(workBookId, worksheetName, tableName, column);
-    if (response is Row) {
-        int responseIndex = response?.index ?: 1;
-        test:assertEquals(responseIndex, columnInputIndex, "Column not added");
+    Column|error response = excelClient->createColumn(workBookId, worksheetName, tableName, [["a3"], ["c3"], ["aa"]], 
+    columnInputIndex);
+    if (response is Column) {
+        int responseIndex = response.index;
+        test:assertEquals(responseIndex, columnInputIndex, "Column is not added");
     } else {
         test:assertFail(response.toString());
     }
@@ -233,7 +225,7 @@ function testListColumn() {
     log:printInfo("excelClient -> listColumns()");
     Column[]|error response = excelClient->listColumns(workBookId, worksheetName, tableName);
     if (response is Column[]) {
-        int responseIndex = response[0]?.index ?: 1;
+        int responseIndex = response[0].index;
         test:assertEquals(responseIndex, rowInputIndex, "Found 0 columns");
     } else {
         test:assertFail(response.toString());
@@ -258,20 +250,14 @@ function testDeleteTable() {
     }
 }
 
-ChartConfiguration chart = {
-    'type: "ColumnStacked",
-    sourceData: "A1:B2",
-    seriesBy: AUTO
-};
-
 @test:Config {dependsOn: [testCreateRow]}
 function testAddChart() {
     runtime:sleep(5);
     log:printInfo("excelClient -> addChart()");
-    Chart|error response = excelClient->addChart(workBookId, worksheetName, chart);
+    Chart|error response = excelClient->addChart(workBookId, worksheetName, "ColumnStacked", "A1:B2", AUTO);
     if (response is Chart) {
         chartName = <string>response?.name;
-        test:assertNotEquals(chartName, EMPTY_STRING, "Chart not created");
+        test:assertNotEquals(chartName, EMPTY_STRING, "Chart is not created");
     } else {
         test:assertFail(response.toString());
     }
@@ -314,7 +300,7 @@ function testUpdateChart() {
     Chart|error response = excelClient->updateChart(workBookId, worksheetName, chartName, updateChart);
     if (response is Chart) {
         float responseHeight = response?.height ?: 0;
-        test:assertEquals(responseHeight, height, "Chart not updated");
+        test:assertEquals(responseHeight, height, "Chart is not updated");
     } else {
         test:assertFail(response.toString());
     }
@@ -323,32 +309,25 @@ function testUpdateChart() {
 @test:Config {dependsOn: [testUpdateChart]}
 function testGetChartImage() {
     log:printInfo("excelClient -> getChartImage()");
-    ChartImage|error response = excelClient->getChartImage(workBookId, worksheetName, chartName);
+    string|error response = excelClient->getChartImage(workBookId, worksheetName, chartName);
     if (response is error) {
         test:assertFail(response.toString());
     }
 }
-
-Data data = {
-    sourceData: "A1:B3",
-    seriesBy: AUTO
-};
 
 @test:Config {dependsOn: [testGetChartImage]}
 function testResetData() {
     log:printInfo("excelClient -> resetChartData()");
-    error? response = excelClient->resetChartData(workBookId, worksheetName, chartName, data);
+    error? response = excelClient->resetChartData(workBookId, worksheetName, chartName, "A1:B3", AUTO);
     if (response is error) {
         test:assertFail(response.toString());
     }
 }
 
-ChartPosition chartPosition = {startCell: "D3"};
-
 @test:Config {dependsOn: [testResetData]}
 function testSetPosition() {
     log:printInfo("excelClient -> setChartPosition()");
-    error? response = excelClient->setChartPosition(workBookId, worksheetName, chartName, chartPosition);
+    error? response = excelClient->setChartPosition(workBookId, worksheetName, chartName, "D3");
     if (response is error) {
         test:assertFail(response.toString());
     }
@@ -367,7 +346,7 @@ function testDeleteChart() {
 function testGetWorkbookApplication() {
     log:printInfo("excelClient -> getWorkbookApplication()");
 
-    Application|error response = excelClient->getWorkbookApplication(workBookId);
+    WorkbookApplication|error response = excelClient->getWorkbookApplication(workBookId);
     if (response is error) {
         test:assertFail(response.toString());
     }

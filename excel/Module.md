@@ -1,9 +1,14 @@
 ## Overview
-Ballerina connector for Microsoft Excel is connecting the Excel API in Microsoft Graph v1.0 via Ballerina language easily. It provides capability to perform perform CRUD (Create, Read, Update, and Delete) operations on [Excel workbooks](https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in Microsoft OneDrive. 
+Ballerina connector for Microsoft Excel is connecting the Excel API in Microsoft Graph via Ballerina language easily. It provides capability to perform perform CRUD (Create, Read, Update, and Delete) operations on [Excel workbooks](https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in Microsoft OneDrive. 
 
-The connector is developed on top of Microsoft Graph is a REST web API that empowers you to access Microsoft Cloud service resources. This version of the connector only supports the access to the resources and information of a specific account (currently logged in user).
+This module supports [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) v1.0 version and only allows to perform functions behalf of the currently logged in user.
 
-## Obtaining tokens
+## Configuring connector
+### Prerequisites
+- Microsoft Office365 account
+- Access to register an application in Azure portal
+
+### Obtaining tokens
 
 Follow the following steps below to obtain the configurations.
 
@@ -67,23 +72,12 @@ First, in a new browser, enter the below URL by replacing the `<CLIENT_ID>` with
     workbookIdOrPath = <WORKBOOK_ID_OR_PATH>
     ```
 
-    The `workbookIdOrPath` is workbook id or file path (with the `.xlsx` extension from root. If you have a file in root directory with name of `Work.xlsx`, you need to pass it as `Work.xlsx`). Make sure you create a workbook in Microsoft OneDrive and pass the correct `workbookIdOrPath` before using the connector.
-
-## Compatibility & Limitations
-### Compatibility
-|                                                                                    | Version               |
-|------------------------------------------------------------------------------------|-----------------------|
-| Ballerina Language Version                                                         | **Swan Lake Beta 1**  |
-| [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) Version     | **v1.0**              |
-| Java Development Kit (JDK)                                                         | 11                    |
-
-### Limitations
-- Connector only allows to perform functions behalf of the currently logged in user.
+    The `workbookIdOrPath` is workbook ID or file path (with the `.xlsx` extension from root. If you have a file in root directory with name of `Work.xlsx`, you need to pass `workbookIdOrPath` as `Work.xlsx`). Make sure you create a workbook in Microsoft OneDrive and pass the correct `workbookIdOrPath` before using the connector.
 
 ## Quickstart
 
 ### Create a worksheet in Workbook
-#### Step 1: Import Sheet module
+#### Step 1: Import Excel module
 First, import the ballerinax/microsoft.excel module into the Ballerina project.
 ```ballerina
 import ballerinax/microsoft.excel;
@@ -103,15 +97,42 @@ excel:Configuration configuration = {
 excel:Client excelClient = check new (configuration);
 ```
 #### Step 3: Create a worksheet in a workbook
-You can provide either workbook id or path as `workbookIdOrPath` parameter and file name as 'sheetName` parameter.
+You can provide either workbook ID or path as `workbookIdOrPath` parameter and file name as 'sheetName` parameter.
 
 ```ballerina
 public function main() {
-    excel:Worksheet|error response = excelClient->addWorksheet(workbookIdOrPath, sheetName);
-    if (response is excel:Worksheet) {
-        log:printInfo(response.toString());
-    }
+    excel:Worksheet|error response = check excelClient->addWorksheet(workbookIdOrPath, sheetName);
+    // new worksheet is created
 }
 ```
+## Snippets
+Snippets of some operations.
+
+- List all worksheets
+    ``` ballerina
+    excel:Worksheet[] response = check excelClient->listWorksheets(workbookIdOrPath);
+    ```
+
+- Add table in a worksheet
+    ```ballerina
+    excel:Table response = check excelClient->addTable(workbookIdOrPath, "worksheetName", "A1:C5");
+    ```
+
+- List top 5 rows
+    ```ballerina
+    excel:Row[] response = check excelClient->listRows(workbookIdOrPath, "worksheetName", "tableName", "?$top=5");
+    ```
+
+- Update a worksheet
+    ```ballerina
+    excel:Worksheet sheet = {position: 1};
+    excel:Worksheet response = check excelClient->updateWorksheet(workbookIdOrPath, "worksheetName", sheet);
+    ```
+
+- Delete a column
+    ```ballerina
+    int indexNumber = 1; 
+    error? response = excelClient->deleteColumn(workbookIdOrPath, "worksheetName", "tableName", indexNumber);
+    ```
 
 ### [You can find more samples here](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/tree/master/samples)

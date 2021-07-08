@@ -19,12 +19,7 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:Data data = {
-        sourceData: "A1:B3",
-        seriesBy: excel:AUTO
-    };
-
-    error? response = excelClient->resetChartData(workbookIdOrPath, "worksheetName", "chartName", data);
+    error? response = excelClient->resetChartData(workbookIdOrPath, "worksheetName", "chartName", "A1:B3", excel:AUTO);
     if !(response is error) {
         log:printInfo("Chart reset");
     }
