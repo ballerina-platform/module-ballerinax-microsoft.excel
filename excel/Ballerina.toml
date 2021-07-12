@@ -1,0 +1,8 @@
+[package]
+org= "ballerinax"
+name= "microsoft.excel"
+version= "0.11.0-SNAPSHOT"
+license= ["Apache-2.0"]
+authors = ["Ballerina"]
+keywords = ["microsoft", "excel", "workbook", "worksheet", "sheets"]
+repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.excel"
