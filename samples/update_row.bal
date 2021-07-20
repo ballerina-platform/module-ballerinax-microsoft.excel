@@ -19,12 +19,8 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    json[][] values = [["a3"], ["c3"], ["aa"]];
-    int columnIndex = 1;
-    
-    excel:Column|error response = excelClient->createColumn(workbookIdOrPath, "sheetName", "tableName", values, 
-    columnIndex);
-    if (response is excel:Column) {
+    excel:Row|error response = excelClient->updateRow(workbookIdOrPath, "sheetName", "tableName", 4, [[(), (), 8]]);
+    if (response is excel:Row) {
         log:printInfo(response.toString());
     }
 }

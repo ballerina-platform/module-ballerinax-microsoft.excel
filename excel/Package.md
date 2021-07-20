@@ -1,15 +1,15 @@
 Connects to Microsoft Excel from Ballerina
 
 ### Package Overview
-#### Compatibility
-|                                                                                    | Version               |
-|------------------------------------------------------------------------------------|-----------------------|
-| Ballerina Language Version                                                         | **Swan Lake Beta 2**  |
-| [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) Version     | **v1.0**              |
-
 The `microsoft.excel` is a [Ballerina](https://ballerina.io/) connector for Microsoft Excel.
 
 This package provides the capability to easily access Microsoft Excel.
+
+#### Compatibility
+|                                                                        | Version               |
+|------------------------  ----------------------------------------------|-----------------------|
+| Ballerina Language                                                     | **Swan Lake Beta2**   |
+| [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) | **v1.0**              |
 
 ### Report Issues
 

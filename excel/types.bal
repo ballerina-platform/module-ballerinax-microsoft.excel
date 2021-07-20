@@ -62,7 +62,7 @@ public type Cell record {
     int rowIndex;
     json text;
     json valueTypes;
-    json values;
+    json[][] values;
 };
 
 # Represents the Excel application that manages the workbook.
@@ -128,7 +128,7 @@ public type Table record {
 @display {label: "Row"}
 public type Row record {
     int index;
-    json values;
+    json[][] values;
 };
 
 # Chart object in a workbook.
@@ -168,7 +168,7 @@ public type Column record {
     string id;
     string name?;
     int index;
-    json values;
+    json[][] values;
 };
 
 # Specifies the calculation type to use in the workbook.
