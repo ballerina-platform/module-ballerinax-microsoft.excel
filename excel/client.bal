@@ -24,7 +24,7 @@ public client class Client {
     # Initializes the Excel connector client.
     #
     # + configuration - Configurations required to initialize the `Client`
-    # + return - An error on failure of initialization or else `()`
+    # + return - An error on failure of initialization else `()`
     public isolated function init(ExcelConfiguration configuration) returns error? {
         self.excelClient = check new (BASE_URL, {
             auth: configuration.authConfig,
