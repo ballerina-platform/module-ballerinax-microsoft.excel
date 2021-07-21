@@ -24,7 +24,7 @@ public client class Client {
     # Initializes the Excel connector client.
     #
     # + configuration - Configurations required to initialize the `Client`
-    # + return - An error on failure of initialization or else `()`
+    # + return - An error on failure of initialization else `()`
     public isolated function init(ExcelConfiguration configuration) returns error? {
         self.excelClient = check new (BASE_URL, {
             auth: configuration.authConfig,
@@ -277,7 +277,7 @@ public client class Client {
                                         @display {label: "Index"} int index,
                                         @display {label: "Values"} json[][] values)
                                         returns Row|error {
-        string path = check createRequestPath([WORKSHEETS, worksheetNameOrId, TABLES, tableNameOrId, ROWS,  ITEM_AT + 
+        string path = check createRequestPath([WORKSHEETS, worksheetNameOrId, TABLES, tableNameOrId, ROWS, ITEM_AT + 
         OPEN_ROUND_BRACKET + INDEX + EQUAL_SIGN + index.toString() + CLOSE_ROUND_BRACKET], workbookIdOrPath);
         json payload = {values: values};
         return check self.excelClient->patch(path, payload, targetType = Row);
