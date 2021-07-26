@@ -11,7 +11,7 @@ The `microsoft.excel` is a [Ballerina](https://ballerina.io/) connector for Micr
 
 This connector provides operations for connecting and interacting with Microsoft Graph API Excel endpoints over the network. 
 For more information about configuration and operations, go to the module. 
-- [`microsoft.excel`](https://docs.central.ballerina.io/ballerinax/microsoft.excel/latest).
+- [`microsoft.excel`](https://docs.central.ballerina.io/ballerinax/microsoft.excel/1.0.1-SNAPSHOT).
 
 # Building from the Source
 ## Setting Up the Prerequisites
@@ -27,7 +27,7 @@ For more information about configuration and operations, go to the module.
 2. Download and install [Ballerina Beta 2](https://ballerina.io/). 
 
 ## Building the Source
-Execute the commands below to build from the source after installing Ballerina SL Beta 2 version.
+Execute the commands below to build from the source after installing Ballerina SL Beta2 version.
 
 1. To build the package:
     ```    

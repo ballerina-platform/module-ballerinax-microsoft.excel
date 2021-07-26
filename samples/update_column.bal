@@ -35,8 +35,9 @@ excel:ExcelConfiguration configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:Column[]|error response = excelClient->listColumns(workbookIdOrPath, "worksheetName", "tableName");
-    if (response is excel:Column[]) {
-        log:printInfo(response[0].toString());
+    excel:Column|error response = excelClient->updateColumn(workbookIdOrPath, "sheetName", "tableName", 1, 
+    name = "columnName");
+    if (response is excel:Column) {
+        log:printInfo(response.toString());
     }
 }
