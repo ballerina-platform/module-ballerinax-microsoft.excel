@@ -170,7 +170,7 @@ function testUpdateTable() {
     }
 }
 
-int rowInputIndex = 0;
+int rowInputIndex = 1;
 
 @test:Config {dependsOn: [testUpdateTable]}
 function testCreateRow() {
@@ -189,14 +189,28 @@ function testListRows() {
     log:printInfo("excelClient -> listRows()");
     Row[]|error response = excelClient->listRows(workBookId, worksheetName, tableName);
     if (response is Row[]) {
-        int responseIndex = response[0].index;
+        int responseIndex = response[1].index;
         test:assertEquals(responseIndex, rowInputIndex, "Found 0 rows");
     } else {
         test:assertFail(response.toString());
     }
 }
 
-@test:Config {dependsOn: [testListRows]}
+@test:Config {dependsOn: [testCreateRow]}
+function testUpdateRow() {
+    runtime:sleep(5);
+    string value = "testValue";
+    log:printInfo("excelClient -> updateRow()");
+    Row|error response = excelClient->updateRow(workBookId, worksheetName, tableName, rowInputIndex, [[(), (), value]]);
+    if (response is Row) {
+        json updatedValue = response.values[0][2];
+        test:assertEquals(updatedValue.toString(), value, "Row is not updated");
+    } else {
+        test:assertFail(response.toString());
+    }
+}
+
+@test:Config {dependsOn: [testUpdateRow]}
 function testDeleteRow() {
     log:printInfo("excelClient -> deleteRow()");
     error? response = excelClient->deleteRow(workBookId, worksheetName, tableName, rowInputIndex);
@@ -205,9 +219,9 @@ function testDeleteRow() {
     }
 }
 
-int columnInputIndex = 3;
+int columnInputIndex = 2;
 
-@test:Config {dependsOn: [testUpdateTable]}
+@test:Config {dependsOn: [testDeleteRow]}
 function testCreateColumn() {
     log:printInfo("excelClient -> createColumn()");
     Column|error response = excelClient->createColumn(workBookId, worksheetName, tableName, [["a3"], ["c3"], ["aa"]], 
@@ -225,14 +239,28 @@ function testListColumn() {
     log:printInfo("excelClient -> listColumns()");
     Column[]|error response = excelClient->listColumns(workBookId, worksheetName, tableName);
     if (response is Column[]) {
-        int responseIndex = response[0].index;
-        test:assertEquals(responseIndex, rowInputIndex, "Found 0 columns");
+        int responseIndex = response[2].index;
+        test:assertEquals(responseIndex, columnInputIndex, "Found 0 columns");
     } else {
         test:assertFail(response.toString());
     }
 }
 
-@test:Config {dependsOn: [testListColumn]}
+@test:Config {dependsOn: [testCreateColumn]}
+function testUpdateColumn() {
+    runtime:sleep(5);
+    string value = "testName";
+    log:printInfo("excelClient -> updateColumn()");
+    Column|error response = excelClient->updateColumn(workBookId, worksheetName, tableName, columnInputIndex, [[()], [()], [value]]);
+    if (response is Column) {
+        json updatedValue = response.values[2][0];
+        test:assertEquals(updatedValue.toString(), value, "Column is not updated");
+    } else {
+        test:assertFail(response.toString());
+    }
+}
+
+@test:Config {dependsOn: [testUpdateColumn]}
 function testDeleteColumn() {
     log:printInfo("excelClient -> deleteColumn()");
     error? response = excelClient->deleteColumn(workBookId, worksheetName, tableName, columnInputIndex);

@@ -23,7 +23,8 @@ public client class Client {
 
     # Initializes the Excel connector client.
     #
-    # + configuration - Configurations required to initialize the `Client` endpoint
+    # + configuration - Configurations required to initialize the `Client`
+    # + return - An error on failure of initialization else `()`
     public isolated function init(ExcelConfiguration configuration) returns error? {
         self.excelClient = check new (BASE_URL, {
             auth: configuration.authConfig,
@@ -33,7 +34,7 @@ public client class Client {
 
     # Adds a new worksheet to the workbook.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetName - The name of the worksheet to be added. If specified, name should be unqiue. If not specified, 
     # Excel determines the name of the new worksheet
@@ -49,7 +50,7 @@ public client class Client {
 
     # Retrieves the properties of a worksheet.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + return - `Worksheet` record or error
@@ -63,7 +64,7 @@ public client class Client {
 
     # Retrieves a list of worksheets.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
     # and followed by query parameters. Example: `?$top=2&$count=true`. For more information about query 
@@ -80,7 +81,7 @@ public client class Client {
 
     # Update the properties of worksheet.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + worksheet - 'Worksheet' record contains  values for relevant fields that should be updated
@@ -97,7 +98,7 @@ public client class Client {
 
     # Gets the range object containing the single cell based on row and column numbers.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + row - number of the cell to be retrieved. Zero-indexed
@@ -116,7 +117,7 @@ public client class Client {
 
     # Deletes the worksheet from the workbook.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + return - nil or error
@@ -131,7 +132,7 @@ public client class Client {
 
     # Creates a new table.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + address - Range address or name of the range object representing the data source
@@ -152,7 +153,7 @@ public client class Client {
 
     # Retrieves the properties of table.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -172,7 +173,7 @@ public client class Client {
 
     # Retrieves a list of tables.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
@@ -192,7 +193,7 @@ public client class Client {
 
     # Updates the properties of a table.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -214,7 +215,7 @@ public client class Client {
     # together in a single call rather than doing single row insertion. For best results, collect the rows to be
     # inserted on the application side and perform single rows add operation. 
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -226,7 +227,7 @@ public client class Client {
     remote isolated function createRow(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
                                         @display {label: "Table Name or ID"} string tableNameOrId, 
-                                        @display {label: "Values"} json values, 
+                                        @display {label: "Values"} json[][] values, 
                                         @display {label: "Index"} int? index = ()) 
                                         returns Row|error {
         string path = check createRequestPath([WORKSHEETS, worksheetNameOrId, TABLES, tableNameOrId, ROWS, ADD], 
@@ -237,7 +238,7 @@ public client class Client {
 
     # Retrieves a list of table rows.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -257,9 +258,34 @@ public client class Client {
         return getRowArray(response);
     }
 
+    # Updates the properties of a row.
+    #
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
+    # is in root, path will be `<FILE_NAME>.xlsx`)
+    # + worksheetNameOrId - Worksheet name or ID
+    # + tableNameOrId - Table name or ID
+    # + index - The index number of the row within the rows collection of the table
+    # + values - A 2-dimensional array of unformatted values of the table rows (boolean or string or number). Provide
+    # values for relevant fields that should be updated. Existing properties that are not included in the request will
+    # maintain their previous values or be recalculated based on changes to other property values. For best performance
+    # you shouldn't include existing values that haven't changed
+    # + return - `Row` record or error
+    @display {label: "Update Row"}
+    remote isolated function updateRow(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
+                                        @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
+                                        @display {label: "Table Name or ID"} string tableNameOrId,
+                                        @display {label: "Index"} int index,
+                                        @display {label: "Values"} json[][] values)
+                                        returns Row|error {
+        string path = check createRequestPath([WORKSHEETS, worksheetNameOrId, TABLES, tableNameOrId, ROWS, ITEM_AT + 
+        OPEN_ROUND_BRACKET + INDEX + EQUAL_SIGN + index.toString() + CLOSE_ROUND_BRACKET], workbookIdOrPath);
+        json payload = {values: values};
+        return check self.excelClient->patch(path, payload, targetType = Row);
+    }
+
     # Deletes the row from the table.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -278,7 +304,7 @@ public client class Client {
 
     # Creates a new table column.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -289,7 +315,7 @@ public client class Client {
     remote isolated function createColumn(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
                                             @display {label: "Table Name or ID"} string tableNameOrId, 
-                                            @display {label: "Values"} json values, 
+                                            @display {label: "Values"} json[][] values, 
                                             @display {label: "Index"} int? index = ()) 
                                             returns Column|error {
         string path = check createRequestPath([WORKSHEETS, worksheetNameOrId, TABLES, tableNameOrId, COLUMNS, ADD], 
@@ -300,7 +326,7 @@ public client class Client {
 
     # Retrieves a list of table columns.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -320,9 +346,42 @@ public client class Client {
         return getColumnArray(response);
     }
 
+    # Updates the properties of a column.
+    #
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
+    # is in root, path will be `<FILE_NAME>.xlsx`)
+    # + worksheetNameOrId - Worksheet name or ID
+    # + tableNameOrId - Table name or ID
+    # + index - The index number of the column within the columns collection of the table
+    # + values -  A 2-dimensional array of unformatted values of the table rows (boolean or string or number). Provide
+    # values for relevant fields that should be updated. Existing properties that are not included in the request will
+    # maintain their previous values or be recalculated based on changes to other property values. For best performance
+    # you shouldn't include existing values that haven't changed
+    # + name - The name of the table column
+    # + return - `Column` record or error
+    @display {label: "Update Column"}
+    remote isolated function updateColumn(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
+                                            @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
+                                            @display {label: "Table Name or ID"} string tableNameOrId,
+                                            @display {label: "Index"} int index,
+                                            @display {label: "Values"} json[][]? values = (),
+                                            @display {label: "Column Name"} string? name = ())
+                                            returns Column|error {
+        string path = check createRequestPath([WORKSHEETS, worksheetNameOrId, TABLES, tableNameOrId, COLUMNS, ITEM_AT + 
+        OPEN_ROUND_BRACKET + INDEX + EQUAL_SIGN + index.toString() + CLOSE_ROUND_BRACKET], workbookIdOrPath);
+        map<json> payload = {index: index};
+        if (name is string) {
+            payload["name"] = name;
+        }
+        if (values is json[][]) {
+            payload["values"] = values;
+        }
+        return check self.excelClient->patch(path, payload, targetType = Column);
+    }
+
     # Deletes a column from the table.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -341,7 +400,7 @@ public client class Client {
 
     # Deletes a table.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
@@ -357,7 +416,7 @@ public client class Client {
 
     # Creates a new chart.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + type - Represents the type of a chart. The possible values are: ColumnClustered, ColumnStacked,
@@ -379,7 +438,7 @@ public client class Client {
 
     # Retrieves the properties of a chart.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + chartName - Chart name
@@ -400,7 +459,7 @@ public client class Client {
 
     # Retrieve a list of charts.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
@@ -419,7 +478,7 @@ public client class Client {
 
     # Updates the properties of chart.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + chartName - Chart name
@@ -438,7 +497,7 @@ public client class Client {
 
     # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + chartName - Chart name
@@ -464,7 +523,7 @@ public client class Client {
 
     # Resets the source data for the chart.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + chartName - Chart name
@@ -486,7 +545,7 @@ public client class Client {
 
     # Positions the chart relative to cells on the worksheet.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + chartName - Chart name
@@ -510,7 +569,7 @@ public client class Client {
 
     # Deletes a chart.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + chartName - Chart name
@@ -527,7 +586,7 @@ public client class Client {
 
     # Retrieve the properties of a workbookApplication.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + return - `WorkbookApplication` or error
     @display {label: "Get Workbook Application"}
@@ -540,7 +599,7 @@ public client class Client {
 
     # Recalculate all currently opened workbooks in Excel.
     #
-    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
+    # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + 'type - Specifies the calculation type to use
     # + return - nil or error
@@ -554,11 +613,11 @@ public client class Client {
     }
 }
 
-# Record used to create excel client
+# Represents client configuration.
 #
-# + authConfig - Client configuration  
+# + authConfig - Client auth configuration  
 # + secureSocketConfig - Secure socket configuration
-@display {label: "Excel Configuration"}
+@display {label: "Connection Config"}
 public type ExcelConfiguration record {
     http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig authConfig;
     http:ClientSecureSocket secureSocketConfig?;
