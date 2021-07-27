@@ -11,7 +11,7 @@ The `microsoft.excel` is a [Ballerina](https://ballerina.io/) connector for Micr
 
 This connector provides operations for connecting and interacting with Microsoft Graph API Excel endpoints over the network. 
 For more information about configuration and operations, go to the module. 
-- [`microsoft.excel`](https://docs.central.ballerina.io/ballerinax/microsoft.excel/1.0.1-SNAPSHOT).
+- [`microsoft.excel`](excel/Module.md)
 
 # Building from the Source
 ## Setting Up the Prerequisites
