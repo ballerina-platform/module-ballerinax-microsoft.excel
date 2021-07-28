@@ -14,7 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Represents worksheet properties
+# Represents worksheet properties.
 #
 # + id - Returns a value that uniquely identifies the worksheet in a given workbook. The value of the identifier remains
 # the same even when the worksheet is renamed or moved

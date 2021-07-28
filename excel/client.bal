@@ -16,15 +16,21 @@
 
 import ballerina/http;
 
-# Microsoft Excel connector client endpoint
+# Ballerina Microsoft Excel connector provides the capability to access Microsoft Graph Excel API
+# It provides capability to perform perform CRUD (Create, Read, Update, and Delete) operations on [Excel workbooks]
+# (https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in Microsoft OneDrive.
+#  
 @display {label: "Microsoft Excel", iconPath: "logo.svg"}
-public client class Client {
-    http:Client excelClient;
+public isolated client class Client {
+    final http:Client excelClient;
 
-    # Initializes the Excel connector client.
-    #
-    # + configuration - Configurations required to initialize the `Client`
-    # + return - An error on failure of initialization else `()`
+    # Initializes the connector. During initialization you can pass either http:BearerTokenConfig if you have a bearer 
+    # token or http:OAuth2RefreshTokenGrantConfig if you have OAuth tokens.
+    # Create a Microsoft account and obtain tokens following 
+    # [this guide](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols)
+    # 
+    # + configuration - Configurations required to initialize the client
+    # + return - An error on failure of initialization or else `()`
     public isolated function init(ExcelConfiguration configuration) returns error? {
         self.excelClient = check new (BASE_URL, {
             auth: configuration.authConfig,
@@ -38,7 +44,7 @@ public client class Client {
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetName - The name of the worksheet to be added. If specified, name should be unqiue. If not specified, 
     # Excel determines the name of the new worksheet
-    # + return - `Worksheet` record or error
+    # + return - `Worksheet` record or else an `error` if failed
     @display {label: "Add Worksheet"}
     remote isolated function addWorksheet(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name"} string? worksheetName = ()) 
@@ -53,7 +59,7 @@ public client class Client {
     # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
-    # + return - `Worksheet` record or error
+    # + return - `Worksheet` record or else an `error` if failed
     @display {label: "Get Worksheet"}
     remote isolated function getWorksheet(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId) 
@@ -69,7 +75,7 @@ public client class Client {
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
     # and followed by query parameters. Example: `?$top=2&$count=true`. For more information about query 
     # parameters, refer https://docs.microsoft.com/en-us/graph/query-parameters
-    # + return - `Worksheet` record list or error
+    # + return - `Worksheet` record list or else an `error` if failed
     @display {label: "List Worksheets"}
     remote isolated function listWorksheets(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Query"} string? query = ()) 
@@ -85,7 +91,7 @@ public client class Client {
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + worksheet - 'Worksheet' record contains  values for relevant fields that should be updated
-    # + return - `Worksheet` record or error
+    # + return - `Worksheet` record or else an `error` if failed
     @display {label: "Update Worksheet"}
     remote isolated function updateWorksheet(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                                 @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -103,7 +109,7 @@ public client class Client {
     # + worksheetNameOrId - Worksheet name or ID
     # + row - number of the cell to be retrieved. Zero-indexed
     # + column - Column number of the cell to be retrieved. Zero-indexed
-    # + return - `Cell` record or error
+    # + return - `Cell` record or else an `error` if failed
     @display {label: "Get Cell"}
     remote isolated function getCell(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -120,7 +126,7 @@ public client class Client {
     # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a workbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
-    # + return - nil or error
+    # + return - `()` or else an `error` if failed
     @display {label: "Delete Worksheet"}
     remote isolated function deleteWorksheet(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                                 @display {label: "Worksheet Name or ID"} string worksheetNameOrId) 
@@ -139,7 +145,7 @@ public client class Client {
     # + hasHeaders - Boolean value that indicates whether the data being imported has column labels. If the source does
     # not contain headers (i.e,. when this property set to false), Excel will automatically generate
     # header shifting the data down by one row
-    # + return - `Table` record or error
+    # + return - `Table` record or else an `error` if failed
     @display {label: "Add Table"}
     remote isolated function addTable(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -160,7 +166,7 @@ public client class Client {
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
     # and followed by query parameters. Example: `?$top=2&$count=true`. For more information about query 
     # parameters, refer https://docs.microsoft.com/en-us/graph/query-parameters
-    # + return - `Table` record or error
+    # + return - `Table` record or else an `error` if failed
     @display {label: "Get Table"}
     remote isolated function getTable(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -179,7 +185,7 @@ public client class Client {
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
     # and followed by query parameters. Example: `?$top=2&$count=true`. For more information about query 
     # parameters, refer https://docs.microsoft.com/en-us/graph/query-parameters
-    # + return - `Table` record list or error
+    # + return - `Table` record list or else an `error` if failed
     @display {label: "List Tables"}
     remote isolated function listTables(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string? worksheetNameOrId = (), 
@@ -198,7 +204,7 @@ public client class Client {
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
     # + 'table - `Table` record contains the values for relevant fields that should be updated
-    # + return - `Table` record or error
+    # + return - `Table` record or else an `error` if failed
     @display {label: "Update Table"}
     remote isolated function updateTable(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -222,7 +228,7 @@ public client class Client {
     # + values - A 2-dimensional array of unformatted values of the table rows (boolean or string or number).
     # + index - Specifies the relative position of the new row. If null, the addition happens at the end. Any rows below
     # the inserted row are shifted downwards. Zero-indexed
-    # + return - `Row` record or error
+    # + return - `Row` record or else an `error` if failed
     @display {label: "Create Row"}
     remote isolated function createRow(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -245,7 +251,7 @@ public client class Client {
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
     # and followed by query parameters. Example: `?$top=2&$count=true`. For more information about query 
     # parameters, refer https://docs.microsoft.com/en-us/graph/query-parameters
-    # + return - `Row` record list or error
+    # + return - `Row` record list or else an `error` if failed
     @display {label: "List Rows"}
     remote isolated function listRows(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -269,7 +275,7 @@ public client class Client {
     # values for relevant fields that should be updated. Existing properties that are not included in the request will
     # maintain their previous values or be recalculated based on changes to other property values. For best performance
     # you shouldn't include existing values that haven't changed
-    # + return - `Row` record or error
+    # + return - `Row` record or else an `error` if failed
     @display {label: "Update Row"}
     remote isolated function updateRow(@display {label: "Workbook ID or Path"} string workbookIdOrPath,
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId,
@@ -290,7 +296,7 @@ public client class Client {
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
     # + index - Row index
-    # + return - nil or error
+    # + return - `()` or else an `error` if failed
     @display {label: "Delete Row"}
     remote isolated function deleteRow(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -310,7 +316,7 @@ public client class Client {
     # + tableNameOrId - Table name or ID
     # + values - A 2-dimensional array of unformatted values of the table columns (boolean or string or number).
     # + index - The index number of the column within the columns collection of the table
-    # + return - `Column` record or error
+    # + return - `Column` record or else an `error` if failed
     @display {label: "Create Column"}
     remote isolated function createColumn(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -333,7 +339,7 @@ public client class Client {
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
     # and followed by query parameters. Example: `?$top=2&$count=true`. For more information about query 
     # parameters, refer https://docs.microsoft.com/en-us/graph/query-parameters
-    # + return - `Column` record list or error
+    # + return - `Column` record list or else an `error` if failed
     @display {label: "List Columns"}
     remote isolated function listColumns(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -358,7 +364,7 @@ public client class Client {
     # maintain their previous values or be recalculated based on changes to other property values. For best performance
     # you shouldn't include existing values that haven't changed
     # + name - The name of the table column
-    # + return - `Column` record or error
+    # + return - `Column` record or else an `error` if failed
     @display {label: "Update Column"}
     remote isolated function updateColumn(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -386,7 +392,7 @@ public client class Client {
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
     # + index - The index number of the column within the columns collection of the table
-    # + return - nil or error
+    # + return - `()` or else an `error` if failed
     @display {label: "Delete Column"}
     remote isolated function deleteColumn(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -404,7 +410,7 @@ public client class Client {
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + tableNameOrId - Table name or ID
-    # + return - nil or error
+    # + return - `()` or else an `error` if failed
     @display {label: "Delete Table"}
     remote isolated function deleteTable(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -424,7 +430,7 @@ public client class Client {
     # LineMarkersStacked, LineMarkersStacked100, PieOfPie, etc.
     # + sourceData - The Range object corresponding to the source data
     # + seriesBy - Specifies the way columns or rows are used as data series on the chart
-    # + return - `Chart` record or error
+    # + return - `Chart` record or else an `error` if failed
     @display {label: "Add Chart"}
     remote isolated function addChart(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -445,7 +451,7 @@ public client class Client {
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
     # and followed by query parameters. Example: `?$top=2&$count=true`. For more information about query 
     # parameters, refer https://docs.microsoft.com/en-us/graph/query-parameters
-    # + return - `Chart` record or error
+    # + return - `Chart` record or else an `error` if failed
     @display {label: "Get Chart"}
     remote isolated function getChart(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -465,7 +471,7 @@ public client class Client {
     # + query - Query string that can control the amount of data returned in a response. String should start with `?` 
     # and followed by query parameters. Example: `?$top=2&$count=true`. For more information about query 
     # parameters, refer https://docs.microsoft.com/en-us/graph/query-parameters
-    # + return - `Chart` record list or error
+    # + return - `Chart` record list or else an `error` if failed
     @display {label: "List Charts"}
     remote isolated function listCharts(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                         @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -483,7 +489,7 @@ public client class Client {
     # + worksheetNameOrId - Worksheet name or ID
     # + chartName - Chart name
     # + chart - 'Chart' record contains values for relevant fields that should be updated
-    # + return - `Chart` record or error
+    # + return - `Chart` record or else an `error` if failed
     @display {label: "Update Chart"}
     remote isolated function updateChart(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -504,7 +510,7 @@ public client class Client {
     # + width - The desired width of the resulting image
     # + height - The desired height of the resulting image.
     # + fittingMode - The method used to scale the chart to the specified dimensions (if both height and width are set)
-    # + return - Base-64 image string or error
+    # + return - Base-64 image string or else an `error` if failed
     @display {label: "Get Chart Image"}
     remote isolated function getChartImage(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -529,7 +535,7 @@ public client class Client {
     # + chartName - Chart name
     # + sourceData - The Range object corresponding to the source data
     # + seriesBy - Specifies the way columns or rows are used as data series on the chart
-    # + return - nil or error
+    # + return - `()` or else an `error` if failed
     @display {label: "Reset Chart Data"}
     remote isolated function resetChartData(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -552,7 +558,7 @@ public client class Client {
     # + startCell - The start cell. This is where the chart will be moved to. The start cell is the top-left or 
     # top-right cell, depending on the user's right-to-left display settings.
     # + endCell - The end cell. If specified, the chart's width and height will be set to fully cover up this cell/range
-    # + return - nil or error
+    # + return - `()` or else an `error` if failed
     @display {label: "Set Chart Position"}
     remote isolated function setChartPosition(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                                 @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -573,7 +579,7 @@ public client class Client {
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + worksheetNameOrId - Worksheet name or ID
     # + chartName - Chart name
-    # + return - nil or error
+    # + return - `()` or else an `error` if failed
     @display {label: "Delete Chart"}
     remote isolated function deleteChart(@display {label: "Workbook ID or Path"} string workbookIdOrPath, 
                                             @display {label: "Worksheet Name or ID"} string worksheetNameOrId, 
@@ -584,11 +590,11 @@ public client class Client {
         _ = check handleResponse(response);
     }
 
-    # Retrieve the properties of a workbookApplication.
+    # Retrieves the properties of a workbookApplication.
     #
     # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
-    # + return - `WorkbookApplication` or error
+    # + return - `WorkbookApplication` or else an `error` if failed
     @display {label: "Get Workbook Application"}
     remote isolated function getWorkbookApplication(@display {label: "Workbook ID or Path"} string workbookIdOrPath) 
                                                     returns WorkbookApplication|error {
@@ -597,12 +603,12 @@ public client class Client {
         return response;
     }
 
-    # Recalculate all currently opened workbooks in Excel.
+    # Recalculates all currently opened workbooks in Excel.
     #
     # + workbookIdOrPath - Workbook ID or file path. Path should be with the `.xlsx` extension from root. If a worksbook
     # is in root, path will be `<FILE_NAME>.xlsx`)
     # + 'type - Specifies the calculation type to use
-    # + return - nil or error
+    # + return - `()` or else an `error` if failed
     @display {label: "Calculate Workbook Application"}
     remote isolated function calculateWorkbookApplication(@display {label: "Workbook ID or Path"} string 
                                                             workbookIdOrPath, CalculationType 'type) returns error? {
