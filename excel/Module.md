@@ -1,12 +1,14 @@
 ## Overview
-Ballerina connector for Microsoft Excel is connecting the  Microsoft Graph Excel API via Ballerina language. It provides capability to perform CRUD (Create, Read, Update, and Delete) operations on [Excel workbooks](https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in Microsoft OneDrive. 
+
+Ballerina connector for Microsoft Excel connects the Microsoft Graph Excel API via [Ballerina](https://ballerina.io/). It provides the capability to perform CRUD (Create, Read, Update, and Delete) operations on [Excel workbooks](https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in a Microsoft OneDrive.  
 
 This module supports [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) v1.0 version and only allows to perform functions behalf of the currently logged in user.
 
 ## Prerequisites
 Before using this connector in your Ballerina application, complete the following:
-1. Create a [Microsoft Office365 account](https://signup.live.com/)
-2. Obtain token - Follow the steps [here](https://docs.microsoft.com/en-us/graph/auth-v2-user#authentication-and-authorization-steps)
+1. Create a [Microsoft Office 365 account](https://signup.live.com/)
+2. Obtain tokens  
+ Follow the steps [here](https://docs.microsoft.com/en-us/graph/auth-v2-user#authentication-and-authorization-steps)
 
 ## Quickstart
 To use the Microsoft Excel connector in your Ballerina application, update the .bal file as follows:
@@ -17,7 +19,7 @@ Import the `ballerinax/microsoft.excel` module into the Ballerina project.
 import ballerinax/microsoft.excel;
 ```
 ### Step 2: Create a new connector instance
-Create a `excel:Configuration` with the OAuth2 tokens obtained, and initialize the connector with it. 
+Create an `excel:Configuration` with the OAuth2 tokens obtained and initialize the connector with it. 
 ```ballerina
 excel:Configuration configuration = {
     clientConfig: {
