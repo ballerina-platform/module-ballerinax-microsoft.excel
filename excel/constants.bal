@@ -20,6 +20,7 @@ const string DRIVE = "drive";
 const string ITEMS = "items";
 const string WORKBOOK = "workbook";
 const string WORKSHEETS = "worksheets";
+const string CREATE_SESSION = "createSession";
 const string ADD = "add";
 const string TABLES = "tables";
 const string CHARTS = "charts";
@@ -50,6 +51,7 @@ const string FITTING_MODE = "fittingMode";
 const string SET_DATA = "setData";
 const string SET_POSITION = "setPosition";
 const string VALUE = "value";
+const string WORKBOOK_SESSION_ID = "workbook-session-id";
 
 // Symbols
 const string QUESTION_MARK = "?";

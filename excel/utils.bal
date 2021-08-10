@@ -16,6 +16,13 @@
 
 import ballerina/http;
 
+isolated function createRequestParams(string[] pathParameters, string workbookIdOrPath, string? sessionId = (), string? query = ()) 
+returns [string, map<string|string[]>?]|error {
+    string path = check createRequestPath(pathParameters, workbookIdOrPath, query);
+    map<string|string[]>? headers = createRequestHeader(sessionId);
+    return [path, headers];
+}
+
 isolated function createRequestPath(string[] pathParameters, string workbookIdOrPath, string? query = ()) 
 returns string|error {
     string path = EMPTY_STRING;
@@ -26,6 +33,15 @@ returns string|error {
     path = check createPath(path, pathParameters);
     path = query is string ? (path + query) : path;
     return path;
+}
+
+isolated function createRequestHeader(string? sessionId = ()) returns map<string|string[]>? {
+    if sessionId is string {
+        map<string|string[]> headers = {};
+        headers[WORKBOOK_SESSION_ID] = sessionId;
+        return headers;
+    }
+    return;
 }
 
 isolated function createPath(string currentpath, string[] pathParameters) returns string|error {
