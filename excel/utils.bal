@@ -63,7 +63,7 @@ returns string {
 
 isolated function handleResponse(http:Response httpResponse) returns map<json>|error {
     if (httpResponse.statusCode == http:STATUS_OK || httpResponse.statusCode == http:STATUS_CREATED) {
-        json jsonResponse = check httpResponse.getJsonPayload();
+        final json jsonResponse = check httpResponse.getJsonPayload();
         return <map<json>>jsonResponse;
     } else if (httpResponse.statusCode == http:STATUS_NO_CONTENT) {
         return {};
