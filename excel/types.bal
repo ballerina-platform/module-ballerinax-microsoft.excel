@@ -202,3 +202,7 @@ public enum FittingMode {
     FIT_AND_CENTER = "FitAndCenter",
     FILL = "Fill"
 }
+
+type Session record {
+    string id;
+};
