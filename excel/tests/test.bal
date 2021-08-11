@@ -282,7 +282,7 @@ function testDeleteColumn() {
 @test:Config {dependsOn: [testDeleteColumn, testDeleteRow]}
 function testDeleteTable() {
     log:printInfo("excelClient -> deleteTable()");
-    error? response = excelClient->deleteTable(workBookId, worksheetName, tableName);
+    error? response = excelClient->deleteTable(workBookId, worksheetName, tableName, sessionId);
     if (response is error) {
         test:assertFail(response.toString());
     }
