@@ -133,7 +133,7 @@ public isolated client class Client {
                                                 @display {label: "Session ID"} string? sessionId = ()) 
                                                 returns Worksheet|error {
         [string, map<string|string[]>?] [path, headers] = check createRequestParams([WORKSHEETS, worksheetNameOrId], 
-        workbookIdOrPath);
+        workbookIdOrPath, sessionId);
         json payload = check worksheet.cloneWithType(json);
         return check self.excelClient->patch(path, payload, headers, targetType = Worksheet);
     }
@@ -172,7 +172,7 @@ public isolated client class Client {
                                                 @display {label: "Session ID"} string? sessionId = ()) 
                                                 returns error? {
         [string, map<string|string[]>?] [path, headers] = check createRequestParams([WORKSHEETS, worksheetNameOrId], 
-        workbookIdOrPath);
+        workbookIdOrPath, sessionId);
         http:Response response = check self.excelClient->delete(path, headers = headers);
         _ = check handleResponse(response);
     }
@@ -196,7 +196,7 @@ public isolated client class Client {
                                         @display {label: "Session ID"} string? sessionId = ()) 
                                         returns Table|error {
         [string, map<string|string[]>?] [path, headers] = check createRequestParams([WORKSHEETS, worksheetNameOrId, 
-        TABLES, ADD], workbookIdOrPath);
+        TABLES, ADD], workbookIdOrPath, sessionId);
         json payload = {address: address, hasHeaders: hasHeaders};
         return check self.excelClient->post(path, payload, headers, targetType = Table);
     }
@@ -366,7 +366,7 @@ public isolated client class Client {
                                         @display {label: "Session ID"} string? sessionId = ()) returns error? {
         [string, map<string|string[]>?] [path, headers] = check createRequestParams([WORKSHEETS, worksheetNameOrId, 
         TABLES, tableNameOrId, ROWS, ITEM_AT + OPEN_ROUND_BRACKET + INDEX + EQUAL_SIGN + index.toString() + 
-        CLOSE_ROUND_BRACKET], workbookIdOrPath);
+        CLOSE_ROUND_BRACKET], workbookIdOrPath, sessionId);
         http:Response response = check self.excelClient->delete(path, headers = headers);
         _ = check handleResponse(response);
     }
@@ -414,8 +414,7 @@ public isolated client class Client {
                                             @display {label: "Session ID"} string? sessionId = ()) 
                                             returns @display {label: "Column List"} Column[]|error {
         [string, map<string|string[]>?] [path, headers] = check createRequestParams([WORKSHEETS, worksheetNameOrId, 
-        TABLES, tableNameOrId, COLUMNS], 
-        workbookIdOrPath, sessionId, query);
+        TABLES, tableNameOrId, COLUMNS], workbookIdOrPath, sessionId, query);
         http:Response response = check self.excelClient->get(path, headers);
         return getColumnArray(response);
     }

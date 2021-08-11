@@ -46,7 +46,6 @@ function testCreateSession() {
     string|error response = excelClient->createSession(workBookId);
     if (response is string) {
         sessionId = response;
-        log:printInfo(response);
         test:assertNotEquals(response, EMPTY_STRING, "Session is not created");
     } else {
         test:assertFail(response.toString());
