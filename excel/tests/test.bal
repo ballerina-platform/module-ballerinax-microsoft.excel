@@ -46,7 +46,6 @@ function testCreateSession() {
     string|error response = excelClient->createSession(workBookId);
     if (response is string) {
         sessionId = response;
-        log:printInfo(response);
         test:assertNotEquals(response, EMPTY_STRING, "Session is not created");
     } else {
         test:assertFail(response.toString());
@@ -283,7 +282,7 @@ function testDeleteColumn() {
 @test:Config {dependsOn: [testDeleteColumn, testDeleteRow]}
 function testDeleteTable() {
     log:printInfo("excelClient -> deleteTable()");
-    error? response = excelClient->deleteTable(workBookId, worksheetName, tableName);
+    error? response = excelClient->deleteTable(workBookId, worksheetName, tableName, sessionId);
     if (response is error) {
         test:assertFail(response.toString());
     }
