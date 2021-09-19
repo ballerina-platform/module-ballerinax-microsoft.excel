@@ -24,8 +24,8 @@ configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 configurable string workbookIdOrPath = os:getEnv("WORKBOOK_PATH");
 
-ExcelConfiguration configuration = {
-    authConfig: {
+ConnectionConfig configuration = {
+    auth: {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshToken: refreshToken,

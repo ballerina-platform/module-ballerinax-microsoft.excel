@@ -19,10 +19,10 @@ Import the `ballerinax/microsoft.excel` module into the Ballerina project.
 import ballerinax/microsoft.excel;
 ```
 ### Step 2: Create a new connector instance
-Create an `excel:Configuration` with the OAuth2 tokens obtained and initialize the connector with it. 
+Create an `excel:ConnectionConfig` with the OAuth2 tokens obtained and initialize the connector with it. 
 ```ballerina
-excel:Configuration configuration = {
-    clientConfig: {
+excel:ConnectionConfig configuration = {
+    auth: {
         refreshUrl: <REFRESH_URL>,
         refreshToken : <REFRESH_TOKEN>,
         clientId : <CLIENT_ID>,
