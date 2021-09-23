@@ -21,7 +21,7 @@ import ballerina/http;
 # (https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in Microsoft OneDrive.
 # If you have more than one call to make within a certain period of time, Microsoft recommends to create a session and 
 # pass the session ID with each request. By default, this connector uses sessionless.
-@display {label: "Microsoft Excel", iconPath: "logo.svg"}
+@display {label: "Microsoft Excel", iconPath: "resources/microsoft.excel.svg"}
 public isolated client class Client {
     private final http:Client excelClient;
 
@@ -32,11 +32,8 @@ public isolated client class Client {
     # 
     # + configuration - Configurations required to initialize the client
     # + return - An error on failure of initialization or else `()`
-    public isolated function init(ExcelConfiguration configuration) returns error? {
-        self.excelClient = check new (BASE_URL, {
-            auth: configuration.authConfig,
-            secureSocket: configuration?.secureSocketConfig
-        });
+    public isolated function init(ConnectionConfig configuration) returns error? {
+        self.excelClient = check new (BASE_URL, configuration);
     }
 
     # Creates a session.
@@ -724,10 +721,36 @@ public isolated client class Client {
 
 # Record used to create excel client
 #
-# + authConfig - Client configuration  
-# + secureSocketConfig - Secure socket configuration
-@display {label: "Excel Configuration"}
-public type ExcelConfiguration record {
-    http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig authConfig;
-    http:ClientSecureSocket secureSocketConfig?;
-};
+@display {label: "Connection Config"}
+public type ConnectionConfig record {|
+    # Configurations related to client authentication
+    http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig auth;
+    # The HTTP version understood by the client
+    string httpVersion = "1.1";
+    # Configurations related to HTTP/1.x protocol
+    http:ClientHttp1Settings http1Settings = {};
+    # Configurations related to HTTP/2 protocol
+    http:ClientHttp2Settings http2Settings = {};
+    # The maximum time to wait (in seconds) for a response before closing the connection
+    decimal timeout = 60;
+    # The choice of setting `forwarded`/`x-forwarded` header
+    string forwarded = "disable";
+    # Configurations associated with Redirection
+    http:FollowRedirects? followRedirects = ();
+    # Configurations associated with request pooling
+    http:PoolConfiguration? poolConfig = ();
+    # HTTP caching related configurations
+    http:CacheConfig cache = {};
+    # Specifies the way of handling compression (`accept-encoding`) header
+    http:Compression compression = http:COMPRESSION_AUTO;
+    # Configurations associated with the behaviour of the Circuit Breaker
+    http:CircuitBreakerConfig? circuitBreaker = ();
+    # Configurations associated with retrying
+    http:RetryConfig? retryConfig = ();
+    # Configurations associated with cookies
+    http:CookieConfig? cookieConfig = ();
+    # Configurations associated with inbound response size limits
+    http:ResponseLimitConfigs responseLimits = {};
+    #SSL/TLS-related options
+    http:ClientSecureSocket? secureSocket = ();
+|};

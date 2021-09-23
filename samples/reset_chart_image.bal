@@ -23,8 +23,8 @@ configurable string refreshToken = ?;
 configurable string refreshUrl = ?;
 configurable string workbookIdOrPath = ?;
 
-excel:ExcelConfiguration configuration = {
-    authConfig: {
+excel:ConnectionConfig configuration = {
+    auth: {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshToken: refreshToken,
