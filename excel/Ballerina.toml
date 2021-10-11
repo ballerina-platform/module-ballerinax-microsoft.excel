@@ -1,8 +1,8 @@
 [package]
 org= "ballerinax"
 name= "microsoft.excel"
-version= "1.0.1-SNAPSHOT"
+version= "2.0.0"
 license= ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["productivity/spreadsheets", "cost/free", "vendor/microsoft"]
+keywords = ["Productivity/Spreadsheets", "Cost/Free", "Vendor/Microsoft"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.excel"
