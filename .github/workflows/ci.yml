@@ -13,7 +13,14 @@ jobs:
               uses: ballerina-platform/ballerina-action/@nightly
               with:
                 args:
-                    build -c 
+                    pack
+              env:
+                WORKING_DIR: ./excel
+            - name: Ballerina Test
+              uses: ballerina-platform/ballerina-action/@nightly
+              with:
+                args:
+                    test
               env:
                 WORKING_DIR: ./excel
                 REFRESH_URL: ${{ secrets.REFRESH_URL }}
