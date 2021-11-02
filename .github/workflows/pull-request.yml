@@ -13,6 +13,6 @@ jobs:
         uses: ballerina-platform/ballerina-action/@nightly
         with:
           args:
-            build -c --skip-tests
+            pack
         env:
           WORKING_DIR: ./excel

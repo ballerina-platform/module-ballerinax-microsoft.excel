@@ -25,11 +25,11 @@ Execute the commands below to build from the source after installing Ballerina S
 
 1. To build the package:
     ```    
-    bal build -c ./excel
+    bal pack ./excel
     ```
-2. To build the package without tests:
+2. To run tests after build:
     ```
-    bal build -c --skip-tests ./excel
+    bal test ./excel
     ```
 ## Contributing to Ballerina
 As an open source project, Ballerina welcomes contributions from the community. 
