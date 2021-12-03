@@ -21,7 +21,7 @@ import ballerina/http;
 # (https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in Microsoft OneDrive.
 # If you have more than one call to make within a certain period of time, Microsoft recommends to create a session and 
 # pass the session ID with each request. By default, this connector uses sessionless.
-@display {label: "Microsoft Excel", iconPath: "resources/microsoft.excel.svg"}
+@display {label: "Microsoft Excel", iconPath: "icon.png"}
 public isolated client class Client {
     private final http:Client excelClient;
 
