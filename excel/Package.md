@@ -8,7 +8,7 @@ This package provides the capability to perform CRUD operations in Microsoft Exc
 ### Compatibility
 |                     | Version         |
 |---------------------|-----------------|
-| Ballerina Language  | Swan Lake Beta3 |
+| Ballerina Language  | Swan Lake Beta6 |
 | Microsoft Graph API | v1.0            |
 
 ## Report issues
