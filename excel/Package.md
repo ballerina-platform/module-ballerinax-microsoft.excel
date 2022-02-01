@@ -6,10 +6,10 @@ The `microsoft.excel` is a [Ballerina](https://ballerina.io/) connector for Micr
 This package provides the capability to perform CRUD operations in Microsoft Excel worksheet table, and chart.
 
 ### Compatibility
-|                     | Version         |
-|---------------------|-----------------|
-| Ballerina Language  | Swan Lake Beta6 |
-| Microsoft Graph API | v1.0            |
+|                     | Version            |
+|---------------------|--------------------|
+| Ballerina Language  | Swan Lake 2201.0.0 |
+| Microsoft Graph API | v1.0               |
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)
