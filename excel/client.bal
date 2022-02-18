@@ -17,10 +17,10 @@
 import ballerina/http;
 
 # Ballerina Microsoft Excel connector provides the capability to access Microsoft Graph Excel API
-# It provides capability to perform perform CRUD (Create, Read, Update, and Delete) operations on [Excel workbooks]
-# (https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in Microsoft OneDrive.
-# If you have more than one call to make within a certain period of time, Microsoft recommends to create a session and 
-# pass the session ID with each request. By default, this connector uses sessionless.
+# It provides capability to perform perform CRUD (Create, Read, Update, and Delete) operations on 
+# [Excel workbooks](https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in 
+# Microsoft OneDrive. If you have more than one call to make within a certain period of time, Microsoft recommends to 
+# create a session and pass the session ID with each request. By default, this connector uses sessionless.
 @display {label: "Microsoft Excel", iconPath: "icon.png"}
 public isolated client class Client {
     private final http:Client excelClient;
