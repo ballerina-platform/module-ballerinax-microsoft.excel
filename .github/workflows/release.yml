@@ -12,7 +12,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: Ballerina Build
-              uses: ballerina-platform/ballerina-action/@master
+              uses: ballerina-platform/ballerina-action/@2201.2.1
               with:
                   args:
                       pack
@@ -24,7 +24,7 @@ jobs:
                   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
                   WORKBOOK_PATH: ${{ secrets.WORKBOOK_PATH }}
             - name: Ballerina Push
-              uses: ballerina-platform/ballerina-action/@master
+              uses: ballerina-platform/ballerina-action/@2201.2.1
               with:
                   args:
                       push
