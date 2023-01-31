@@ -220,7 +220,7 @@ function testUpdateRow() {
     }
 }
 
-@test:Config {dependsOn: [testUpdateRow]}
+@test:Config {dependsOn: [testUpdateRow, testListRows]}
 function testDeleteRow() {
     log:printInfo("excelClient -> deleteRow()");
     error? response = excelClient->deleteRow(workBookId, worksheetName, tableName, rowInputIndex, sessionId);
@@ -270,7 +270,7 @@ function testUpdateColumn() {
     }
 }
 
-@test:Config {dependsOn: [testUpdateColumn]}
+@test:Config {dependsOn: [testUpdateColumn, testListColumn]}
 function testDeleteColumn() {
     log:printInfo("excelClient -> deleteColumn()");
     error? response = excelClient->deleteColumn(workBookId, worksheetName, tableName, columnInputIndex, sessionId);
@@ -279,7 +279,7 @@ function testDeleteColumn() {
     }
 }
 
-@test:Config {dependsOn: [testDeleteColumn, testDeleteRow]}
+@test:Config {dependsOn: [testDeleteColumn, testDeleteRow, testListTable, testUpdateTable]}
 function testDeleteTable() {
     log:printInfo("excelClient -> deleteTable()");
     error? response = excelClient->deleteTable(workBookId, worksheetName, tableName, sessionId);
