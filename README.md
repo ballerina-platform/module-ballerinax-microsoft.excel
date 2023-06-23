@@ -3,6 +3,7 @@ Ballerina Microsoft Excel Connector
 
 [![Build Status](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/workflows/CI/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions?query=workflow%3ACI)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-microsoft.excel.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/commits/master)
+[![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions/workflows/build-with-bal-test-native.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions/workflows/build-with-bal-test-native.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [Microsoft Excel](https://www.microsoft.com/en-ww/microsoft-365/excel) is a spreadsheet application developed by Microsoft in Microsoft Office 365.
