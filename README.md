@@ -2,6 +2,7 @@ Ballerina Microsoft Excel Connector
 ===================
 
 [![Build Status](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/workflows/CI/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/ballerina-platform/module-ballerinax-microsoft.excel/branch/master/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerinax-microsoft.excel)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-microsoft.excel.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/commits/master)
 [![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions/workflows/build-with-bal-test-native.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions/workflows/build-with-bal-test-native.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
