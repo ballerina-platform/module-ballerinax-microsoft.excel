@@ -2,6 +2,7 @@ Ballerina Microsoft Excel Connector
 ===================
 
 [![Build Status](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/workflows/CI/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/ballerina-platform/module-ballerinax-microsoft.excel/branch/master/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerinax-microsoft.excel)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-microsoft.excel.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/commits/master)
 [![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions/workflows/build-with-bal-test-native.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/actions/workflows/build-with-bal-test-native.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -26,11 +27,11 @@ Execute the commands below to build from the source after installing Ballerina.
 
 1. To build the package:
     ```    
-    bal pack ./excel
+    bal build ./ballerina
     ```
 2. To run tests after build:
     ```
-    bal test ./excel
+    bal test ./ballerina
     ```
 ## Contributing to Ballerina
 As an open source project, Ballerina welcomes contributions from the community. 
