@@ -35,8 +35,8 @@ excel:ConnectionConfig configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:Application|error response = excelClient->getWorkbookApplication(workbookIdOrPath);
-    if (response is excel:Application) {
+    excel:WorkbookApplication|error response = excelClient->getWorkbookApplication(workbookIdOrPath);
+    if (response is excel:WorkbookApplication) {
         log:printInfo(response.toString());
     }
 }
