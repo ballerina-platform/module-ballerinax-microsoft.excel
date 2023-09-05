@@ -1,18 +1,43 @@
-name: CI_pull_request
+name: Pull Request
 
-on: [pull_request]
+on: [ pull_request ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-      - name: Ballerina Build
-        uses: ballerina-platform/ballerina-action/@nightly
+
+      # Setup Ballerina Environment
+      - name: Set Up Ballerina
+        uses: ballerina-platform/setup-ballerina@v1.1.0
         with:
-          args:
-            pack
+          version: latest
+
+      # Build Ballerina Project
+      - name: Ballerina Build
+        run: bal pack ./ballerina
         env:
-          WORKING_DIR: ./excel
+          JAVA_HOME: /usr/lib/jvm/default-jvm
+
+      # Build Module Examples
+      - name: Ballerina Examples Build
+        run: chmod +x ./examples/build.sh && ./examples/build.sh build
+        env:
+          JAVA_HOME: /usr/lib/jvm/default-jvm
+
+      # Test Ballerina Project
+      - name: Ballerina Test
+        # tests will be skipped if the PR is from a forked repository (as the secrets are not available)
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        run: bal test ./ballerina --test-report --code-coverage --coverage-format=xml
+        env:
+          JAVA_HOME: /usr/lib/jvm/default-jvm
+          REFRESH_URL: ${{ secrets.REFRESH_URL }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          WORKBOOK_PATH: ${{ secrets.WORKBOOK_PATH }}
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3

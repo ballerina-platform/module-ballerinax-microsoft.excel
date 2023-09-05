@@ -35,9 +35,8 @@ excel:ConnectionConfig configuration = {
 excel:Client excelClient = check new (configuration);
 
 public function main() {
-    excel:Column|error response = excelClient->updateColumn(workbookIdOrPath, "sheetName", "tableName", 1, 
-    name = "columnName");
-    if (response is excel:Column) {
+    excel:WorkbookApplication|error response = excelClient->getWorkbookApplication(workbookIdOrPath);
+    if (response is excel:WorkbookApplication) {
         log:printInfo(response.toString());
     }
 }
