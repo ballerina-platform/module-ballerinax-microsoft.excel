@@ -40,9 +40,9 @@ public function main() {
         left: 99
     };
 
-    excel:Worksheet|error response = excelClient->updateChart(workbookIdOrPath, "worksheetName", "chartName",
+    excel:Chart|error response = excelClient->updateChart(workbookIdOrPath, "worksheetName", "chartName",
     updateChart);
-    if (response is excel:Worksheet) {
+    if (response is excel:Chart) {
         log:printInfo(response.toString());
     }
 }
