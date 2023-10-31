@@ -113,6 +113,10 @@ isolated function getChartArray(http:Response response) returns Chart[]|error {
     return check handledResponse[VALUE].cloneWithType(ChartArray);
 }
 
+isolated function createSubPath(string ItemIdOrPath) returns string {
+    return ItemIdOrPath.endsWith(".xlsx") ?  string `items/${ItemIdOrPath}` : string `root:/${ItemIdOrPath}:`;
+}
+
 type WorkSheetArray Worksheet[];
 
 type RowArray Row[];
