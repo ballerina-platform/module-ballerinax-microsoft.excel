@@ -124,7 +124,7 @@ function testDeleteWorksheet() {
         if response.statusCode != 404 {
             test:assertFail(response.statusCode.toBalString());
         }
-    } else if response is error {
+    } else {
         test:assertFail(response.toString());
     }
 }
