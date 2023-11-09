@@ -221,4 +221,3 @@ isolated function getMapForHeaders(map<any> headerParam) returns map<string|stri
     }
     return headerMap;
 }
-

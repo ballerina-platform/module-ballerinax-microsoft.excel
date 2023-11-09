@@ -68,15 +68,13 @@ public type OAuth2RefreshTokenGrantConfig record {|
     string refreshUrl = "https://login.microsoftonline.com/organizations/oauth2/v2.0/token";
 |};
 
-public type ColumnsArr Columns[];
-
-# Represents the properties to add a new name to the collection of the given scope using the user's locale for the formula..
+# Represents the properties to add a new name to the collection of the given scope using the user's locale for the formula.
 public type FormulaLocal record {
-    # The name of the new named item.
+    # The name of the new named item
     string name?;
-    # The formula or the range that the name will refer to.
+    # The formula or the range that the name will refer to
     string formulas?;
-    # The formula or the range that the name will refer to.
+    # The formula or the range that the name will refer to
     string comment?;
 };
 
@@ -84,29 +82,29 @@ public type FormulaLocal record {
 public type RangeView record {
     # Represents the cell addresses
     record {} cellAddresses?;
-    # Returns the number of visible columns. Read-only.
+    # Returns the number of visible columns
     int columnCount?;
-    # Represents the formula in A1-style notation.
+    # Represents the formula in A1-style notation
     record {} formulas?;
-    # Represents the formula in A1-style notation, in the user's language and number-formatting locale. For example, the English "=SUM(A1, 1.5)" formula would become "=SUMME(A1; 1,5)" in German.
-    record {} formulasLocal?;
-    # Represents the formula in R1C1-style notation.
+    # Represents the formula in A1-style notation, in the user's language and number-formatting locale
+    string formulasLocal?;
+    # Represents the formula in R1C1-style notation
     record {} formulasR1C1?;
     # Index of the range
     int index?;
-    # Represents Excel's number format code for the given cell.
+    # Represents Excel's number format code for the given cell
     record {} numberFormat?;
-    # Returns the total number of rows in the range. Read-only.
+    # Returns the total number of rows in the range
     int rowCount?;
-    # Text values of the specified range. The Text value doesn't depend on the cell width. The sign substitution that happens in Excel UI doesn't affect the text value returned by the API. Read-only.
+    # Text values of the specified range
     record {} text?;
-    # Represents the type of data of each cell. The possible values are:- Unknown, Empty, String, Integer, Double, Boolean, Error. Read-only.
-    record {} valueTypes?;
-    # Represents the raw values of the specified range. The data returned could be of type string, number, or a boolean. Cell that contains an error returns the error string.
-    record {} values?;
+    # Represents the type of data of each cell
+    "Unknown"|"Empty"|"String"|"Integer"|"Double"|"Boolean"|"Error" valueTypes?;
+    # Represents the raw values of the specified range
+    (string|int|decimal?)[][]? values?;
 };
 
-# Represents the properties of the named item.
+# Represents the properties of the named item
 public type NamedItems record {
     # Represents the list of the named item
     NamedItem[] value?;
@@ -126,8 +124,15 @@ public type RangeFormat record {
     boolean wrapText?;
 };
 
-# Represents the properties to create a named item.
-public type AddNamedItemPayload Item|FormulaLocal;
+# Represents the sorting for the table.
+public type TableSort record {
+    # The current conditions used to last sort the table
+    SortField[] fields?;
+    # Represents whether the casing impacted the last sort of the table
+    boolean matchCase?;
+    # Represents Chinese character ordering method last used to sort the table
+    "PinYin"|"StrokeCount" method?;
+};
 
 # Represents the worksheet.
 public type Worksheet record {
@@ -137,24 +142,36 @@ public type Worksheet record {
     string name?;
     # The position of the worksheet in the workbook
     int position?;
-    # The Visibility of the worksheet.
+    # The Visibility of the worksheet
     "Visible"|"Hidden"|"VeryHidden" visibility?;
-};
-
-# Represents the properties to create chart.
-public type CreateChartPayload record {
-    # Represents the type of a chart
-    string 'type?;
-    # The Range object corresponding to the source data
-    string sourceData?;
-    # Specifies the way columns or rows are used as data series on the chart.
-    "Auto"|"Columns"|"Rows" seriesBy?;
 };
 
 # Represents a list of chart.
 public type Charts record {
     # Represents the list of the chart
-    Chart[] values?;
+    Chart[] value?;
+};
+
+# Represents worksheet name to create worksheet.
+public type NewWorksheet record {
+    # Name of the new worksheet
+    string name?;
+};
+
+# Represents the current conditions used to last sort.
+public type SortField record {
+    # Represents whether the sorting is done in an ascending fashion
+    boolean 'ascending?;
+    # Represents the color that is the target of the condition if the sorting is on font or cell color
+    string color?;
+    # Represents additional sorting options for this field
+    "Normal"|"TextAsNumber" dataOption?;
+    # Represents the icon that is the target of the condition if the sorting is on the cell's icon
+    Icon[] icon?;
+    # Represents the column (or row, depending on the sort orientation) that the condition is on
+    int 'key?;
+    # Represents the type of sorting of this condition
+    "Value"|"CellColor"|"FontColor"|"Icon" sortOn?;
 };
 
 # Represents the chart series.
@@ -165,7 +182,7 @@ public type ChartSeries record {
 
 # Represents the properties to the merge range.
 public type Across record {
-    # Set true to merge cells in each row of the specified range as separate merged cells.
+    # Set true to merge cells in each row of the specified range as separate merged cells
     boolean across?;
 };
 
@@ -175,19 +192,11 @@ public type Image record {
     string value?;
 };
 
-# Represents the properties to create table.
-public type CreateTablePayload record {
-    # Address or name of the range object representing the data source. If the address doesn't contain a sheet name, the currently active sheet is used.
-    string address?;
-    # whether the data being imported has column labels. If the source doesn't contain headers (when this property set to false), Excel generates header shifting the data down by one row.
-    boolean hasHeaders?;
-};
-
 # Represents the properties to add new name to the collection of the given scope.
 public type Item record {
-    # The name of the new named item.
+    # The name of the new named item
     string name?;
-    # The type of the new named item.
+    # The type of the new named item
     "Range"|"Formula"|"Text"|"Integer"|"Double"|"Boolean" 'type?;
     # The reference to the object that the new named item refers to.
     string reference?;
@@ -210,7 +219,7 @@ public type Column record {
     # The name of the table column.
     string name?;
     # The raw values of the specified range
-    (string|int)[][] values?;
+    (string|int|decimal?)[][] values?;
 };
 
 # Represents the properties to clear range values
@@ -219,10 +228,10 @@ public type ApplyTo record {
     "All"|"Formats"|"Contents" applyTo?;
 };
 
-# Represents a list of table.
+# Represents a list of tables.
 public type Tables record {
     # List of table
-    Table[] valuse?;
+    Table[] value?;
 };
 
 # Represents the range.
@@ -231,31 +240,47 @@ public type AnotherRange record {
     string anotherRange?;
 };
 
+# Represents the properties to create chart.
+public type NewChart record {
+    # Represents the type of a chart
+    string 'type;
+    # The Range object corresponding to the source data
+    string sourceData;
+    # Specifies the way columns or rows are used as data series on the chart
+    "Auto"|"Columns"|"Rows" seriesBy;
+};
+
 # Represents the list of replies of the workbook comment.
 public type Replies record {
     # The list of replies of the workbook comment
     Reply[] value?;
 };
 
+# Represents a list of range border.
+public type RangeBorders record {
+    # The list of range border
+    RangeBorder[] value?;
+};
+
 # Represents the properties to recalculate all currently opened workbooks in Excel.
 public type CalculationMode record {
     # Specifies the calculation type to use
-    "Recalculate"|"Full"|"FullRebuild" calculationMode?;
+    "Recalculate"|"Full"|"FullRebuild" calculationMode;
 };
 
 # Represents a chart properties.
 public type Chart record {
-    # Represents the height, in points, of the chart object.
+    # Represents the height, in points, of the chart object
     decimal height?;
-    # Gets a chart based on its position in the collection. Read-only.
+    # Gets a chart based on its position in the collection
     string id?;
-    # The distance, in points, from the left side of the chart to the worksheet origin.
+    # The distance, in points, from the left side of the chart to the worksheet origin
     decimal left?;
-    # Represents the name of a chart object.
+    # Represents the name of a chart object
     string name?;
-    # Represents the distance, in points, from the top edge of the object to the top of row 1 (on a worksheet) or the top of the chart area (on a chart).
+    # Represents the distance, in points, from the top edge of the object to the top of row 1 (on a worksheet) or the top of the chart area (on a chart)
     decimal top?;
-    # Represents the width, in points, of the chart object.
+    # Represents the width, in points, of the chart
     decimal width?;
 };
 
@@ -263,12 +288,6 @@ public type Chart record {
 public type Rows record {
     # The list of table row
     Row[] value?;
-};
-
-# Represents worksheet name to create worksheet.
-public type CreateWorksheet record {
-    # Name of the new worksheet.
-    string name?;
 };
 
 # Represents the ways to shift the cells.
@@ -283,8 +302,16 @@ public type Comment record {
     string content?;
     # Indicates the type for the comment
     string contentType?;
-    # Represents the comment identifier. Read-only
+    # Represents the comment identifier
     string id?;
+};
+
+# Represents the properties to create table.
+public type NewTable record {
+    # Address or name of the range object representing the data source
+    string address?;
+    # whether the data being imported has column labels
+    boolean hasHeaders?;
 };
 
 # Represents a table properties.
@@ -303,20 +330,23 @@ public type Table record {
     boolean showBandedRows?;
     # Indicates whether the columns show banded formatting in which odd columns are highlighted differently from even ones to make reading the table easier
     boolean showBandedColumns?;
-    # Indicates whether the filter buttons are visible at the top of each column header. Setting this is only allowed if the table contains a header row
+    # Indicates whether the filter buttons are visible at the top of each column header
     boolean showFilterButton?;
-    # Indicates whether the header row is visible or not. This value can be set to show or remove the header row
+    # Indicates whether the header row is visible or not
     boolean showHeaders?;
-    # Indicates whether the total row is visible or not. This value can be set to show or remove the total row
+    # Indicates whether the total row is visible or not
     boolean showTotals?;
-    # Constant value that represents the Table style.
+    # Constant value that represents the Table style
     "TableStyleLight1"|"TableStyleLight21"|"TableStyleMedium1"|"TableStyleMedium2"|"TableStyleMedium28"|"TableStyleDark1"|"TableStyleDark11" style?;
 };
 
+# Represents the properties to create a named item.
+public type NewNamedItem Item|FormulaLocal;
+
 # Represents the properties of the position.
 public type Position record {
-    # The start cell. This is where the chart is moved to. The start cell is the top-left or top-right cell, depending on the user's right-to-left display settings.
-    record {} startCell;
+    # The start cell. This is where the chart is moved to
+    string startCell;
     # The end cell. If specified, the chart's width and height will be set to fully cover up this cell/range.
     string endCell?;
 };
@@ -324,7 +354,7 @@ public type Position record {
 # Represents the list of workbook comment.
 public type Comments record {
     # The list of workbook comment
-    Comment[] values?;
+    Comment[] value?;
 };
 
 # Represents the list of table column.
@@ -334,51 +364,51 @@ public type Columns record {
 };
 
 public type Range record {
-    # Represents the range reference in A1-style. Address value contains the Sheet reference (for example, Sheet1!A1:B4). Read-only
+    # The range reference in A1-style
     string address?;
-    # Represents range reference for the specified range in the language of the user. Read-only.
+    # Range reference for the specified range in the language of the user
     string addressLocal?;
-    # Number of cells in the range. Read-only.
+    # Number of cells in the range
     int cellCount?;
-    # Represents the total number of columns in the range. Read-only.
+    # The total number of columns in the range
     int columnCount?;
     # Represents if all columns of the current range are hidden
     boolean columnHidden?;
-    # Represents the column number of the first cell in the range. Zero-indexed. Read-only.
+    # The column number of the first cell in the range
     int columnIndex?;
-    # Represents the formula in A1-style notation.
+    # The formula in A1-style notation
     (string|int)[][]? formulas?;
-    # Represents the formula in A1-style notation, in the user's language and number-formatting locale. For example, the English "=SUM(A1, 1.5)" formula would become "=SUMME(A1; 1,5)" in German.
-    (string|int)[][]? formulasLocal?;
-    # Represents the formula in R1C1-style notation.
+    # The formula in A1-style notation, in the user's language and number-formatting locale
+    string? formulasLocal?;
+    # The formula in R1C1-style notation
     (string|int)[][]? formulasR1C1?;
-    # Represents if all cells of the current range are hidden. Read-only.
+    # Represents if all cells of the current range are hidden
     boolean hidden?;
     # Represents Excel's number format code for the given cell.
     (string|int)[][]? numberFormat?;
-    # Returns the total number of rows in the range. Read-only.
+    # The total number of rows in the range
     int rowCount?;
-    # Represents if all rows of the current range are hidden.
+    # Represents if all rows of the current range are hidden
     boolean rowHidden?;
-    # Returns the row number of the first cell in the range. Zero-indexed. Read-only.
+    # The row number of the first cell in the range
     int rowIndex?;
-    # Text values of the specified range. The Text value doesn't depend on the cell width. The sign substitution that happens in Excel UI doesn't affect the text value returned by the API. Read-only.
+    # Text values of the specified range
     (string|int)[][]? text?;
-    # Represents the type of data of each cell. The possible values are:- Unknown, Empty, String, Integer, Double, Boolean, Error. Read-only.
-    (string|int)[][]? valueTypes?;
-    # Represents the raw values of the specified range. The data returned could be of type string, number, or a boolean. Cell that contains an error returns the error string.
-    (string|int)[][]? values?;
+    # Represents the type of data of each cell
+    "Unknown"|"Empty"|"String"|"Integer"|"Double"|"Boolean"|"Error" valueTypes?;
+    # Represents the raw values of the specified range
+    (string|int|decimal?)[][]? values?;
 };
 
-# Represents the list of worksheet.
+# Represents the list of the worksheet.
 public type Worksheets record {
-    # The list of worksheet
+    # The list of the worksheet
     Worksheet[] value?;
 };
 
 # Represents the pivot table.
 public type PivotTable record {
-    # ID of the PivotTable. Read-only.
+    # ID of the PivotTable
     string id?;
     # Name of the PivotTable
     string name?;
@@ -394,10 +424,24 @@ public type OffsetRange record {
 
 # Represents the properties to reset the data of the chart.
 public type ResetData record {
-    # The range corresponding to the source data.
-    record {} sourceData?;
-    # Specifies the way columns or rows are used as data series on the chart.
+    # The range corresponding to the source data
+    string sourceData?;
+    # Specifies the way columns or rows are used as data series on the chart
     "Auto"|"Columns"|"Rows" seriesBy?;
+};
+
+# Represents a range border.
+public type RangeBorder record {
+    # HTML color code representing the color of the border line, of the form `#RRGGBB` (for example "FFA500") or as a named HTML color (for example "orange")
+    string color?;
+    # Represents border identifier
+    "EdgeTop"|"EdgeBottom"|"EdgeLeft"|"EdgeRight"|"InsideVertical"|"InsideHorizontal"|"DiagonalDown"|"DiagonalUp" id?;
+    # Constant value that indicates the specific side of the border
+    "EdgeTop"|"EdgeBottom"|"EdgeLeft"|"EdgeRight"|"InsideVertical"|"InsideHorizontal"|"DiagonalDown"|"DiagonalUp" sideIndex?;
+    # One of the constants of line style specifying the line style for the border
+    "None"|"Continuous"|"Dash"|"DashDot"|"DashDotDot"|"Dot"|"Double"|"SlantDashDot" style?;
+    # Specifies the weight of the border around a range
+    "Hairline"|"Thin"|"Medium"|"Thick" weight?;
 };
 
 # Represents the reply of the workbook comments.
@@ -405,9 +449,9 @@ public type Reply record {
     # The ID of the comment reply
     string id?;
     # The content of the comment reply
-    string content;
+    string content?;
     # Indicates the type for the comment reply
-    string contentType;
+    string contentType?;
 };
 
 # Represents the collection of the chart series.
@@ -418,19 +462,27 @@ public type CollectionOfChartSeries record {
 
 # Represents the table row properties.
 public type Row record {
-    # The ID of the table row.
+    # The ID of the table row
     string id?;
-    # The index of the table row.
+    # The index of the table row
     int index?;
-    # The values in the table row.
-    (string|int)[][] values?;
+    # The values in the table row
+    (string|int|decimal?)[][] values?;
+};
+
+# Represents a range border.
+public type Icon record {
+    # The index of the icon in the given set
+    int index?;
+    # The set that the icon is part of
+    "Invalid"|"ThreeArrows"|"ThreeArrowsGray"|"ThreeFlags"|"ThreeTrafficLights1"|"ThreeTrafficLights2"|"ThreeSigns"|"ThreeSymbols"|"ThreeSymbols2"|"FourArrows"|"FourArrowsGray"|"FourRedToBlack"|"FourRating"|"FourTrafficLights"|"FiveArrows"|"FiveArrowsGray"|"FiveRating"|"FiveQuarters"|"ThreeStars"|"ThreeTriangles"|"FiveBoxes" set?;
 };
 
 # Represents the properties of the named item.
 public type NamedItem record {
-    # The name of the new named item.
+    # The name of the new named item
     string name?;
-    # The type of the new named item.
+    # The type of the new named item
     "String"|"Integer"|"Double"|"Range"|"Boolean" 'type?;
     # The comment associated with this name
     string comment?;
@@ -452,6 +504,20 @@ public type Application record {
 public type Session record {
     # The ID of the workbook session
     string id?;
-    # Whether to create a persistent session or not. `true` for persistent session. `false` for non-persistent session (view mode)
+    # Whether to create a persistent session or not. `true` for persistent session.
     boolean persistChanges;
+};
+
+# Represents the sorting for the range.
+public type RangeSort record {
+    # The list of conditions to sort on
+    SortField[] fields?;
+    # Whether to have the casing determine string ordering
+    boolean matchCase?;
+    # Whether the range has a header
+    boolean hasHeaders?;
+    # Whether the operation is sorting rows or columns
+    "Rows"|"Columns" orientation?;
+    # The ordering method used for Chinese characters
+    "PinYin"|"StrokeCount" method?;
 };

@@ -50,32 +50,6 @@ public isolated client class Client {
         Session response = check self.clientEp->post(resourcePath, request);
         return response;
     }
-    # Refresh the existing workbook session..
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function refreshSession(string itemId, string sessionId) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/refreshSession`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Close the existing workbook session.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function closeSession(string itemId, string sessionId) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/closeSession`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
     # Creates a new session for a workbook.
     #
     # + itemPath - The full path of the workbook
@@ -88,7 +62,20 @@ public isolated client class Client {
         Session response = check self.clientEp->post(resourcePath, request);
         return response;
     }
-    # Refresh the existing workbook session..
+    # Refreshes the existing workbook session.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function refreshSession(string itemId, string sessionId) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/refreshSession`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Refreshes the existing workbook session..
     #
     # + itemPath - The full path of the workbook
     # + sessionId - The ID of the session
@@ -101,7 +88,20 @@ public isolated client class Client {
         http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Close an existing workbook session.
+    # Closes the existing workbook session.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function closeSession(string itemId, string sessionId) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/closeSession`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Closes an existing workbook session.
     #
     # + itemPath - The full path of the workbook
     # + sessionId - The ID of the session
@@ -114,7 +114,53 @@ public isolated client class Client {
         http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Recalculate all currently opened workbooks in Excel.
+    # Retrieves a list of table in the workbook.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listWorkbookTables(string itemId, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Tables|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Tables response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of table in the workbook.
+    #
+    # + itemPath - The full path of the workbook
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listWorkbookTablesWithItemPath(string itemPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Tables|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Tables response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Recalculates all currently opened workbooks in Excel.
     #
     # + itemId - The ID of the drive containing the workbook
     # + sessionId - The ID of the session
@@ -129,19 +175,7 @@ public isolated client class Client {
         http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Get the properties and relationships of the application.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getApplication(string itemId, string? sessionId = ()) returns Application|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/application`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Application response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Recalculate all currently opened workbooks in Excel.
+    # Recalculates all currently opened workbooks in Excel.
     #
     # + itemPath - The full path of the workbook
     # + sessionId - The ID of the session
@@ -156,7 +190,19 @@ public isolated client class Client {
         http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Get the properties and relationships of the application.
+    # Gets the properties and relationships of the application.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getApplication(string itemId, string? sessionId = ()) returns Application|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/application`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Application response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the properties and relationships of the application.
     #
     # + itemPath - The full path of the workbook
     # + sessionId - The ID of the session
@@ -168,7 +214,7 @@ public isolated client class Client {
         Application response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Retrieve a list of comment.
+    # Retrieves a list of comment.
     #
     # + itemId - The ID of the drive containing the workbook
     # + sessionId - The ID of the session
@@ -180,7 +226,19 @@ public isolated client class Client {
         Comments response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Retrieve the properties and relationships of the comment.
+    # Retrieves a list of comment.
+    #
+    # + itemPath - The full path of the workbook
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function listCommentsWithItemPath(string itemPath, string? sessionId = ()) returns Comments|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/comments`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Comments response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieves the properties and relationships of the comment.
     #
     # + itemId - The ID of the drive containing the workbook
     # + commentId - The ID of the comment to get
@@ -193,7 +251,20 @@ public isolated client class Client {
         Comment response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # List the replies of the comment.
+    # Retrieves the properties and relationships of the comment.
+    #
+    # + itemPath - The full path of the workbook
+    # + commentId - The ID of the comment to get
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getCommentWithItemPath(string itemPath, string commentId, string? sessionId = ()) returns Comment|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/comments/${getEncodedUri(commentId)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Comment response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Lists the replies of the comment.
     #
     # + itemId - The ID of the drive containing the workbook
     # + commentId - The ID of the comment to get
@@ -206,7 +277,7 @@ public isolated client class Client {
         Replies response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Create a new reply of the comment.
+    # Creates a new reply of the comment.
     #
     # + itemId - The ID of the drive containing the workbook
     # + commentId - The ID of the comment to get
@@ -222,46 +293,7 @@ public isolated client class Client {
         Reply response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Retrieve the properties and relationships of the reply.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + commentId - The ID of the comment to get
-    # + replyId - The ID of the reply
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getCommentReply(string itemId, string commentId, string replyId, string? sessionId = ()) returns Reply|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/comments/${getEncodedUri(commentId)}/replies/${getEncodedUri(replyId)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Reply response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of comment.
-    #
-    # + itemPath - The full path of the workbook
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function listCommentsWithItemPath(string itemPath, string? sessionId = ()) returns Comments|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/comments`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Comments response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of the comment.
-    #
-    # + itemPath - The full path of the workbook
-    # + commentId - The ID of the comment to get
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCommentWithItemPath(string itemPath, string commentId, string? sessionId = ()) returns Comment|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/comments/${getEncodedUri(commentId)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Comment response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # List the replies of the comment.
+    # Lists the replies of the comment.
     #
     # + itemPath - The full path of the workbook
     # + commentId - The ID of the comment to get
@@ -274,7 +306,7 @@ public isolated client class Client {
         Replies response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Create a new reply of the comment.
+    # Creates a new reply of the comment.
     #
     # + itemPath - The full path of the workbook
     # + commentId - The ID of the comment to get
@@ -290,7 +322,21 @@ public isolated client class Client {
         Reply response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Retrieve the properties and relationships of the reply.
+    # Retrieves the properties and relationships of the reply.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + commentId - The ID of the comment to get
+    # + replyId - The ID of the reply
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getCommentReply(string itemId, string commentId, string replyId, string? sessionId = ()) returns Reply|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/comments/${getEncodedUri(commentId)}/replies/${getEncodedUri(replyId)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Reply response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieves the properties and relationships of the reply.
     #
     # + itemPath - The full path of the workbook
     # + commentId - The ID of the comment to get
@@ -304,7 +350,287 @@ public isolated client class Client {
         Reply response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Retrieve a list of worksheet.
+    # Retrieves a list of table row in the workbook.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - Success. 
+    remote isolated function listWorkbookTableRows(string itemId, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Rows|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Rows response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Adds rows to the end of a table in the workbook.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - Created. 
+    remote isolated function createWorkbookTableRow(string itemId, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of table row in the workbook.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - Success. 
+    remote isolated function listWorkbookTableRowsWithItemPath(string itemPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Rows|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Rows response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Adds rows to the end of a table in the workbook.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - Created. 
+    remote isolated function createWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieves the properties and relationships of table row.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function getWorkbookTableRow(string itemId, string tableIdOrName, int index, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Row|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Deletes the row from the workbook table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorkbookTableRow(string itemId, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Updates the properties of table row.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function updateWorkbookTableRow(string itemId, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieves the properties and relationships of table row.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function getWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, int index, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Deletes the row from the workbook table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Updates the properties of table row.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function updateWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the entire row.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorkbookTableRowRange(string itemId, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the entire row.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorkbookTableRowRangeWithItemPath(string itemPath, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a row based on its position in the collection.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorkbookTableRowWithIndex(string itemId, string tableIdOrName, int index, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a row based on its position in the collection.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorkbookTableRowWithIndexItemPath(string itemPath, string tableIdOrName, int index, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Adds rows to the end of the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - Created. 
+    remote isolated function addWorkbookTableRow(string itemId, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/add`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Adds rows to the end of the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function addWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/add`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve a list of the worksheets.
     #
     # + itemId - The ID of the drive containing the workbook
     # + sessionId - The ID of the session
@@ -332,7 +658,7 @@ public isolated client class Client {
     # + itemId - The ID of the drive containing the workbook
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function addWorksheet(string itemId, CreateWorksheet payload, string? sessionId = ()) returns Worksheet|error {
+    remote isolated function addWorksheet(string itemId, NewWorksheet payload, string? sessionId = ()) returns Worksheet|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -342,7 +668,45 @@ public isolated client class Client {
         Worksheet response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Retrieve the properties and relationships of worksheet.
+    # Retrieve a list of the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listWorksheetsWithItemPath(string itemPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Worksheets|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Worksheets response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Adds a new worksheet to the workbook.
+    #
+    # + itemPath - The full path of the workbook
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function addWorksheetWithItemPath(string itemPath, NewWorksheet payload, string? sessionId = ()) returns Worksheet|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Worksheet response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of the worksheet.
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -366,7 +730,7 @@ public isolated client class Client {
         Worksheet response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Delete Worksheet
+    # Delete a worksheet from a workbook.
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -395,35 +759,140 @@ public isolated client class Client {
         Worksheet response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
-    # Get the used range of a worksheet.
+    # Retrieve the properties and relationships of the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function getWorksheetWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Worksheet|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Worksheet response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Delete a worksheet from a workbook.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function deleteWorksheetWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Update the properties of the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function updateWorksheetWithItemPath(string itemPath, string worksheetIdOrName, Worksheet payload, string? sessionId = ()) returns Worksheet|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Worksheet response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Adds a new table in the worksheet.
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getUsedRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/usedRange`;
+    # + return - OK 
+    remote isolated function addWorksheetTable(string itemId, string worksheetIdOrName, NewTable payload, string? sessionId = ()) returns Table|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/add`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Table response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets the range containing the single cell based on row and column numbers.
+    # Adds a new table in the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function addWorksheetTableWithItemPath(string itemPath, string worksheetIdOrName, NewTable payload, string? sessionId = ()) returns Table|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/add`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Table response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of charts.
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getRangeWithRowAndColumn(string itemId, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - A collection of chart. 
+    remote isolated function listCharts(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Charts|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        Charts response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Retrieve a list of workbook pivottable.
+    # Retrieve a list of chart.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - A collection of chart. 
+    remote isolated function listChartsWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Charts|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Charts response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range.
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -438,8 +907,190 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - OK. 
-    remote isolated function listPivotTable(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns PivotTables|error {
+    remote isolated function getWorksheetRange(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function getWorksheetRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range containing the single cell based on row and column numbers.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorksheetCell(string itemId, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range containing the single cell based on row and column numbers.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorksheetCellWithItemPath(string itemPath, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Creates a new chart.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function addChart(string itemId, string worksheetIdOrName, NewChart payload, string? sessionId = ()) returns Chart|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/add`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Chart response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Creates a new chart.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function addChartWithItemPath(string itemPath, string worksheetIdOrName, NewChart payload, string? sessionId = ()) returns Chart|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/add`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Chart response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of named items associated with the worksheet.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function listWorksheetNamedItem(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItems|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/names`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        NamedItems response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of named items associated with the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function listWorksheetNamedItemWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItems|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/names`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        NamedItems response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of the workbook pivot tables.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function listPivotTables(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns PivotTables|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        PivotTables response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of the workbook pivot tables.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function listPivotTablesWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns PivotTables|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
@@ -451,7 +1102,7 @@ public isolated client class Client {
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + pivotTableId - The ID of the pivot table.
+    # + pivotTableId - The ID of the pivot table
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves related resources
@@ -472,184 +1123,11 @@ public isolated client class Client {
         PivotTable response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Refreshes the pivot table.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + pivotTableId - The ID of the pivot table.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function refreshPivotTable(string itemId, string worksheetIdOrName, string pivotTableId, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables/${getEncodedUri(pivotTableId)}/refresh`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Refreshes the pivot table within a given worksheet.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + pivotTableId - The ID of the pivot table.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function refreshAllPivotTable(string itemId, string worksheetIdOrName, string pivotTableId, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables/${getEncodedUri(pivotTableId)}/refreshAll`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of worksheet.
-    #
-    # + itemPath - The full path of the workbook
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK 
-    remote isolated function listWorksheetsWithIemPath(string itemPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Worksheets|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Worksheets response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Adds a new worksheet to the workbook.
-    #
-    # + itemPath - The full path of the workbook
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function addWorksheetWithIemPath(string itemPath, CreateWorksheet payload, string? sessionId = ()) returns Worksheet|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Worksheet response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of worksheet.
+    # Retrieve a list of the workbook pivot table.
     #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK. 
-    remote isolated function getWorksheetWithIemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Worksheet|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Worksheet response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Delete Worksheet
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function deleteWorksheetWithIemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
-        return response;
-    }
-    # Update the properties of worksheet.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - Success. 
-    remote isolated function updateWorksheetWithIemPath(string itemPath, string worksheetIdOrName, Worksheet payload, string? sessionId = ()) returns Worksheet|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Worksheet response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Get the used range of a worksheet.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getUsedRangeWithIemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/usedRange`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range containing the single cell based on row and column numbers.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getRangeWithRowAndColumnWithItemPath(string itemPath, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of workbook pivottable.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK. 
-    remote isolated function listPivotTableWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns PivotTables|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        PivotTables response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of workbook pivottable.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + pivotTableId - The ID of the pivot table.
+    # + pivotTableId - The ID of the pivot table
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves related resources
@@ -672,9 +1150,24 @@ public isolated client class Client {
     }
     # Refreshes the pivot table.
     #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + pivotTableId - The ID of the pivot table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function refreshPivotTable(string itemId, string worksheetIdOrName, string pivotTableId, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables/refresh`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Refreshes the pivot table.
+    #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + pivotTableId - The ID of the pivot table.
+    # + pivotTableId - The ID of the pivot table
     # + sessionId - The ID of the session
     # + return - OK. 
     remote isolated function refreshPivotTableWithItemPath(string itemPath, string worksheetIdOrName, string pivotTableId, string? sessionId = ()) returns http:Response|error {
@@ -685,55 +1178,39 @@ public isolated client class Client {
         http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Refreshes the pivot table within a given worksheet.
+    # Refreshes all pivot tables within given worksheet.
     #
-    # + itemPath - The full path of the workbook
+    # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + pivotTableId - The ID of the pivot table.
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function refreshAllPivotTableWithItemPath(string itemPath, string worksheetIdOrName, string pivotTableId, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables/${getEncodedUri(pivotTableId)}/refreshAll`;
+    remote isolated function refreshAllPivotTables(string itemId, string worksheetIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables/refreshAll`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
         http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets the range.
+    # Refreshes all pivot tables within given worksheet.
     #
-    # + itemId - The ID of the drive containing the workbook
+    # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function getWorksheetRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Update the properties of range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function updateRange(string itemId, string namedItemName, Range payload, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range`;
+    remote isolated function refreshAllPivotTablesWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/pivotTables/refreshAll`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
     # Retrieve the properties and relationships of range.
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + address - The address of the range
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves related resources
@@ -745,7 +1222,7 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - Success. 
-    remote isolated function getRangeWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
+    remote isolated function getWorksheetRangeWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
@@ -758,11 +1235,53 @@ public isolated client class Client {
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + address - The address of the range
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function updateRangeWithAddress(string itemId, string worksheetIdOrName, string address, Range payload, string? sessionId = ()) returns Range|error {
+    remote isolated function updateWorksheetRangeWithAddress(string itemId, string worksheetIdOrName, string address, Range payload, string? sessionId = ()) returns Range|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - Success. 
+    remote isolated function getWorksheetRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Update the properties of range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function updateWorksheetRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, Range payload, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
@@ -776,7 +1295,6 @@ public isolated client class Client {
     # + itemId - The ID of the drive containing the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
-    # + address - The address
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves related resources
@@ -788,7 +1306,7 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - Success. 
-    remote isolated function getColumnRange(string itemId, string tableIdOrName, string columnIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
+    remote isolated function getColumnRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
@@ -814,14 +1332,1256 @@ public isolated client class Client {
         Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
+    # Retrieve the properties and relationships of range.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - Success. 
+    remote isolated function getColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Update the properties of range.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function updateColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Range payload, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the range object that is associated with the name.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getNamedItemRange(string itemId, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Update the properties of range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function updateNameRange(string itemId, string name, Range payload, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the range object that is associated with the name.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getNamedItemRangeWithItemPath(string itemPath, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Update the properties of range.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function updateNameRangeWithItemPath(string itemPath, string name, Range payload, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Gets the range containing the single cell based on row and column numbers.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeCell(string itemId, string name, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range containing the single cell based on row and column numbers.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeCellWithItemPath(string itemPath, string name, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range object containing the single cell based on row and column numbers.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeCell(string itemId, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range object containing the single cell based on row and column numbers.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeCellWithItemPath(string itemPath, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range object containing the single cell based on row and column numbers.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeCellWithAddress(string itemId, string worksheetIdOrName, string address, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range object containing the single cell based on row and column numbers.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeCellWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range object containing the single cell based on row and column numbers.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeCell(string itemId, string tableIdOrName, string columnIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range object containing the single cell based on row and column numbers.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + row - Row number of the cell to be retrieved. Zero-indexed.
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeCellWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a column contained in the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeColumn(string itemId, string name, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/column(column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a column contained in the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeColumnWithItemPath(string itemPath, string name, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/column(column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a column contained in the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeColumn(string itemId, string worksheetIdOrName, string address, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/column(column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a column contained in the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeColumnWithItemPath(string itemPath, string worksheetIdOrName, string address, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/column(column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a column contained in the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeColumn(string itemId, string tableIdOrName, string columnIdOrName, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/column(column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a column contained in the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + column - Column number of the cell to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeColumnWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, int column, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/column(column=${getEncodedUri(column)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the right of the given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetColumnsAfterRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsAfter`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the right of the given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetColumnsAfterRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsAfter`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the right of the given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + columnCount - The number of columns to include in the resulting range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetColumnsAfterRangeWithCount(string itemId, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsAfter(count=${getEncodedUri(columnCount)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the right of the given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + columnCount - The number of columns to include in the resulting range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetColumnsAfterRangeWithCountItemPath(string itemPath, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsAfter(count=${getEncodedUri(columnCount)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the left of the given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetColumnsBeforeRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsBefore`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the left of the given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetColumnsBeforeRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsBefore`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the left of the given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + columnCount - The number of columns to include in the resulting range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetColumnsBeforeRangeWithCount(string itemId, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsBefore(count=${getEncodedUri(columnCount)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the left of the given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + columnCount - The number of columns to include in the resulting range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetColumnsBeforeRangeWithCountItemPath(string itemPath, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsBefore(count=${getEncodedUri(columnCount)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire column of the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeEntireColumn(string itemId, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/entireColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire column of the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeEntireColumnWithItemPath(string itemPath, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/entireColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire column of the range
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorksheetRangeEntireColumn(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/entireColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire column of the range
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorksheetRangeEntireColumnWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/entireColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire column of the range
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getColumnRangeEntireColumn(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/entireColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire column of the range
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getColumnRangeEntireColumnWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/entireColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire row of the range
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getNameRangeEntireRow(string itemId, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/entireRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire row of the range
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getNameRangeEntireRowWithItemPath(string itemPath, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/entireRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire row of the range
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorksheetRangeEntireRow(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/entireRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire row of the range
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorksheetRangeEntireRowWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/entireRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire row of the range
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeEntireRow(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/entireRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range that represents the entire row of the range
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeEntireRowWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/entireRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last cell within the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeLastCell(string itemId, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/lastCell`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last cell within the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeLastCellWithItemPath(string itemPath, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/lastCell`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last cell within the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeLastCell(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastCell`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last cell within the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeLastCellWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastCell`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last cell within the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeLastCell(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastCell`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last cell within the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeLastCellWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastCell`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last column within the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeLastColumn(string itemId, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/lastColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last column within the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeLastColumnWithItemPath(string itemPath, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/lastColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last column within the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeLastColumn(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last column within the range
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeLastColumnWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last column within the range
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeLastColumn(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last column within the range
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeLastColumnWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastColumn`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last row within the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeLastRow(string itemId, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/lastRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last row within the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameRangeLastRowWithItemPath(string itemPath, string name, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/lastRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last row within the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeLastRow(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last row within the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRangeLastRowWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last row within the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeLastRow(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the last row within the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnRangeLastRowWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastRow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of rows above a given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRowsAboveRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsAbove`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of rows above a given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRowsAboveRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsAbove`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of rows above a given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + rowCount - The number of rows to include in the resulting range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRowsAboveRangeWithCount(string itemId, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsAbove(count=${getEncodedUri(rowCount)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of rows above a given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + rowCount - The number of rows to include in the resulting range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRowsAboveRangeWithCountItemPath(string itemPath, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsAbove(count=${getEncodedUri(rowCount)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the left of the given range
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRowsBelowRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsBelow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the left of the given range
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRowsBelowRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsBelow`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the left of the given range
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + rowCount - The number of rows to include in the resulting range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRowsBelowRangeWithCount(string itemId, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsBelow(count=${getEncodedUri(rowCount)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a certain number of columns to the left of the given range
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + rowCount - The number of rows to include in the resulting range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetRowsBelowRangeWithCountItemPath(string itemPath, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsBelow(count=${getEncodedUri(rowCount)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the used range of the given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + valuesOnly - A value indicating whether to return only the values in the used range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameUsedRange(string itemId, string name, boolean valuesOnly, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the used range of the given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + valuesOnly - A value indicating whether to return only the values in the used range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getNameUsedRangeWithItemPath(string itemPath, string name, boolean valuesOnly, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the used range of the worksheet with in the given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + valuesOnly - A value indicating whether to return only the values in the used range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetUsedRange(string itemId, string worksheetIdOrName, string address, boolean valuesOnly, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the used range of the worksheet with in the given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + valuesOnly - A value indicating whether to return only the values in the used range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetUsedRangeWithItemPath(string itemPath, string worksheetIdOrName, string address, boolean valuesOnly, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the used range of the given range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + valuesOnly - A value indicating whether to return only the values in the used range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnUsedRange(string itemId, string tableIdOrName, string columnIdOrName, boolean valuesOnly, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the used range of the given range.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + valuesOnly - A value indicating whether to return only the values in the used range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getColumnUsedRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, boolean valuesOnly, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Clear range values such as format, fill, and border.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearNameRange(string itemId, string name, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clear range values such as format, fill, and border.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearNameRangeWithItemPath(string itemPath, string name, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clear range values such as format, fill, and border.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearWorksheetRange(string itemId, string worksheetIdOrName, string address, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clear range values such as format, fill, and border.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearWorksheetRangeWithItemPath(string itemPath, string worksheetIdOrName, string address, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clear range values such as format, fill, and border.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearColumnRange(string itemId, string tableIdOrName, string columnIdOrName, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clear range values such as format, fill, and border.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Deletes the cells associated with the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteNameRangeCell(string itemId, string name, Shift payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/delete`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Deletes the cells associated with the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteNameRangeCellWithItemPath(string itemPath, string name, Shift payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/delete`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Deletes the cells associated with the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorksheetRangeCell(string itemId, string worksheetIdOrName, string address, Shift payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/delete`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Deletes the cells associated with the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorksheetRangeCellWithItemPath(string itemPath, string worksheetIdOrName, string address, Shift payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/delete`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Deletes the cells associated with the range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteColumnRangeCell(string itemId, string tableIdOrName, string columnIdOrName, Shift payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/delete`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Deletes the cells associated with the range.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteColumnRangeCellWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Shift payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/delete`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
     # Inserts a cell or a range of cells into the worksheet in place of this range, and shifts the other cells to make space.
     #
     # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function insertRange(string itemId, string namedItemName, Shift payload, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/insert`;
+    remote isolated function insertNameRange(string itemId, string name, Shift payload, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/insert`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Inserts a cell or a range of cells into the worksheet in place of this range, and shifts the other cells to make space.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function insertNameRangeWithItemPath(string itemPath, string name, Shift payload, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/insert`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
@@ -834,11 +2594,28 @@ public isolated client class Client {
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + address - The address of the range
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function insertRangeWithAddrees(string itemId, string worksheetIdOrName, string address, Shift payload, string? sessionId = ()) returns Range|error {
+    remote isolated function insertWorksheetRange(string itemId, string worksheetIdOrName, string address, Shift payload, string? sessionId = ()) returns Range|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/insert`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Inserts a cell or a range of cells into the worksheet in place of this range, and shifts the other cells to make space.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function insertWorksheetRangeWithItemPath(string itemPath, string worksheetIdOrName, string address, Shift payload, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/insert`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
@@ -864,10 +2641,343 @@ public isolated client class Client {
         Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Retrieve the properties and relationships of the range format
+    # Inserts a cell or a range of cells into the worksheet in place of this range, and shifts the other cells to make space.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function insertColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Shift payload, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/insert`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Merge the range cells into one region in the worksheet.
     #
     # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function mergeNameRange(string itemId, string name, Across payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/merge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Merge the range cells into one region in the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function mergeNameRangeWithItemPath(string itemPath, string name, Across payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/merge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Merge the range cells into one region in the worksheet.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function mergeWorksheetRange(string itemId, string worksheetIdOrName, string address, Across payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/merge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Merge the range cells into one region in the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function mergeWorksheetRangeWithItemPath(string itemPath, string worksheetIdOrName, string address, Across payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/merge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Merge the range cells into one region in the worksheet.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function mergeColumnRange(string itemId, string tableIdOrName, string columnIdOrName, Across payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/merge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Merge the range cells into one region in the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function mergeColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Across payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/merge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Unmerge the range cells into separate cells.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function unmergeNameRange(string itemId, string name, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/unmerge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Unmerge the range cells into separate cells.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function unmergeNameRangeWithItemPath(string itemPath, string name, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/unmerge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Unmerge the range cells into separate cells.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function unmergeWorksheetRange(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/unmerge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Unmerge the range cells into separate cells.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function unmergeWorksheetRangeWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/unmerge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Unmerge the range cells into separate cells.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function unmergeColumnRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/unmerge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Unmerge the range cells into separate cells.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function unmergeColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/unmerge`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Get the range visible from a filtered range.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getVisibleView(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns RangeView|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/visibleView`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeView response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the range visible from a filtered range.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getVisibleViewWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns RangeView|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/visibleView`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeView response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function performNameRangeSort(string itemId, string name, RangeSort payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function performNameRangeSortWithItemPath(string itemPath, string name, RangeSort payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function performWorksheetRangeSort(string itemId, string worksheetIdOrName, string address, RangeSort payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function performWorksheetRangeSortWithItemPath(string itemPath, string worksheetIdOrName, string address, RangeSort payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function performColumnRangeSort(string itemId, string tableIdOrName, string columnIdOrName, RangeSort payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - No Content 
+    remote isolated function performColumnRangeSortWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, RangeSort payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of the range format.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves related resources
@@ -879,8 +2989,8 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - OK 
-    remote isolated function getRangeFormat(string itemId, string namedItemName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/format`;
+    remote isolated function getNameRangeFormat(string itemId, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/format`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
@@ -891,11 +3001,11 @@ public isolated client class Client {
     # Update the properties of range format.
     #
     # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function updateRangeFormat(string itemId, string namedItemName, RangeFormat payload, string? sessionId = ()) returns RangeFormat|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/format`;
+    remote isolated function updateNameRangeFormat(string itemId, string name, RangeFormat payload, string? sessionId = ()) returns RangeFormat|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/format`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
@@ -904,11 +3014,10 @@ public isolated client class Client {
         RangeFormat response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
-    # Retrieve the properties and relationships of the range format
+    # Retrieve the properties and relationships of the range format.
     #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves related resources
@@ -920,7 +3029,48 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - OK 
-    remote isolated function getRangeFormatWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
+    remote isolated function getNameRangeFormatWithItemPath(string itemPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/format`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeFormat response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Update the properties of range format.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function updateNameRangeFormatWithItemPath(string itemPath, string name, RangeFormat payload, string? sessionId = ()) returns RangeFormat|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/format`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        RangeFormat response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of the range format.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function getWorksheetRangeFormat(string itemId, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
@@ -933,10 +3083,10 @@ public isolated client class Client {
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + address - The address of the range
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function updateRangeFormatWithAddress(string itemId, string worksheetIdOrName, string address, RangeFormat payload, string? sessionId = ()) returns RangeFormat|error {
+    remote isolated function updateWorksheetRangeFormat(string itemId, string worksheetIdOrName, string address, RangeFormat payload, string? sessionId = ()) returns RangeFormat|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -946,7 +3096,49 @@ public isolated client class Client {
         RangeFormat response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
-    # Retrieve the properties and relationships of the range format
+    # Retrieve the properties and relationships of the range format.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function getWorksheetRangeFormatWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeFormat response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Update the properties of range format.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function updateWorksheetRangeFormatWithItemPath(string itemPath, string worksheetIdOrName, string address, RangeFormat payload, string? sessionId = ()) returns RangeFormat|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        RangeFormat response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of the range format.
     #
     # + itemId - The ID of the drive containing the workbook
     # + tableIdOrName - The ID or name of the table
@@ -988,940 +3180,7 @@ public isolated client class Client {
         RangeFormat response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
-    # Merge the range cells into one region in the worksheet.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function mergeRange(string itemId, string namedItemName, Across payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/merge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Merge the range cells into one region in the worksheet.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function mergeRangeWithAddress(string itemId, string worksheetIdOrName, string address, Across payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/merge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Merge the range cells into one region in the worksheet.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function mergeColumnRange(string itemId, string tableIdOrName, string columnIdOrName, Across payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/merge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Unmerge the range cells into separate cells.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function unmergeRange(string itemId, string namedItemName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/unmerge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Unmerge the range cells into separate cells.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function unmergeRangeWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/unmerge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Unmerge the range cells into separate cells.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function unmergeColumnRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/unmerge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Clear range values such as format, fill, and border.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function clearRange(string itemId, string namedItemName, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/clear`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Clear range values such as format, fill, and border.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function clearRangeWithAddress(string itemId, string worksheetIdOrName, string address, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/clear`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Clear range values such as format, fill, and border.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function clearColumnRange(string itemId, string tableIdOrName, string columnIdOrName, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/clear`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Deletes the cells associated with the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteCell(string itemId, string namedItemName, Shift payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/delete`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Deletes the cells associated with the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteCellWithAddress(string itemId, string worksheetIdOrName, string address, Shift payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/delete`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Deletes the cells associated with the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteColumnCell(string itemId, string tableIdOrName, string columnIdOrName, Shift payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/delete`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Gets the range containing the single cell based on row and column numbers.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getNameRangeWithRowAndColumn(string itemId, string namedItemName, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range object containing the single cell based on row and column numbers.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getWorkSheetRangeWithRowAndColumn(string itemId, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range object containing the single cell based on row and column numbers.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRangeWithRowColumnAddress(string itemId, string worksheetIdOrName, string address, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range object containing the single cell based on row and column numbers.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnRangeWithRowAndColumn(string itemId, string tableIdOrName, string columnIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a column contained in the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRangeColumn(string itemId, string namedItemName, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/column(column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a column contained in the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRangeColumnWithAddress(string itemId, string worksheetIdOrName, string address, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/column(column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a column contained in the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnRangeColumn(string itemId, string tableIdOrName, string columnIdOrName, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/column(column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the right of the given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCloumAfterRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsAfter`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the right of the given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + columnCount - The number of columns to include in the resulting range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCloumAfterRangeWithCount(string itemId, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsAfter(count=${getEncodedUri(columnCount)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the left of the given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCloumBeforeRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsBefore`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the left of the given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + columnCount - The number of columns to include in the resulting range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCloumBeforeRangeWithCount(string itemId, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsBefore(count=${getEncodedUri(columnCount)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range that represents the entire column of the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getEntireColumnRange(string itemId, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/entireColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range that represents the entire column of the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getEntireColumnRangeWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/entireColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range that represents the entire column of the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getColumnEntireColumnRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/entireColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range that represents the entire row of the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getEntireRowRange(string itemId, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/entireRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range that represents the entire row of the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getEntireRowRangeWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/entireRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range that represents the entire row of the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnEntireRowRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/entireRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last cell within the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastCell(string itemId, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/lastCell`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last cell within the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastCellWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastCell`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last cell within the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnLastCell(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastCell`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last column within the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastColumnRange(string itemId, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/lastColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last column within the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastColumnRangeWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last column within the range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnLastColumnRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last row within the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastRowRange(string itemId, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/lastRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last row within the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastRowRangeWithAddress(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last row within the range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnLastRowRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of rows above a given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRowsAboveRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsAbove`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of rows above a given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + rowCount - The number of rows to include in the resulting range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRowsAboveRangeWithCount(string itemId, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsAbove(count=${getEncodedUri(rowCount)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the left of the given range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRowsBelowRange(string itemId, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsBelow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the left of the given range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + rowCount - The number of rows to include in the resulting range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRowsBelowRangeWithCount(string itemId, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsBelow(count=${getEncodedUri(rowCount)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the used range of the given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + namedItemName - The name of the named item
-    # + valuesOnly - A value indicating whether to return only the values in the used range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getUsedRangeWithValuesOnly(string itemId, string namedItemName, boolean valuesOnly, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(namedItemName)}/range/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the used range of the given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + valuesOnly - A value indicating whether to return only the values in the used range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getUsedRangeWithAddress(string itemId, string worksheetIdOrName, string address, boolean valuesOnly, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the used range of the given range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + valuesOnly - A value indicating whether to return only the values in the used range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnUsedRange(string itemId, string tableIdOrName, string columnIdOrName, boolean valuesOnly, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the resized range of a range.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + deltaRows - The number of rows to expand or contract the bottom-right corner of the range by. If deltaRows is positive, the range will be expanded. If deltaRows is negative, the range will be contracted.
-    # + deltaColumns - The number of columns to expand or contract the bottom-right corner of the range by. If deltaColumns is positive, the range will be expanded. If deltaColumns is negative, the range will be contracted.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getResizedRange(string itemId, string worksheetIdOrName, int deltaRows, int deltaColumns, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/resizedRange(deltaRows=${getEncodedUri(deltaRows)}, deltaColumns=${getEncodedUri(deltaColumns)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Get the range visible from a filtered range
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getVisibleView(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns RangeView|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/visibleView`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        RangeView response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getWorksheetRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Update the properties of range.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function updateWorkbookRangeWithItemPath(string itemPath, string namedItemName, Range payload, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - Success. 
-    remote isolated function getRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Update the properties of range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function updateRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, Range payload, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of range.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - Success. 
-    remote isolated function getColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Update the properties of range.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function updateColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Range payload, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Range response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Inserts a cell or a range of cells into the worksheet in place of this range, and shifts the other cells to make space.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function insertRangeWithItemPath(string itemPath, string namedItemName, Shift payload, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/insert`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Inserts a cell or a range of cells into the worksheet in place of this range, and shifts the other cells to make space.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function insertRangeWithAddreesItemPath(string itemPath, string worksheetIdOrName, string address, Shift payload, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/insert`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Inserts a cell or a range of cells into the worksheet in place of this range, and shifts the other cells to make space.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function insertColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Shift payload, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/insert`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of the range format
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK 
-    remote isolated function getRangeFormatWithItemPath(string itemPath, string namedItemName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/format`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        RangeFormat response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Update the properties of range format.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function updateRangeFormatWithItemPath(string itemPath, string namedItemName, RangeFormat payload, string? sessionId = ()) returns RangeFormat|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/format`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        RangeFormat response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of the range format
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK 
-    remote isolated function getRangeFormatWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        RangeFormat response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Update the properties of range format.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function updateRangeFormatWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, RangeFormat payload, string? sessionId = ()) returns RangeFormat|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        RangeFormat response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of the range format
+    # Retrieve the properties and relationships of the range format.
     #
     # + itemPath - The full path of the workbook
     # + tableIdOrName - The ID or name of the table
@@ -1963,661 +3222,444 @@ public isolated client class Client {
         RangeFormat response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
-    # Merge the range cells into one region in the worksheet.
+    # Retrieves a list of range borders.
     #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
     # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
     # + return - OK 
-    remote isolated function mergeRangeWithItemPath(string itemPath, string namedItemName, Across payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/merge`;
+    remote isolated function listNameRangeBorders(string itemId, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorders|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/format/borders`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeBorders response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Create a new range border.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - Created 
+    remote isolated function createNameRangeBorder(string itemId, string name, RangeBorder payload, string? sessionId = ()) returns RangeBorder|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/format/borders`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        RangeBorder response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Merge the range cells into one region in the worksheet.
+    # Retrieves a list of range borders.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listNameRangeBordersWithItemPath(string itemPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorders|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/format/borders`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeBorders response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Create a new range border.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - Created 
+    remote isolated function createNameRangeBorderWithItemPath(string itemPath, string name, RangeBorder payload, string? sessionId = ()) returns RangeBorder|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/format/borders`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        RangeBorder response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of range borders.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listWorksheetRangeBorders(string itemId, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorders|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format/borders`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeBorders response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Create a new range border.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - Created 
+    remote isolated function createWorksheetRangeBorder(string itemId, string worksheetIdOrName, string address, RangeBorder payload, string? sessionId = ()) returns RangeBorder|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format/borders`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        RangeBorder response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of range borders.
     #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + address - The address of the range
     # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
     # + return - OK 
-    remote isolated function mergeRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, Across payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/merge`;
+    remote isolated function listWorksheetRangeBordersWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorders|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format/borders`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeBorders response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Create a new range border.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - Created 
+    remote isolated function createWorksheetRangeBorderWithItemPath(string itemPath, string worksheetIdOrName, string address, RangeBorder payload, string? sessionId = ()) returns RangeBorder|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format/borders`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        RangeBorder response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Merge the range cells into one region in the worksheet.
+    # Retrieves a list of range borders.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listColumnRangeBorders(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorders|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/format/borders`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        RangeBorders response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Create a new range border.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - Created 
+    remote isolated function createColumnRangeBorder(string itemId, string tableIdOrName, string columnIdOrName, RangeBorder payload, string? sessionId = ()) returns RangeBorder|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/format/borders`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        RangeBorder response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieves a list of range borders.
     #
     # + itemPath - The full path of the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
     # + return - OK 
-    remote isolated function mergeColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Across payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/merge`;
+    remote isolated function listColumnRangeBordersWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorders|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/format/borders`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        RangeBorders response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Unmerge the range cells into separate cells.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function unmergeRangeWithItemPath(string itemPath, string namedItemName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/unmerge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Unmerge the range cells into separate cells.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function unmergeRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/unmerge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Unmerge the range cells into separate cells.
+    # Create a new range border.
     #
     # + itemPath - The full path of the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - No Content 
-    remote isolated function unmergeColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/unmerge`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Clear range values such as format, fill, and border.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function clearRangeWithItemPath(string itemPath, string namedItemName, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/clear`;
+    # + return - Created 
+    remote isolated function createColumnRangeBorderWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, RangeBorder payload, string? sessionId = ()) returns RangeBorder|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/format/borders`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        RangeBorder response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Clear range values such as format, fill, and border.
+    # Changes the width of the columns of the current range to achieve the best fit, based on the current data in the columns.
     #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function clearRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/clear`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Clear range values such as format, fill, and border.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function clearColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, ApplyTo payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/clear`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Deletes the cells associated with the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteCellWithItemPath(string itemPath, string namedItemName, Shift payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/delete`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Deletes the cells associated with the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteCellWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, Shift payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/delete`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Deletes the cells associated with the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteColumnCellWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Shift payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/delete`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Gets the range containing the single cell based on row and column numbers.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getNamedItemRangeWithRowColumnItemPath(string itemPath, string namedItemName, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range object containing the single cell based on row and column numbers.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getWorkSheetRangeWithRowAndColumnItemPath(string itemPath, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range object containing the single cell based on row and column numbers.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRangeWithRowColumnAddressItemPath(string itemPath, string worksheetIdOrName, string address, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range object containing the single cell based on row and column numbers.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + row - Row number of the cell to be retrieved. Zero-indexed.
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRangeWithRowAndColumnItemPath(string itemPath, string tableIdOrName, string columnIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/cell(row=${getEncodedUri(row)},column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a column contained in the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRangeColumnWithItemPath(string itemPath, string namedItemName, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/column(column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a column contained in the range
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRangeColumnWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/column(column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a column contained in the range
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + column - Column number of the cell to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnRangeColumnWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, int column, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/column(column=${getEncodedUri(column)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the right of the given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCloumAfterRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsAfter`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the right of the given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + columnCount - The number of columns to include in the resulting range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCloumAfterRangeWithCountItemPath(string itemPath, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsAfter(count=${getEncodedUri(columnCount)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the left of the given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCloumBeforeRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsBefore`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the left of the given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + columnCount - The number of columns to include in the resulting range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getCloumBeforeRangeWithCountItemPath(string itemPath, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/columnsBefore(count=${getEncodedUri(columnCount)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range that represents the entire column of the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getEntireColumnRangeWithItemPath(string itemPath, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/entireColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the range that represents the entire column of the range
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function getEntireColumnRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/entireColumn`;
+    remote isolated function autofitNameRangeColumns(string itemId, string name, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/format/autofitColumns`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets the range that represents the entire column of the range
+    # Changes the width of the columns of the current range to achieve the best fit, based on the current data in the columns.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function autofitNameRangeColumnsWithItemPath(string itemPath, string name, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/format/borders/autofitColumns`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Changes the width of the columns of the current range to achieve the best fit, based on the current data in the columns.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function autofitWorksheetRangeColumns(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format/autofitColumns`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Changes the width of the columns of the current range to achieve the best fit, based on the current data in the columns.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function autofitWorksheetRangeColumnsWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format/autofitColumns`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Changes the width of the columns of the current range to achieve the best fit, based on the current data in the columns.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function autofitColumnRangeColumns(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/format/autofitColumns`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Changes the width of the columns of the current range to achieve the best fit, based on the current data in the columns.
     #
     # + itemPath - The full path of the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function getColumnEntireColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/entireColumn`;
+    remote isolated function autofitColumnRangeColumnsWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/format/autofitColumns`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets the range that represents the entire row of the range
+    # Changes the height of the rows of the current range to achieve the best fit, based on the current data in the columns.
     #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function getEntireRowRangeWithItemPath(string itemPath, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/entireRow`;
+    remote isolated function autofitNameRangeRows(string itemId, string name, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range/format/autofitRows`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets the range that represents the entire row of the range
+    # Changes the height of the rows of the current range to achieve the best fit, based on the current data in the columns.
     #
     # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function getEntireRowRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/entireRow`;
+    remote isolated function autofitNameRangeRowsWithItemPath(string itemPath, string name, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range/format/borders/autofitRows`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets the range that represents the entire row of the range
+    # Changes the height of the rows of the current range to achieve the best fit, based on the current data in the columns.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function autofitWorksheetRangeRows(string itemId, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format/autofitRows`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Changes the height of the rows of the current range to achieve the best fit, based on the current data in the columns.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + address - The address of the range
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function autofitWorksheetRangeRowsWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/format/autofitRows`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Changes the width of the columns of the current range to achieve the best fit, based on the current data in the columns.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function autofitColumnRangeRows(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/format/autofitRows`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Changes the height of the rows of the current range to achieve the best fit, based on the current data in the columns.
     #
     # + itemPath - The full path of the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnEntireRowRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/entireRow`;
+    # + return - OK. 
+    remote isolated function autofitColumnRangeRowsWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/format/autofitRows`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets the last cell within the range.
+    # Get the resized range of a range.
     #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastCellWithItemPath(string itemPath, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/lastCell`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last cell within the range.
-    #
-    # + itemPath - The full path of the workbook
+    # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
+    # + deltaRows - The number of rows to expand or contract the bottom-right corner of the range by. If deltaRows is positive, the range will be expanded. If deltaRows is negative, the range will be contracted.
+    # + deltaColumns - The number of columns to expand or contract the bottom-right corner of the range by. If deltaColumns is positive, the range will be expanded. If deltaColumns is negative, the range will be contracted.
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function getLastCellWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastCell`;
+    remote isolated function getResizedRange(string itemId, string worksheetIdOrName, int deltaRows, int deltaColumns, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/resizedRange(deltaRows=${getEncodedUri(deltaRows)}, deltaColumns=${getEncodedUri(deltaColumns)})`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last cell within the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnLastCellWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastCell`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last column within the range
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastColumnRangeWithItemPath(string itemPath, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/lastColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last column within the range
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastColumnRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last column within the range
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnLastColumnRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastColumn`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last row within the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastRowRangeWithItemPath(string itemPath, string namedItemName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/lastRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last row within the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getLastRowRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/lastRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets the last row within the range.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnLastRowRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/lastRow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of rows above a given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRowsAboveRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsAbove`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of rows above a given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + rowCount - The number of rows to include in the resulting range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRowsAboveRangeWithCountItemPath(string itemPath, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsAbove(count=${getEncodedUri(rowCount)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the left of the given range
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRowsBelowRangeWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsBelow`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Gets a certain number of columns to the left of the given range
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + rowCount - The number of rows to include in the resulting range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getRowsBelowRangeWithCountItemPath(string itemPath, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range/rowsBelow(count=${getEncodedUri(rowCount)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the used range of the given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + namedItemName - The name of the named item
-    # + valuesOnly - A value indicating whether to return only the values in the used range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getUsedRangeWithItemPath(string itemPath, string namedItemName, boolean valuesOnly, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(namedItemName)}/range/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the used range of the given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + valuesOnly - A value indicating whether to return only the values in the used range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getUsedRangeWithAddressItemPath(string itemPath, string worksheetIdOrName, string address, boolean valuesOnly, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the used range of the given range.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + valuesOnly - A value indicating whether to return only the values in the used range
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getColumnUsedRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, boolean valuesOnly, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/range/usedRange(valuesOnly=${getEncodedUri(valuesOnly)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        http:Request request = new;
+        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
     # Get the resized range of a range.
@@ -2636,102 +3678,9 @@ public isolated client class Client {
         Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Get the range visible from a filtered range
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + address - The address
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getVisibleViewWithItemPath(string itemPath, string worksheetIdOrName, string address, string? sessionId = ()) returns RangeView|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/range(address='${getEncodedUri(address)}')/visibleView`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        RangeView response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of table in the workbook.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK 
-    remote isolated function listWorkbookTables(string itemId, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Tables|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Tables response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of table in the worksheet.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK 
-    remote isolated function listTables(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Tables|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Tables response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Create a new table in the workbook
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function createWorkbookTable(string itemId, CreateTablePayload payload, string? sessionId = ()) returns Table|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/add`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Table response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Create a new table in the worksheet.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function createTable(string itemId, string worksheetIdOrName, CreateTablePayload payload, string? sessionId = ()) returns Table|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/add`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Table response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
     # Retrieve the properties and relationships of table.
     #
     # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
@@ -2744,7 +3693,7 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - OK. 
-    remote isolated function getWorkbookTable(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table|error {
+    remote isolated function getWorkbookTable(string itemId, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
@@ -2756,11 +3705,10 @@ public isolated client class Client {
     # Deletes the table from the workbook.
     #
     # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function deleteWorkbookTable(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+    remote isolated function deleteWorkbookTable(string itemId, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -2781,142 +3729,6 @@ public isolated client class Client {
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
         Table response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Deletes the table from the worksheet
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteTable(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
-        return response;
-    }
-    # Update the properties of table in the worksheet
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function updateTable(string itemId, string worksheetIdOrName, string tableIdOrName, Table payload, string? sessionId = ()) returns Table|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Table response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Get the range associated with the entire table.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getWorkbookTableRange(string itemId, string tableIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the range associated with the entire table.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getTableRange(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of table in the workbook.
-    #
-    # + itemPath - The full path of the workbook
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK 
-    remote isolated function listWorkbookTablesWithItemPath(string itemPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Tables|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Tables response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of table in the worksheet.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK 
-    remote isolated function listTablesWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Tables|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Tables response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Create a new table in the workbook
-    #
-    # + itemPath - The full path of the workbook
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function createWorkbookTableWithItemPath(string itemPath, CreateTablePayload payload, string? sessionId = ()) returns Table|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/add`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Table response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Create a new table in the worksheet.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function createTableWithItemPath(string itemPath, string worksheetIdOrName, CreateTablePayload payload, string? sessionId = ()) returns Table|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/add`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Table response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
     # Retrieve the properties and relationships of table.
@@ -2974,6 +3786,62 @@ public isolated client class Client {
     }
     # Retrieve the properties and relationships of table.
     #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function getWorksheetTable(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Table response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Deletes the table from the worksheet.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorksheetTable(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Update the properties of table in the worksheet.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function updateWorksheetTable(string itemId, string worksheetIdOrName, string tableIdOrName, Table payload, string? sessionId = ()) returns Table|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Table response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table.
+    #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
@@ -2988,7 +3856,7 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - OK. 
-    remote isolated function getTableWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table|error {
+    remote isolated function getWorksheetTableWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
@@ -2997,28 +3865,28 @@ public isolated client class Client {
         Table response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Deletes the table from the worksheet
+    # Deletes the table from the worksheet.
     #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function deleteTableWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+    remote isolated function deleteWorksheetTableWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
         return response;
     }
-    # Update the properties of table in the worksheet
+    # Update the properties of table in the worksheet.
     #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function updateTableWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, Table payload, string? sessionId = ()) returns Table|error {
+    remote isolated function updateWorksheetTableWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, Table payload, string? sessionId = ()) returns Table|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -3026,6 +3894,127 @@ public isolated client class Client {
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
         Table response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the data body of the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorkbookTableBodyRange(string itemId, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/dataBodyRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the data body of the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorkbookTableBodyRangeWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/dataBodyRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the data body of the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetTableBodyRange(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/dataBodyRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the data body of the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetTableBodyRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/dataBodyRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with header row of the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorkbookTableHeaderRowRange(string itemId, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/headerRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with header row of the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorkbookTableHeaderRowRangeWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/headerRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with header row of the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetTableHeaderRowRange(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/headerRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with header row of the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetTableHeaderRowRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/headerRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the range associated with the entire table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorkbookTableRange(string itemId, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
     # Get the range associated with the entire table.
@@ -3043,19 +4032,339 @@ public isolated client class Client {
     }
     # Get the range associated with the entire table.
     #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetTableRange(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/range`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Get the range associated with the entire table.
+    #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function getTableRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+    remote isolated function getWorksheetTableRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/range`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         Range response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Retrieve a list of table row in the workbook.
+    # Gets the range associated with totals row of the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorkbookTableTotalRowRange(string itemId, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/totalRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with totals row of the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getWorkbookTableTotalRowRangeWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/totalRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with totals row of the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetTableTotalRowRange(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/totalRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with totals row of the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetTableTotalRowRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/totalRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Clears all the filters currently applied on the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function clearWorkbookTableFilters(string itemId, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/clearFilters`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clears all the filters currently applied on the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function clearWorkbookTableFiltersWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/clearFilters`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clears all the filters currently applied on the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearWorksheetTableFilters(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/clearFilters`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clears all the filters currently applied on the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearWorksheetTableFiltersWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/clearFilters`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Converts the table into a normal range of cells. All data is preserved.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function convertWorkbookTableToRange(string itemId, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/convertToRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Converts the table into a normal range of cells. All data is preserved.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function convertWorkbookTableToRangeWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/convertToRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Converts the table into a normal range of cells. All data is preserved.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function convertWorksheetTableToRange(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/convertToRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Converts the table into a normal range of cells. All data is preserved.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function convertWorksheetTableToRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/convertToRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        Range response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Reapplies all the filters currently on the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function reapplyWorkbookTableFilters(string itemId, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/reapplyFilters`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Reapplies all the filters currently on the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function reapplyWorkbookTableFiltersWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/reapplyFilters`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Reapplies all the filters currently on the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function reapplyWorksheetTableFilters(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/reapplyFilters`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Reapplies all the filters currently on the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function reapplyWorksheetTableFiltersWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/reapplyFilters`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve a list of table in the worksheet.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listWorksheetTables(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Tables|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Tables response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieve a list of table in the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listWorksheetTablesWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Tables|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Tables response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Create a new table in the workbook
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function addWorkbookTable(string itemId, NewTable payload, string? sessionId = ()) returns Table|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/add`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Table response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Create a new table in the workbook
+    #
+    # + itemPath - The full path of the workbook
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function addWorkbookTableWithItemPath(string itemPath, NewTable payload, string? sessionId = ()) returns Table|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/add`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Table response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table sort.
     #
     # + itemId - The ID of the drive containing the workbook
     # + tableIdOrName - The ID or name of the table
@@ -3069,30 +4378,266 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - Success. 
-    remote isolated function listWorkbookTableRows(string itemId, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Rows|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows`;
+    # + return - OK. 
+    remote isolated function getWorkbookTableSort(string itemId, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns TableSort|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/sort`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Rows response = check self.clientEp->get(resourcePath, httpHeaders);
+        TableSort response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Adds rows to the end of a table in the workbook.
+    # Retrieve the properties and relationships of table sort.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function getWorkbookTableSortWithItemPath(string itemPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns TableSort|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/sort`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        TableSort response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table sort.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function getWorksheetTableSort(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns TableSort|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/sort`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        TableSort response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table sort.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function getWorksheetTableSortWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns TableSort|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/sort`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        TableSort response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation to the table.
     #
     # + itemId - The ID of the drive containing the workbook
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - Created. 
-    remote isolated function createWorkbookTableRow(string itemId, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows`;
+    # + return - OK. 
+    remote isolated function performWorkbookTableSort(string itemId, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation to the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function performWorkbookTableSortWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation to the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function performWorksheetTableSort(string itemId, string worksheetIdOrName, string tableIdOrName, TableSort payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/sort/apply`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Perform a sort operation to the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function performWorksheetTableSortWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, TableSort payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/sort/apply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clears the sorting that is currently on the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function clearWorkbookTableSort(string itemId, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/sort/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clears the sorting that is currently on the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function clearWorkbookTableSortWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/sort/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clears the sorting that is currently on the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearWorksheetTableSort(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/sort/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Clears the sorting that is currently on the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function clearWorksheetTableSortWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/sort/clear`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Reapplies the current sorting parameters to the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function reapplyWorkbookTableSort(string itemId, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/sort/reapply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Reapplies the current sorting parameters to the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function reapplyWorkbookTableSortWithItemPath(string itemPath, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/sort/reapply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Reapplies the current sorting parameters to the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function reapplyWorksheetTableSort(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/sort/reapply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Reapplies the current sorting parameters to the table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function reapplyWorksheetTableSortWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/sort/reapply`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
     # Retrieve a list of table row in the worksheet.
@@ -3111,7 +4656,7 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - OK 
-    remote isolated function listTableRows(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Rows|error {
+    remote isolated function listWorksheetTableRows(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Rows|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
@@ -3127,7 +4672,7 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - Created. 
-    remote isolated function createTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
+    remote isolated function createWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -3137,22 +4682,46 @@ public isolated client class Client {
         Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Update the properties of table row.
+    # Retrieve a list of table row in the worksheet.
     #
-    # + itemId - The ID of the drive containing the workbook
+    # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
-    # + rowIndex - The index of the table row
     # + sessionId - The ID of the session
-    # + return - Success. 
-    remote isolated function updateTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int rowIndex, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows`;
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listWorksheetTableRowsWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Rows|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Rows response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Adds rows to the end of a table in the worksheet.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - Created. 
+    remote isolated function createWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
     # Adds rows to the end of the table.
@@ -3162,7 +4731,7 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - Created. 
-    remote isolated function addTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
+    remote isolated function addWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/add`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -3172,165 +4741,6 @@ public isolated client class Client {
         Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets a row based on its position in the collection.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getTableRowWithIndex(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Row response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Deletes the row from the workbook table.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
-        return response;
-    }
-    # Get the range associated with the entire row.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getWorkbookTableRowRangeWithIndex(string itemId, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Get the range associated with the entire row.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - Success. 
-    remote isolated function getTableRowRangeWithIndex(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of table row in the workbook.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - Success. 
-    remote isolated function listWorkbookTableRowsWithItemPath(string itemPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Rows|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Rows response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Adds rows to the end of a table in the workbook.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + return - Created. 
-    remote isolated function createWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of table row in the worksheet.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK 
-    remote isolated function listTableRowsWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Rows|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Rows response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Adds rows to the end of a table in the worksheet.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + return - Created. 
-    remote isolated function createTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Update the properties of table row.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + rowIndex - The index of the table row
-    # + sessionId - The ID of the session
-    # + return - Success. 
-    remote isolated function updateTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int rowIndex, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
     # Adds rows to the end of the table.
     #
     # + itemPath - The full path of the workbook
@@ -3338,7 +4748,7 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function addTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
+    remote isolated function addWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, Row payload, string? sessionId = ()) returns Row|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/add`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -3350,14 +4760,114 @@ public isolated client class Client {
     }
     # Gets a row based on its position in the collection.
     #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function getWorksheetTableRowWithIndex(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a row based on its position in the collection.
+    #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function getTableRowWithIndexItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Row|error {
+    remote isolated function getWorksheetTableRowWithIndexItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Row|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table row.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function getWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Row|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Deletes the row from the workbook table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Update the properties of table row.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function updateWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table row.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function getWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
@@ -3371,22 +4881,41 @@ public isolated client class Client {
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
     # + return - OK 
-    remote isolated function deleteTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+    remote isolated function deleteWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
         return response;
     }
-    # Get the range associated with the entire row.
+    # Update the properties of table row.
     #
     # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function getWorkbookTableRowRangeWithIndexItemPath(string itemPath, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})/range`;
+    # + return - Success. 
+    remote isolated function updateWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Get the range associated with the entire row.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function getWorksheetTableRowRange(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})/range`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         Range response = check self.clientEp->get(resourcePath, httpHeaders);
@@ -3400,7 +4929,7 @@ public isolated client class Client {
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
     # + return - Success. 
-    remote isolated function getTableRowRangeWithIndexItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
+    remote isolated function getWorksheetTableRowRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})/range`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -3437,7 +4966,7 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function createWorkBookTableColumn(string itemId, string tableIdOrName, Column payload, string? sessionId = ()) returns Column|error {
+    remote isolated function createWorkbookTableColumn(string itemId, string tableIdOrName, Column payload, string? sessionId = ()) returns Column|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -3445,66 +4974,6 @@ public isolated client class Client {
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
         Column response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of table column in the workbook.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function listTableColumns(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Columns[]|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Columns[] response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Create a new table column in the workbook.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function createTableColumn(string itemId, string worksheetIdOrName, string tableIdOrName, Column payload, string? sessionId = ()) returns Column|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Column response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Deletes the column from the table.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - No Content. 
-    remote isolated function deleteWorkbookTableColumn(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
-        return response;
-    }
-    # Delete a column from a table.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + columnIdOrName - The ID or name of the column
-    # + sessionId - The ID of the session
-    # + return - No Content. 
-    remote isolated function deleteTableColumn(string itemId, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
         return response;
     }
     # Retrieve a list of table column in the workbook.
@@ -3537,8 +5006,50 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function createWorkBookTableColumnWithItemPath(string itemPath, string tableIdOrName, Column payload, string? sessionId = ()) returns Column|error {
+    remote isolated function createWorkbookTableColumnWithItemPath(string itemPath, string tableIdOrName, Column payload, string? sessionId = ()) returns Column|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Column response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve a list of table column in the workbook.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function listWorksheetTableColumns(string itemId, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Columns|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Columns response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Create a new table column in the workbook.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function createWorksheetTableColumn(string itemId, string worksheetIdOrName, string tableIdOrName, Column payload, string? sessionId = ()) returns Column|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
@@ -3553,9 +5064,20 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
     # + return - OK. 
-    remote isolated function listTableColumnsWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Columns|error {
+    remote isolated function listWorksheetTableColumnsWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Columns|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         Columns response = check self.clientEp->get(resourcePath, httpHeaders);
@@ -3568,7 +5090,7 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function createTableColumnWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, Column payload, string? sessionId = ()) returns Column|error {
+    remote isolated function createWorksheetTableColumnWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, Column payload, string? sessionId = ()) returns Column|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -3576,6 +5098,87 @@ public isolated client class Client {
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
         Column response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table column.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function getWorkbookTableColumn(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Column|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Column response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Deletes the column from the table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - No Content. 
+    remote isolated function deleteWorkbookTableColumn(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Update the properties of table column
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function updateWorkbookTableColumn(string itemId, string tableIdOrName, string columnIdOrName, Column payload, string? sessionId = ()) returns Column|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Column response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table column.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function getWorkbookTableColumnWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Column|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Column response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
     # Deletes the column from the table.
@@ -3592,25 +5195,29 @@ public isolated client class Client {
         http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
         return response;
     }
-    # Delete a column from a table.
+    # Update the properties of table column
     #
     # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - No Content. 
-    remote isolated function deleteTableColumnWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+    # + return - OK. 
+    remote isolated function updateWorkbookTableColumnWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, Column payload, string? sessionId = ()) returns Column|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Column response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
-    # Retrieve a list of chart.
+    # Retrieve the properties and relationships of table column.
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves related resources
@@ -3621,30 +5228,280 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - A collection of chart objects. 
-    remote isolated function listCharts(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Charts|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts`;
+    # + return - OK. 
+    remote isolated function getWorksheetTableColumn(string itemId, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Column|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Charts response = check self.clientEp->get(resourcePath, httpHeaders);
+        Column response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Creates a new chart
+    # Delete a column from a table.
     #
     # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function addChart(string itemId, string worksheetIdOrName, CreateChartPayload payload, string? sessionId = ()) returns Chart|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/add`;
+    # + return - No Content. 
+    remote isolated function deleteWorksheetTableColumn(string itemId, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Update the properties of table column
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function updateWorksheetTableColumn(string itemId, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, Column payload, string? sessionId = ()) returns Column|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        Chart response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        Column response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of table column.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function getWorksheetTableColumnWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Column|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Column response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Delete a column from a table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - No Content. 
+    remote isolated function deleteWorksheetTableColumnWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Update the properties of table column
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function updateWorksheetTableColumnWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, Column payload, string? sessionId = ()) returns Column|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Column response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the data body of the column
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworkbookTableColumnsDataBodyRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/dataBodyRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the data body of the column
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworkbookTableColumnsDataBodyRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/dataBodyRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the data body of the column
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworksheetTableColumnsDataBodyRange(string itemId, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/dataBodyRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the data body of the column
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworksheetTableColumnsDataBodyRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/dataBodyRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the header row of the column.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworkbookTableColumnsHeaderRowRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/headerRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the header row of the column.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworkbookTableColumnsHeaderRowRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/headerRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the header row of the column.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworksheetTableColumnsHeaderRowRange(string itemId, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/headerRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the header row of the column.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworksheetTableColumnsHeaderRowRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/headerRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the totals row of the column.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworkbookTableColumnsTotalRowRange(string itemId, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/totalRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the totals row of the column.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworkbookTableColumnsTotalRowRangeWithItemPath(string itemPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/totalRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the totals row of the column.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworksheetTableColumnsTotalRowRange(string itemId, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/totalRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets the range associated with the totals row of the column.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + columnIdOrName - The ID or name of the column
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getworksheetTableColumnsTotalRowRangeWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/columns/${getEncodedUri(columnIdOrName)}/totalRowRange`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Range response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
     # Retrieve the properties and relationships of chart.
@@ -3692,204 +5549,6 @@ public isolated client class Client {
         Chart response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
-    # Resets the source data for the chart.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + chartIdOrName - The ID or name of the chart
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function setChartData(string itemId, string worksheetIdOrName, string chartIdOrName, ResetData payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/setData`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Positions the chart relative to cells on the worksheet
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + chartIdOrName - The ID or name of the chart
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function setPosition(string itemId, string worksheetIdOrName, string chartIdOrName, Position payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/setPosition`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of chart series .
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + chartIdOrName - The ID or name of the chart
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - Created. 
-    remote isolated function listChartSeries(string itemId, string worksheetIdOrName, string chartIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns CollectionOfChartSeries|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/series`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        CollectionOfChartSeries response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # create a new chart series.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + chartIdOrName - The ID or name of the chart
-    # + sessionId - The ID of the session
-    # + return - Created. 
-    remote isolated function createChartSeries(string itemId, string worksheetIdOrName, string chartIdOrName, ChartSeries payload, string? sessionId = ()) returns ChartSeries|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/series`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        ChartSeries response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Gets a chart based on its position in the collection.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getChartBasedOnPosition(string itemId, string worksheetIdOrName, int index, string? sessionId = ()) returns Chart|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/itemAt(index=${getEncodedUri(index)})`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Chart response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + chartIdOrName - The ID or name of the chart
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getChartImage(string itemId, string worksheetIdOrName, string chartIdOrName, string? sessionId = ()) returns Image|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/image`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Image response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + chartIdOrName - The ID or name of the chart
-    # + width - The desired width of the resulting image.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getChartImageWithWidth(string itemId, string worksheetIdOrName, string chartIdOrName, int width, string? sessionId = ()) returns Image|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/image(width=${getEncodedUri(width)})`;
-        map<anydata> queryParam = {"width": width};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Image response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + chartIdOrName - The ID or name of the chart
-    # + width - The desired width of the resulting image.
-    # + height - The desired height of the resulting image.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getChartImageWithWidthHeight(string itemId, string worksheetIdOrName, string chartIdOrName, int width, int height, string? sessionId = ()) returns Image|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/image(width=${getEncodedUri(width)},height=${getEncodedUri(height)})`;
-        map<anydata> queryParam = {"width": width, "height": height};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Image response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + chartIdOrName - The ID or name of the chart
-    # + width - The desired width of the resulting image.
-    # + height - The desired height of the resulting image.
-    # + fittingMode - The method used to scale the chart to the specified dimensions (if both height and width are set)."
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getChartImageWithWidthHeightFittingMode(string itemId, string worksheetIdOrName, string chartIdOrName, int width, int height, "Fit"|"FitAndCenter"|"Fill" fittingMode, string? sessionId = ()) returns Image|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/image(width=${getEncodedUri(width)},height=${getEncodedUri(height)},fittingMode=${getEncodedUri(fittingMode)})`;
-        map<anydata> queryParam = {"width": width, "height": height, "fittingMode": fittingMode};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Image response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of chart.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - A collection of chart objects. 
-    remote isolated function listChartsWithItemPath(string itemPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Charts|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Charts response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Creates a new chart
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function addChartWithItemPath(string itemPath, string worksheetIdOrName, CreateChartPayload payload, string? sessionId = ()) returns Chart|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/add`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Chart response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
     # Retrieve the properties and relationships of chart.
     #
     # + itemPath - The full path of the workbook
@@ -3935,38 +5594,46 @@ public isolated client class Client {
         Chart response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
-    # Resets the source data for the chart.
+    # Retrieve a list of chart series .
     #
-    # + itemPath - The full path of the workbook
+    # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chartIdOrName - The ID or name of the chart
     # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function setChartDataWithItemPath(string itemPath, string worksheetIdOrName, string chartIdOrName, ResetData payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/setData`;
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - Created. 
+    remote isolated function listChartSeries(string itemId, string worksheetIdOrName, string chartIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns CollectionOfChartSeries|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/series`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        CollectionOfChartSeries response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Positions the chart relative to cells on the worksheet
+    # create a new chart series.
     #
-    # + itemPath - The full path of the workbook
+    # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chartIdOrName - The ID or name of the chart
     # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function setPositionWithItemPath(string itemPath, string worksheetIdOrName, string chartIdOrName, Position payload, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/setPosition`;
+    # + return - Created. 
+    remote isolated function createChartSeries(string itemId, string worksheetIdOrName, string chartIdOrName, ChartSeries payload, string? sessionId = ()) returns ChartSeries|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/series`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         http:Request request = new;
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
-        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        ChartSeries response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
     # Retrieve a list of chart series .
@@ -4011,18 +5678,18 @@ public isolated client class Client {
         ChartSeries response = check self.clientEp->post(resourcePath, request, httpHeaders);
         return response;
     }
-    # Gets a chart based on its position in the collection.
+    # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
     #
-    # + itemPath - The full path of the workbook
+    # + itemId - The ID of the drive containing the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
-    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + chartIdOrName - The ID or name of the chart
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function getChartBasedOnPositionWithItemPath(string itemPath, string worksheetIdOrName, int index, string? sessionId = ()) returns Chart|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/itemAt(index=${getEncodedUri(index)})`;
+    remote isolated function getChartImage(string itemId, string worksheetIdOrName, string chartIdOrName, string? sessionId = ()) returns Image|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/image`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Chart response = check self.clientEp->get(resourcePath, httpHeaders);
+        Image response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
     # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
@@ -4039,12 +5706,125 @@ public isolated client class Client {
         Image response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
+    # Resets the source data for the chart.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + chartIdOrName - The ID or name of the chart
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function resetChartData(string itemId, string worksheetIdOrName, string chartIdOrName, ResetData payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/setData`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Resets the source data for the chart.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + chartIdOrName - The ID or name of the chart
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function resetChartDataWithItemPath(string itemPath, string worksheetIdOrName, string chartIdOrName, ResetData payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/setData`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Positions the chart relative to cells on the worksheet
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + chartIdOrName - The ID or name of the chart
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function setChartPosition(string itemId, string worksheetIdOrName, string chartIdOrName, Position payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/setPosition`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Positions the chart relative to cells on the worksheet
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + chartIdOrName - The ID or name of the chart
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function setChartPositionWithItemPath(string itemPath, string worksheetIdOrName, string chartIdOrName, Position payload, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/setPosition`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        http:Response response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Gets a chart based on its position in the collection.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getChartBasedOnPosition(string itemId, string worksheetIdOrName, int index, string? sessionId = ()) returns Chart|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Chart response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Gets a chart based on its position in the collection.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getChartBasedOnPositionWithItemPath(string itemPath, string worksheetIdOrName, int index, string? sessionId = ()) returns Chart|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Chart response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + chartIdOrName - The ID or name of the chart
+    # + width - The desired width of the resulting image
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getChartImageWithWidth(string itemId, string worksheetIdOrName, string chartIdOrName, int width, string? sessionId = ()) returns Image|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/image(width=${getEncodedUri(width)})`;
+        map<anydata> queryParam = {"width": width};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Image response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
     # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
     #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chartIdOrName - The ID or name of the chart
-    # + width - The desired width of the resulting image.
+    # + width - The desired width of the resulting image
     # + sessionId - The ID of the session
     # + return - OK. 
     remote isolated function getChartImageWithWidthItemPath(string itemPath, string worksheetIdOrName, string chartIdOrName, int width, string? sessionId = ()) returns Image|error {
@@ -4058,11 +5838,29 @@ public isolated client class Client {
     }
     # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
     #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + chartIdOrName - The ID or name of the chart
+    # + width - The desired width of the resulting image
+    # + height - The desired height of the resulting image
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getChartImageWithWidthHeight(string itemId, string worksheetIdOrName, string chartIdOrName, int width, int height, string? sessionId = ()) returns Image|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/image(width=${getEncodedUri(width)},height=${getEncodedUri(height)})`;
+        map<anydata> queryParam = {"width": width, "height": height};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Image response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
+    #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chartIdOrName - The ID or name of the chart
-    # + width - The desired width of the resulting image.
-    # + height - The desired height of the resulting image.
+    # + width - The desired width of the resulting image
+    # + height - The desired height of the resulting image
     # + sessionId - The ID of the session
     # + return - OK. 
     remote isolated function getChartImageWithWidthHeightItemPath(string itemPath, string worksheetIdOrName, string chartIdOrName, int width, int height, string? sessionId = ()) returns Image|error {
@@ -4076,12 +5874,31 @@ public isolated client class Client {
     }
     # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
     #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + chartIdOrName - The ID or name of the chart
+    # + width - The desired width of the resulting image
+    # + height - The desired height of the resulting image
+    # + fittingMode - The method used to scale the chart to the specified dimensions (if both height and width are set)
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function getChartImageWithWidthHeightFittingMode(string itemId, string worksheetIdOrName, string chartIdOrName, int width, int height, "Fit"|"FitAndCenter"|"Fill" fittingMode, string? sessionId = ()) returns Image|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/charts/${getEncodedUri(chartIdOrName)}/image(width=${getEncodedUri(width)},height=${getEncodedUri(height)},fittingMode=${getEncodedUri(fittingMode)})`;
+        map<anydata> queryParam = {"width": width, "height": height, "fittingMode": fittingMode};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        Image response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Renders the chart as a base64-encoded image by scaling the chart to fit the specified dimensions.
+    #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chartIdOrName - The ID or name of the chart
-    # + width - The desired width of the resulting image.
-    # + height - The desired height of the resulting image.
-    # + fittingMode - The method used to scale the chart to the specified dimensions (if both height and width are set)."
+    # + width - The desired width of the resulting image
+    # + height - The desired height of the resulting image
+    # + fittingMode - The method used to scale the chart to the specified dimensions (if both height and width are set)
     # + sessionId - The ID of the session
     # + return - OK. 
     remote isolated function getChartImageWithWidthHeightFittingModeItemPath(string itemPath, string worksheetIdOrName, string chartIdOrName, int width, int height, "Fit"|"FitAndCenter"|"Fill" fittingMode, string? sessionId = ()) returns Image|error {
@@ -4093,13 +5910,47 @@ public isolated client class Client {
         Image response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Retrieve a list of named item.
+    # Retrieves a list of named items.
     #
     # + itemId - The ID of the drive containing the workbook
     # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
     # + return - OK 
-    remote isolated function listWorkbookNamedItem(string itemId, string? sessionId = ()) returns NamedItems|error {
+    remote isolated function listNamedItem(string itemId, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItems|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        NamedItems response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Retrieve a list of named item.
+    #
+    # + itemPath - The full path of the workbook
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK 
+    remote isolated function listNamedItemWithItemPath(string itemPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItems|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         NamedItems response = check self.clientEp->get(resourcePath, httpHeaders);
@@ -4110,7 +5961,7 @@ public isolated client class Client {
     # + itemId - The ID of the drive containing the workbook
     # + sessionId - The ID of the session
     # + return - Created. 
-    remote isolated function addWorkbookNamedItem(string itemId, AddNamedItemPayload payload, string? sessionId = ()) returns NamedItem|error {
+    remote isolated function addWorkbookNamedItem(string itemId, NewNamedItem payload, string? sessionId = ()) returns NamedItem|error {
         string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/add`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -4122,115 +5973,10 @@ public isolated client class Client {
     }
     # Adds a new name to the collection of the given scope using the user's locale for the formula.
     #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + return - Created. 
-    remote isolated function addNamedItem(string itemId, string worksheetIdOrName, AddNamedItemPayload payload, string? sessionId = ()) returns NamedItem|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/names/add`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        NamedItem response = check self.clientEp->post(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of the named item.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK. 
-    remote isolated function getWorksheetNamedItems(string itemId, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItems|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/names`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        NamedItems response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve the properties and relationships of the named item.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + name - The name of the named item to get.
-    # + sessionId - The ID of the session
-    # + count - Retrieves the total count of matching resources
-    # + expand - Retrieves related resources
-    # + filter - Filters results
-    # + format - Returns the results in the specified media format
-    # + orderby - Orders results
-    # + search - Returns results based on search criteria
-    # + 'select - Filters properties(columns)
-    # + skip - Indexes into a result set
-    # + top - Sets the page size of results
-    # + return - OK. 
-    remote isolated function getWorkbookNamedItem(string itemId, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItem|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}`;
-        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
-        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        NamedItem response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Update the properties of the named item .
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + name - The name of the named item to get.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function updateWorkbookNamedItem(string itemId, string name, NamedItem payload, string? sessionId = ()) returns NamedItem|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        NamedItem response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the range object that is associated with the name.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + name - The name of the named item to get.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getNamedRange(string itemId, string name, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Retrieve a list of named item.
-    #
-    # + itemPath - The full path of the workbook
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function listWorkbookNamedItemWithItemPath(string itemPath, string? sessionId = ()) returns NamedItems|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        NamedItems response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Adds a new name to the collection of the given scope using the user's locale for the formula.
-    #
     # + itemPath - The full path of the workbook
     # + sessionId - The ID of the session
     # + return - Created. 
-    remote isolated function addWorkbookNamedItemWithItemPath(string itemPath, AddNamedItemPayload payload, string? sessionId = ()) returns NamedItem|error {
+    remote isolated function addWorkbookNamedItemWithItemPath(string itemPath, NewNamedItem payload, string? sessionId = ()) returns NamedItem|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/add`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -4242,11 +5988,27 @@ public isolated client class Client {
     }
     # Adds a new name to the collection of the given scope using the user's locale for the formula.
     #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + sessionId - The ID of the session
+    # + return - Created. 
+    remote isolated function addWorksheetNamedItem(string itemId, string worksheetIdOrName, NewNamedItem payload, string? sessionId = ()) returns NamedItem|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/names/add`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        NamedItem response = check self.clientEp->post(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Adds a new name to the collection of the given scope using the user's locale for the formula.
+    #
     # + itemPath - The full path of the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + sessionId - The ID of the session
     # + return - Created. 
-    remote isolated function addNamedItemWithItemPath(string itemPath, string worksheetIdOrName, AddNamedItemPayload payload, string? sessionId = ()) returns NamedItem|error {
+    remote isolated function addWorksheetNamedItemWithItemPath(string itemPath, string worksheetIdOrName, NewNamedItem payload, string? sessionId = ()) returns NamedItem|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/names/add`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -4258,8 +6020,8 @@ public isolated client class Client {
     }
     # Retrieve the properties and relationships of the named item.
     #
-    # + itemPath - The full path of the workbook
-    # + name - The name of the named item to get.
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves related resources
@@ -4271,7 +6033,47 @@ public isolated client class Client {
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
     # + return - OK. 
-    remote isolated function getWorkbookNamedItemWithItemPath(string itemPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItem|error {
+    remote isolated function getNamedItem(string itemId, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItem|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}`;
+        map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
+        resourcePath = resourcePath + check getPathForQueryParam(queryParam);
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        NamedItem response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Update the properties of the named item .
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + return - OK. 
+    remote isolated function updateNamedItem(string itemId, string name, NamedItem payload, string? sessionId = ()) returns NamedItem|error {
+        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/names/${getEncodedUri(name)}`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        NamedItem response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
+    # Retrieve the properties and relationships of the named item.
+    #
+    # + itemPath - The full path of the workbook
+    # + name - The name of the named item
+    # + sessionId - The ID of the session
+    # + count - Retrieves the total count of matching resources
+    # + expand - Retrieves related resources
+    # + filter - Filters results
+    # + format - Returns the results in the specified media format
+    # + orderby - Orders results
+    # + search - Returns results based on search criteria
+    # + 'select - Filters properties(columns)
+    # + skip - Indexes into a result set
+    # + top - Sets the page size of results
+    # + return - OK. 
+    remote isolated function getNamedItemWithItemPath(string itemPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItem|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}`;
         map<anydata> queryParam = {"$count": count, "$expand": expand, "$filter": filter, "$format": format, "$orderby": orderby, "$search": search, "$select": 'select, "$skip": skip, "$top": top};
         resourcePath = resourcePath + check getPathForQueryParam(queryParam);
@@ -4283,10 +6085,10 @@ public isolated client class Client {
     # Update the properties of the named item .
     #
     # + itemPath - The full path of the workbook
-    # + name - The name of the named item to get.
+    # + name - The name of the named item
     # + sessionId - The ID of the session
     # + return - OK. 
-    remote isolated function updateWorkbookNamedItemWithItemPath(string itemPath, string name, NamedItem payload, string? sessionId = ()) returns NamedItem|error {
+    remote isolated function updateNamedItemWithItemPath(string itemPath, string name, NamedItem payload, string? sessionId = ()) returns NamedItem|error {
         string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}`;
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
@@ -4294,19 +6096,6 @@ public isolated client class Client {
         json jsonBody = payload.toJson();
         request.setPayload(jsonBody, "application/json");
         NamedItem response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
-    # Retrieve the range object that is associated with the name.
-    #
-    # + itemPath - The full path of the workbook
-    # + name - The name of the named item to get.
-    # + sessionId - The ID of the session
-    # + return - OK. 
-    remote isolated function getNamedRangeWithItemPath(string itemPath, string name, string? sessionId = ()) returns Range|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/names/${getEncodedUri(name)}/range`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        Range response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
 }
