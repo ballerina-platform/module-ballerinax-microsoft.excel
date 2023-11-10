@@ -15,11 +15,10 @@
 // under the License.
 
 import ballerina/os;
-import ballerina/io;
 import ballerina/log;
 import ballerina/test;
-import microsoft.excel.excel;
 import ballerina/http;
+import ballerina/lang.runtime;
 
 configurable string clientId = os:getEnv("CLIENT_ID");
 configurable string clientSecret = os:getEnv("CLIENT_SECRET");
@@ -27,7 +26,7 @@ configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 configurable string workbookIdOrPath = os:getEnv("WORKBOOK_PATH");
 
-excel:ConnectionConfig configuration = {
+ConnectionConfig configuration = {
     auth: {
         clientId: clientId,
         clientSecret: clientSecret,
@@ -45,18 +44,18 @@ string sessionId = EMPTY_STRING;
 string columnName = EMPTY_STRING;
 string rowId = EMPTY_STRING;
 int sheetPosition = 1;
-excel:Worksheet sheet = {position: sheetPosition};
+Worksheet sheet = {position: sheetPosition};
 int rowIndex = 2;
 boolean showHeaders = false;
 int columnInputIndex = 2;
-excel:Table updateTable = {
+Table updateTable = {
     showHeaders: showHeaders,
     showTotals: false
 };
 
 @test:BeforeSuite
 function testCreateSession() {
-    excel:Session|error response = excelClient->createSession(workBookId, {persistChanges: false});
+    Session|error response = excelClient->createSession(workBookId, {persistChanges: false});
     if response is error {
         test:assertFail(response.toString());
     }
@@ -64,8 +63,8 @@ function testCreateSession() {
 
 @test:Config {}
 function testAddWorksheet() {
-    excel:Worksheet|error response = excelClient->addWorksheet(workBookId, {name: worksheetName}, sessionId);
-    if response is excel:Worksheet {
+    Worksheet|error response = excelClient->addWorksheet(workBookId, {name: worksheetName}, sessionId);
+    if response is Worksheet {
         string name = response?.name ?: EMPTY_STRING;
         test:assertEquals(name, worksheetName, "Unmatch worksheet name");
     } else {
@@ -75,8 +74,9 @@ function testAddWorksheet() {
 
 @test:Config {dependsOn: [testAddWorksheet]}
 function testGetWorksheet() {
-    excel:Worksheet|error response = excelClient->getWorksheet(workBookId, worksheetName, sessionId);
-    if response is excel:Worksheet {
+    runtime:sleep(5);
+    Worksheet|error response = excelClient->getWorksheet(workBookId, worksheetName, sessionId);
+    if response is Worksheet {
         string name = response?.name ?: EMPTY_STRING;
         test:assertEquals(name, worksheetName, "Worksheet not found");
     } else {
@@ -86,8 +86,8 @@ function testGetWorksheet() {
 
 @test:Config {dependsOn: [testGetWorksheet]}
 function testListWorksheets() {
-    excel:Worksheet[]|error response = excelClient->listWorksheets(workBookId, sessionId = sessionId);
-    if response is excel:Worksheet[] {
+    Worksheet[]|error response = excelClient->listWorksheets(workBookId, sessionId = sessionId);
+    if response is Worksheet[] {
         string responseWorksheetName = response[0]?.name ?: EMPTY_STRING;
         test:assertNotEquals(responseWorksheetName, EMPTY_STRING, "Found 0 worksheets");
     } else {
@@ -97,8 +97,8 @@ function testListWorksheets() {
 
 @test:Config {dependsOn: [testDeleteTable]}
 function testUpdateWorksheet() {
-    excel:Worksheet|error response = excelClient->updateWorksheet(workBookId, worksheetName, sheet, sessionId);
-    if response is excel:Worksheet {
+    Worksheet|error response = excelClient->updateWorksheet(workBookId, worksheetName, sheet, sessionId);
+    if response is Worksheet {
         int responsePosition = response?.position ?: 0;
         test:assertEquals(responsePosition, sheetPosition, "Unmatch worksheet position");
     } else {
@@ -108,8 +108,8 @@ function testUpdateWorksheet() {
 
 @test:Config {dependsOn: [testGetWorksheet]}
 function testGetCell() {
-    excel:Range|error response = excelClient->getWorksheetCell(workBookId, worksheetName, rowIndex, 7, sessionId);
-    if response is excel:Range {
+    Range|error response = excelClient->getWorksheetCell(workBookId, worksheetName, rowIndex, 7, sessionId);
+    if response is Range {
         int row = <int>response.rowIndex;
         test:assertEquals(row, rowIndex, "Unmatch worksheet position");
     } else {
@@ -121,7 +121,7 @@ function testGetCell() {
 function testDeleteWorksheet() {
     http:Response|error response = excelClient->deleteWorksheet(workBookId, worksheetName, sessionId);
     if response is http:Response {
-        if response.statusCode != 404 {
+        if response.statusCode != 204 {
             test:assertFail(response.statusCode.toBalString());
         }
     } else {
@@ -131,8 +131,8 @@ function testDeleteWorksheet() {
 
 @test:Config {dependsOn: [testGetWorksheet]}
 function testAddTable() {
-    excel:Table|error response = excelClient->addWorksheetTable(workBookId, worksheetName, {address: "A1:C3"}, sessionId = sessionId);
-    if response is excel:Table {
+    Table|error response = excelClient->addWorksheetTable(workBookId, worksheetName, {address: "A1:C3"}, sessionId = sessionId);
+    if response is Table {
         tableName = response?.name ?: EMPTY_STRING;
         test:assertNotEquals(tableName, EMPTY_STRING, "Table is not created");
     } else {
@@ -142,8 +142,9 @@ function testAddTable() {
 
 @test:Config {dependsOn: [testAddTable]}
 function testGetTable() {
-    excel:Table|error response = excelClient->getWorksheetTable(workBookId, worksheetName, tableName, sessionId = sessionId);
-    if response is excel:Table {
+    runtime:sleep(5);
+    Table|error response = excelClient->getWorksheetTable(workBookId, worksheetName, tableName, sessionId = sessionId);
+    if response is Table {
         string responseTableName = response?.name ?: EMPTY_STRING;
         test:assertEquals(tableName, responseTableName, "Table is not created");
     } else {
@@ -154,8 +155,8 @@ function testGetTable() {
 @test:Config {dependsOn: [testGetTable]}
 function testListTable() {
     log:printInfo("excelClient -> listTables()");
-    excel:Table[]|error response = excelClient->listWorkbookTables(workBookId, sessionId = sessionId);
-    if response is excel:Table[] {
+    Table[]|error response = excelClient->listWorkbookTables(workBookId, sessionId = sessionId);
+    if response is Table[] {
         string responseTableName = response[0]?.name ?: EMPTY_STRING;
         test:assertNotEquals(responseTableName, EMPTY_STRING, "Found 0 tables");
     } else {
@@ -165,10 +166,9 @@ function testListTable() {
 
 @test:Config {dependsOn: [testGetTable]}
 function testUpdateTable() {
-    excel:Table|error response = excelClient->updateWorksheetTable(workBookId, worksheetName, tableName, {style: "TableStyleMedium2"}, sessionId);
-    if response is excel:Table {
-        boolean responseTable = response?.showHeaders ?: true;
-        test:assertEquals(responseTable, showHeaders, "Table is not updated");
+    Table|error response = excelClient->updateWorksheetTable(workBookId, worksheetName, tableName, {style: "TableStyleMedium2"}, sessionId);
+    if response is Table {
+        test:assertEquals(response?.style, "TableStyleMedium2", "Table is not updated");
     } else {
         test:assertFail(response.toString());
     }
@@ -178,9 +178,8 @@ int rowInputIndex = 1;
 
 @test:Config {dependsOn: [testUpdateTable]}
 function testCreateRow() {
-    excel:Row|error response = excelClient->createWorksheetTableRow(workBookId, worksheetName, tableName, {values: [[1, 2, 3]], index: rowInputIndex}, sessionId);
-    if response is excel:Row {
-        rowId = <string>response.id;
+    Row|error response = excelClient->createWorksheetTableRow(workBookId, worksheetName, tableName, {values: [[1, 2, 3]], index: rowInputIndex}, sessionId);
+    if response is Row {
         int responseIndex = <int>response.index;
         test:assertEquals(responseIndex, rowInputIndex, "Row is not added");
     } else {
@@ -190,10 +189,9 @@ function testCreateRow() {
 
 @test:Config {dependsOn: [testCreateRow]}
 function testListRows() {
-    excel:Row[]|error response = excelClient->listWorksheetTableRows(workBookId, worksheetName, tableName, sessionId = sessionId);
-    if response is excel:Row[] {
-        int responseIndex = <int>response[1].index;
-        test:assertEquals(responseIndex, rowInputIndex, "Found 0 rows");
+    Row[]|error response = excelClient->listWorksheetTableRows(workBookId, worksheetName, tableName, sessionId = sessionId);
+    if response is Row[] {
+        test:assertEquals(response[1].index, rowInputIndex, "Found 0 rows");
     } else {
         test:assertFail(response.toString());
     }
@@ -202,8 +200,8 @@ function testListRows() {
 @test:Config {dependsOn: [testCreateRow]}
 function testUpdateRow() {
     string value = "testValue";
-    excel:Row|error response = excelClient->updateWorksheetTableRow(workBookId, worksheetName, tableName, rowInputIndex, {values: [[(), (), value]]},sessionId);
-    if response is excel:Row {
+    Row|error response = excelClient->updateWorksheetTableRow(workBookId, worksheetName, tableName, rowInputIndex, {index: rowInputIndex, values: [[(), 6, value]]},sessionId);
+    if response is Row {
         (string|int|decimal?)[][]? values = response.values;
         if values is () {
             test:assertFail("Row is not updated");
@@ -227,8 +225,8 @@ function testDeleteRow() {
 
 @test:Config {dependsOn: [testDeleteRow]}
 function testCreateColumn() {
-    excel:Column|error response = excelClient->createWorksheetTableColumn(workBookId, worksheetName, tableName, {index: columnInputIndex, values : [["a3"], ["c3"], ["aa"]]},  sessionId);
-    if response is excel:Column {
+    Column|error response = excelClient->createWorksheetTableColumn(workBookId, worksheetName, tableName, {index: columnInputIndex, values : [["a3"], ["a4"], ["a5"], ["a1"]]},  sessionId);
+    if response is Column {
         int responseIndex = <int>response.index;
         columnName = <string>response.name;
         test:assertEquals(responseIndex, columnInputIndex, "Column is not added");
@@ -239,8 +237,8 @@ function testCreateColumn() {
 
 @test:Config {dependsOn: [testCreateColumn]}
 function testListColumn() {
-    excel:Column[]|error response = excelClient->listWorksheetTableColumns(workBookId, worksheetName, tableName, sessionId = sessionId);
-    if response is excel:Column[] {
+    Column[]|error response = excelClient->listWorksheetTableColumns(workBookId, worksheetName, tableName, sessionId = sessionId);
+    if response is Column[] {
         int responseIndex = <int>response[2].index;
         test:assertEquals(responseIndex, columnInputIndex, "Found 0 columns");
     } else {
@@ -251,10 +249,13 @@ function testListColumn() {
 @test:Config {dependsOn: [testCreateColumn]}
 function testUpdateColumn() {
     string value = "testName";
-    io:println(columnName);
-    excel:Column|error response = excelClient->updateWorksheetTableColumn(workBookId, worksheetName, tableName, columnName, {values: [[()], [()], [value]]}, sessionId = sessionId);
-    if response is excel:Column {
-        test:assertEquals(response.values, value, "Column is not updated");
+    Column|error response = excelClient->updateWorksheetTableColumn(workBookId, worksheetName, tableName, columnName, {values: [[()], [()], [value], [()]]}, sessionId = sessionId);
+    if response is Column {
+        (string|int|decimal?)[][]? values = response.values;
+        if values is () {
+            test:assertFail("Column is not updated");
+        }
+        test:assertEquals(values[2][0], value, "Column is not updated");
     } else {
         test:assertFail(response.toString());
     }
@@ -278,8 +279,8 @@ function testDeleteTable() {
 
 @test:Config {dependsOn: [testCreateRow]}
 function testAddChart() {
-    excel:Chart|error response = excelClient->addChart(workBookId, worksheetName, {'type: "ColumnStacked" , sourceData: "A1:B2", seriesBy: "Auto"}, sessionId);
-    if response is excel:Chart {
+    Chart|error response = excelClient->addChart(workBookId, worksheetName, {'type: "ColumnStacked" , sourceData: "A1:B2", seriesBy: "Auto"}, sessionId);
+    if response is Chart {
         chartName = <string>response?.name;
         test:assertNotEquals(chartName, EMPTY_STRING, "Chart is not created");
     } else {
@@ -289,8 +290,9 @@ function testAddChart() {
 
 @test:Config {dependsOn: [testAddChart]}
 function testGetChart() {
-    excel:Chart|error response = excelClient->getChart(workBookId, worksheetName, chartName, sessionId = sessionId);
-    if response is excel:Chart {
+    runtime:sleep(5);
+    Chart|error response = excelClient->getChart(workBookId, worksheetName, chartName, sessionId = sessionId);
+    if response is Chart {
         string chartId = response?.id ?: EMPTY_STRING;
         test:assertNotEquals(chartId, EMPTY_STRING, "Chart not found");
     } else {
@@ -300,8 +302,8 @@ function testGetChart() {
 
 @test:Config {dependsOn: [testGetChart]}
 function testListChart() {
-    excel:Chart[]|error response = excelClient->listCharts(workBookId, worksheetName, sessionId = sessionId);
-    if response is excel:Chart[] {
+    Chart[]|error response = excelClient->listCharts(workBookId, worksheetName, sessionId = sessionId);
+    if response is Chart[] {
         string chartId = response[0]?.id ?: EMPTY_STRING;
         test:assertNotEquals(chartId, EMPTY_STRING, "Found 0 charts");
     } else {
@@ -310,15 +312,15 @@ function testListChart() {
 }
 
 decimal height = 99;
-excel:Chart updateChart = {
+Chart updateChart = {
     height: height,
     left: 99
 };
 
 @test:Config {dependsOn: [testListChart]}
 function testUpdateChart() {
-    excel:Chart|error response = excelClient->updateChart(workBookId, worksheetName, chartName, updateChart, sessionId);
-    if response is excel:Chart {
+    Chart|error response = excelClient->updateChart(workBookId, worksheetName, chartName, updateChart, sessionId);
+    if response is Chart {
         decimal responseHeight = response?.height ?: 0;
         test:assertEquals(responseHeight, height, "Chart is not updated");
     } else {
@@ -328,7 +330,7 @@ function testUpdateChart() {
 
 @test:Config {dependsOn: [testUpdateChart]}
 function testGetChartImage() {
-    excel:Image|error response = excelClient->getChartImage(workBookId, worksheetName, chartName, sessionId = sessionId);
+    Image|error response = excelClient->getChartImage(workBookId, worksheetName, chartName, sessionId = sessionId);
     if response is error {
         test:assertFail(response.toString());
     }
@@ -360,7 +362,7 @@ function testDeleteChart() {
 
 @test:Config {}
 function testGetWorkbookApplication() {
-    excel:Application|error response = excelClient->getApplication(workBookId, sessionId);
+    Application|error response = excelClient->getApplication(workBookId, sessionId);
     if response is error {
         test:assertFail(response.toString());
     }

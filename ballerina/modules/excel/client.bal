@@ -455,37 +455,6 @@ public isolated client class Client {
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Deletes the row from the workbook table.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteWorkbookTableRow(string itemId, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
-        return response;
-    }
-    # Updates the properties of table row.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - Success. 
-    remote isolated function updateWorkbookTableRow(string itemId, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
     # Retrieves the properties and relationships of table row.
     #
     # + itemPath - The full path of the workbook
@@ -509,37 +478,6 @@ public isolated client class Client {
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Deletes the row from the workbook table.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
-        return response;
-    }
-    # Updates the properties of table row.
-    #
-    # + itemPath - The full path of the workbook
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - Success. 
-    remote isolated function updateWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
     # Gets the range associated with the entire row.
@@ -584,6 +522,37 @@ public isolated client class Client {
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
+    # Deletes the row from the workbook table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorkbookTableRow(string itemId, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Updates the properties of table row.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function updateWorkbookTableRow(string itemId, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/${getEncodedUri(itemId)}/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
     # Gets a row based on its position in the collection.
     #
     # + itemPath - The full path of the workbook
@@ -596,6 +565,37 @@ public isolated client class Client {
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Deletes the row from the workbook table.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Updates the properties of table row.
+    #
+    # + itemPath - The full path of the workbook
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function updateWorkbookTableRowWithItemPath(string itemPath, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
     # Adds rows to the end of the table.
@@ -4773,6 +4773,39 @@ public isolated client class Client {
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
+    # Deletes the row from the workbook table.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Update the properties of table row.
+    #
+    # + itemId - The ID of the drive containing the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function updateWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
+        return response;
+    }
     # Gets a row based on its position in the collection.
     #
     # + itemPath - The full path of the workbook
@@ -4786,6 +4819,39 @@ public isolated client class Client {
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
+        return response;
+    }
+    # Deletes the row from the workbook table.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - OK 
+    remote isolated function deleteWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
+        return response;
+    }
+    # Update the properties of table row.
+    #
+    # + itemPath - The full path of the workbook
+    # + worksheetIdOrName - The ID or name of the worksheet
+    # + tableIdOrName - The ID or name of the table
+    # + index - Index value of the object to be retrieved. Zero-indexed.
+    # + sessionId - The ID of the session
+    # + return - Success. 
+    remote isolated function updateWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
+        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/itemAt(index=${getEncodedUri(index)})`;
+        map<any> headerValues = {"sessionId": sessionId};
+        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
     # Retrieve the properties and relationships of table row.
@@ -4814,39 +4880,6 @@ public isolated client class Client {
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
         return response;
     }
-    # Deletes the row from the workbook table.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
-        return response;
-    }
-    # Update the properties of table row.
-    #
-    # + itemId - The ID of the drive containing the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - Success. 
-    remote isolated function updateWorksheetTableRow(string itemId, string worksheetIdOrName, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/items/${getEncodedUri(itemId)}/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
-        return response;
-    }
     # Retrieve the properties and relationships of table row.
     #
     # + itemPath - The full path of the workbook
@@ -4871,39 +4904,6 @@ public isolated client class Client {
         map<any> headerValues = {"sessionId": sessionId};
         map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
         Row response = check self.clientEp->get(resourcePath, httpHeaders);
-        return response;
-    }
-    # Deletes the row from the workbook table.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - OK 
-    remote isolated function deleteWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns http:Response|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Response response = check self.clientEp->delete(resourcePath, headers = httpHeaders);
-        return response;
-    }
-    # Update the properties of table row.
-    #
-    # + itemPath - The full path of the workbook
-    # + worksheetIdOrName - The ID or name of the worksheet
-    # + tableIdOrName - The ID or name of the table
-    # + index - Index value of the object to be retrieved. Zero-indexed.
-    # + sessionId - The ID of the session
-    # + return - Success. 
-    remote isolated function updateWorksheetTableRowWithItemPath(string itemPath, string worksheetIdOrName, string tableIdOrName, int index, Row payload, string? sessionId = ()) returns Row|error {
-        string resourcePath = string `/me/drive/root:/${getEncodedUri(itemPath)}:/workbook/worksheets/${getEncodedUri(worksheetIdOrName)}/tables/${getEncodedUri(tableIdOrName)}/rows/${getEncodedUri(index)}`;
-        map<any> headerValues = {"sessionId": sessionId};
-        map<string|string[]> httpHeaders = getMapForHeaders(headerValues);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        Row response = check self.clientEp->patch(resourcePath, request, httpHeaders);
         return response;
     }
     # Get the range associated with the entire row.

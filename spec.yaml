@@ -142,9 +142,6 @@ components:
       type: object
       description: Represents the table row properties.
       properties:
-        id:
-          type: string
-          description: The ID of the table row
         index:
           type: integer
           description: The index of the table row
@@ -285,9 +282,15 @@ components:
                 - type: string
                 - type: integer
         formulasLocal:
-          type: string
+          type: array
           nullable: true
           description: The formula in A1-style notation, in the user's language and number-formatting locale
+          items:
+            type: array
+            items:
+              oneOf: 
+                - type: string
+                - type: integer
         formulasR1C1:
           type: array
           nullable: true
@@ -331,16 +334,19 @@ components:
                 - type: string
                 - type: integer
         valueTypes:
-          type: string
+          type: array
           description: Represents the type of data of each cell
-          enum:
-            - Unknown
-            - Empty
-            - String
-            - Integer
-            - Double
-            - Boolean
-            - Error        
+          items:
+            type: array
+            items:
+              enum:
+                - Unknown
+                - Empty
+                - String
+                - Integer
+                - Double
+                - Boolean
+                - Error        
         values:
           type: array
           nullable: true
@@ -369,8 +375,14 @@ components:
           type: object
           description: Represents the formula in A1-style notation
         formulasLocal:
-          type: string
+          type: array
           description: Represents the formula in A1-style notation, in the user's language and number-formatting locale
+          items:
+            type: array
+            items:
+              oneOf: 
+                - type: string
+                - type: integer
         formulasR1C1:
           type: object
           description: Represents the formula in R1C1-style notation
@@ -387,16 +399,19 @@ components:
           type: object
           description: Text values of the specified range
         valueTypes:
-          type: string
+          type: array
           description: Represents the type of data of each cell
-          enum:
-            - Unknown
-            - Empty
-            - String
-            - Integer
-            - Double
-            - Boolean
-            - Error
+          items:
+            type: array
+            items:
+              enum:
+                - Unknown
+                - Empty
+                - String
+                - Integer
+                - Double
+                - Boolean
+                - Error 
         values:
           type: array
           nullable: true
@@ -1628,41 +1643,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Row'
-    patch:
-      summary: Updates the properties of table row.
-      operationId: updateWorkbookTableRow
-      tags:
-        - row
-      parameters:
-        - $ref: '#/components/parameters/itemId'
-        - $ref: '#/components/parameters/tableIdOrName'
-        - $ref: '#/components/parameters/index'
-        - $ref: '#/components/parameters/sessionId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Row'
-      responses:
-        '200':
-          description: Success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Row'
-    delete:
-      summary: Deletes the row from the workbook table.
-      operationId: deleteWorkbookTableRow
-      tags:
-        - row
-      parameters:
-        - $ref: '#/components/parameters/itemId'
-        - $ref: '#/components/parameters/tableIdOrName'
-        - $ref: '#/components/parameters/index'
-        - $ref: '#/components/parameters/sessionId'
-      responses:
-        '200':
-          description: OK
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/rows/{index}:
     get:
       summary: Retrieves the properties and relationships of table row.
@@ -1690,41 +1670,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Row'
-    patch:
-      summary: Updates the properties of table row.
-      operationId: updateWorkbookTableRowWithItemPath
-      tags:
-        - row
-      parameters:
-        - $ref: '#/components/parameters/itemPath'
-        - $ref: '#/components/parameters/tableIdOrName'
-        - $ref: '#/components/parameters/index'
-        - $ref: '#/components/parameters/sessionId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Row'
-      responses:
-        '200':
-          description: Success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Row'
-    delete:
-      summary: Deletes the row from the workbook table.
-      operationId: deleteWorkbookTableRowWithItemPath
-      tags:
-        - row
-      parameters:
-        - $ref: '#/components/parameters/itemPath'
-        - $ref: '#/components/parameters/tableIdOrName'
-        - $ref: '#/components/parameters/index'
-        - $ref: '#/components/parameters/sessionId'
-      responses:
-        '200':
-          description: OK
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/rows/itemAt(index={index})/range:
     get:
       summary: Gets the range associated with the entire row.
@@ -1779,6 +1724,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Row'
+    patch:
+      summary: Updates the properties of table row.
+      operationId: updateWorkbookTableRow
+      tags:
+        - row
+      parameters:
+        - $ref: '#/components/parameters/itemId'
+        - $ref: '#/components/parameters/tableIdOrName'
+        - $ref: '#/components/parameters/index'
+        - $ref: '#/components/parameters/sessionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Row'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Row'
+    delete:
+      summary: Deletes the row from the workbook table.
+      operationId: deleteWorkbookTableRow
+      tags:
+        - row
+      parameters:
+        - $ref: '#/components/parameters/itemId'
+        - $ref: '#/components/parameters/tableIdOrName'
+        - $ref: '#/components/parameters/index'
+        - $ref: '#/components/parameters/sessionId'
+      responses:
+        '200':
+          description: OK
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/rows/itemAt(index={index}):
     get:
       summary: Gets a row based on its position in the collection.
@@ -1797,6 +1777,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Row'
+    patch:
+      summary: Updates the properties of table row.
+      operationId: updateWorkbookTableRowWithItemPath
+      tags:
+        - row
+      parameters:
+        - $ref: '#/components/parameters/itemPath'
+        - $ref: '#/components/parameters/tableIdOrName'
+        - $ref: '#/components/parameters/index'
+        - $ref: '#/components/parameters/sessionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Row'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Row'
+    delete:
+      summary: Deletes the row from the workbook table.
+      operationId: deleteWorkbookTableRowWithItemPath
+      tags:
+        - row
+      parameters:
+        - $ref: '#/components/parameters/itemPath'
+        - $ref: '#/components/parameters/tableIdOrName'
+        - $ref: '#/components/parameters/index'
+        - $ref: '#/components/parameters/sessionId'
+      responses:
+        '200':
+          description: OK
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/rows/add:
     post:
       summary: Adds rows to the end of the table.
@@ -1865,7 +1880,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Worksheet'
     get:
-      summary: Retrieve a list of the worksheets.
+      summary: Retrieves a list of the worksheets.
       operationId: listWorksheets
       tags:
         - worksheet
@@ -1911,7 +1926,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Worksheet'
     get:
-      summary: Retrieve a list of the worksheet.
+      summary: Retrieves a list of the worksheet.
       operationId: listWorksheetsWithItemPath
       tags:
         - worksheet
@@ -1936,7 +1951,7 @@ paths:
                 $ref: '#/components/schemas/Worksheets'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}:
     get:
-      summary: Retrieve the properties and relationships of the worksheet.
+      summary: Retrieves the properties and relationships of the worksheet.
       operationId: getWorksheet
       tags:
         - worksheet
@@ -1961,7 +1976,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Worksheet'
     patch:
-      summary: Update the properties of worksheet.
+      summary: Updates the properties of worksheet.
       operationId: updateWorksheet
       tags:
         - worksheet
@@ -1982,7 +1997,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Worksheet'
     delete:
-      summary: Delete a worksheet from a workbook.
+      summary: Deletes a worksheet from a workbook.
       operationId: deleteWorksheet
       tags:
         - worksheet
@@ -1995,7 +2010,7 @@ paths:
           description: No Content
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}:
     get:
-      summary: Retrieve the properties and relationships of the worksheet.
+      summary: Retrieves the properties and relationships of the worksheet.
       operationId: getWorksheetWithItemPath
       tags:
         - worksheet
@@ -2020,7 +2035,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Worksheet'
     patch:
-      summary: Update the properties of the worksheet.
+      summary: Updates the properties of the worksheet.
       operationId: updateWorksheetWithItemPath
       tags:
         - worksheet
@@ -2041,7 +2056,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Worksheet'
     delete:
-      summary: Delete a worksheet from a workbook.
+      summary: Deletes a worksheet from a workbook.
       operationId: deleteWorksheetWithItemPath
       tags:
         - worksheet
@@ -2124,7 +2139,7 @@ paths:
                 $ref: '#/components/schemas/Charts'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/charts:
     get:
-      summary: Retrieve a list of chart.
+      summary: Retrieves a list of chart.
       operationId: listChartsWithItemPath
       tags:
         - worksheet
@@ -2388,7 +2403,7 @@ paths:
                 $ref: '#/components/schemas/PivotTables'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/pivotTables/{pivotTableId}:
     get:
-      summary: Retrieve the properties and relationships of pivot table.
+      summary: Retrieves the properties and relationships of pivot table.
       operationId: getPivotTable
       tags:
         - worksheet
@@ -2415,7 +2430,7 @@ paths:
                 $ref: '#/components/schemas/PivotTable'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/pivotTables/{pivotTableId}:
     get:
-      summary: Retrieve a list of the workbook pivot table.
+      summary: Retrieves a list of the workbook pivot table.
       operationId: getPivotTableWithItemPath
       tags:
         - worksheet
@@ -2497,7 +2512,7 @@ paths:
   #___________________________________ RANGE ________________________________________
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}'):
     get:
-      summary: Retrieve the properties and relationships of range.
+      summary: Retrieves the properties and relationships of range.
       operationId: getWorksheetRangeWithAddress
       tags:
         - range
@@ -2523,7 +2538,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Range'
     patch:
-      summary: Update the properties of range.
+      summary: Updates the properties of range.
       operationId: updateWorksheetRangeWithAddress
       tags:
         - range
@@ -2546,7 +2561,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}'):
     get:
-      summary: Retrieve the properties and relationships of range.
+      summary: Retrieves the properties and relationships of range.
       operationId: getWorksheetRangeWithAddressItemPath
       tags:
         - range
@@ -2572,7 +2587,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Range'
     patch:
-      summary: Update the properties of range.
+      summary: Updates the properties of range.
       operationId: updateWorksheetRangeWithAddressItemPath
       tags:
         - range
@@ -2595,7 +2610,7 @@ paths:
                 $ref: '#/components/schemas/Range'               
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range:
     get:
-      summary: Retrieve the properties and relationships of range.
+      summary: Retrieves the properties and relationships of range.
       operationId: getColumnRange
       tags:
         - range
@@ -2621,7 +2636,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Range'
     patch:
-      summary: Update the properties of range.
+      summary: Updates the properties of range.
       operationId: updateColumnRange
       tags:
         - range
@@ -2644,7 +2659,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range:
     get:
-      summary: Retrieve the properties and relationships of range.
+      summary: Retrieves the properties and relationships of range.
       operationId: getColumnRangeWithItemPath
       tags:
         - range
@@ -2670,7 +2685,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Range'
     patch:
-      summary: Update the properties of range.
+      summary: Updates the properties of range.
       operationId: updateColumnRangeWithItemPath
       tags:
         - range
@@ -2693,7 +2708,7 @@ paths:
                 $ref: '#/components/schemas/Range'            
   /me/drive/items/{itemId}/workbook/names/{name}/range:
     get:
-      summary: Retrieve the range object that is associated with the name.
+      summary: Retrieves the range object that is associated with the name.
       operationId: getNamedItemRange
       tags:
         - namedItem
@@ -2709,7 +2724,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Range'
     patch:
-      summary: Update the properties of range.
+      summary: Updates the properties of range.
       operationId: UpdateNameRange
       tags:
         - range
@@ -2731,7 +2746,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/names/{name}/range:
     get:
-      summary: Retrieve the range object that is associated with the name.
+      summary: Retrieves the range object that is associated with the name.
       operationId: getNamedItemRangeWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'
@@ -2745,7 +2760,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Range'
     patch:
-      summary: Update the properties of range.
+      summary: Updates the properties of range.
       operationId: UpdateNameRangeWithItemPath
       tags:
         - range
@@ -3213,7 +3228,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/entireColumn:
     get:
-      summary: Gets the range that represents the entire column of the range
+      summary: Gets the range that represents the entire column of the range.
       operationId: getWorksheetRangeEntireColumn
       tags:
         - range
@@ -3231,7 +3246,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/entireColumn:
     get:
-      summary: Gets the range that represents the entire column of the range
+      summary: Gets the range that represents the entire column of the range.
       operationId: getWorksheetRangeEntireColumnWithItemPath
       tags:
         - range
@@ -3249,7 +3264,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/entireColumn:
     get:
-      summary: Gets the range that represents the entire column of the range
+      summary: Gets the range that represents the entire column of the range.
       operationId: getColumnRangeEntireColumn
       tags:
         - range
@@ -3267,7 +3282,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/entireColumn:
     get:
-      summary: Gets the range that represents the entire column of the range
+      summary: Gets the range that represents the entire column of the range.
       operationId: getColumnRangeEntireColumnWithItemPath
       tags:
         - range
@@ -3285,7 +3300,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/names/{name}/range/entireRow:
     get:
-      summary: Gets the range that represents the entire row of the range
+      summary: Gets the range that represents the entire row of the range.
       operationId: getNameRangeEntireRow
       tags:
         - range
@@ -3302,7 +3317,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/names/{name}/range/entireRow:
     get:
-      summary: Gets the range that represents the entire row of the range
+      summary: Gets the range that represents the entire row of the range.
       operationId: getNameRangeEntireRowWithItemPath
       tags:
         - range
@@ -3319,7 +3334,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/entireRow:
     get:
-      summary: Gets the range that represents the entire row of the range
+      summary: Gets the range that represents the entire row of the range.
       operationId: getWorksheetRangeEntireRow
       tags:
         - range
@@ -3337,7 +3352,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/entireRow:
     get:
-      summary: Gets the range that represents the entire row of the range
+      summary: Gets the range that represents the entire row of the range.
       operationId: getWorksheetRangeEntireRowWithItemPath
       tags:
         - range
@@ -3355,7 +3370,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/entireRow:
     get:
-      summary: Gets the range that represents the entire row of the range
+      summary: Gets the range that represents the entire row of the range.
       operationId: getColumnRangeEntireRow
       tags:
         - range
@@ -3373,7 +3388,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/entireRow:
     get:
-      summary: Gets the range that represents the entire row of the range
+      summary: Gets the range that represents the entire row of the range.
       operationId: getColumnRangeEntireRowWithItemPath
       tags:
         - range
@@ -3549,7 +3564,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/lastColumn:
     get:
-      summary: Gets the last column within the range
+      summary: Gets the last column within the range.
       operationId: getWorksheetRangeLastColumnWithItemPath
       tags:
         - range
@@ -3567,7 +3582,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/lastColumn:
     get:
-      summary: Gets the last column within the range
+      summary: Gets the last column within the range.
       operationId: getColumnRangeLastColumn
       tags:
         - range
@@ -3585,7 +3600,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/lastColumn:
     get:
-      summary: Gets the last column within the range
+      summary: Gets the last column within the range.
       operationId: getColumnRangeLastColumnWithItemPath
       tags:
         - range
@@ -3781,7 +3796,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range/rowsBelow:
     get:
-      summary: Gets a certain number of columns to the left of the given range
+      summary: Gets a certain number of columns to the left of the given range.
       operationId: getWorksheetRowsBelowRange
       tags:
         - range
@@ -3798,7 +3813,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range/rowsBelow:
     get:
-      summary: Gets a certain number of columns to the left of the given range
+      summary: Gets a certain number of columns to the left of the given range.
       operationId: getWorksheetRowsBelowRangeWithItemPath
       tags:
         - range
@@ -3815,7 +3830,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range/rowsBelow(count={rowCount}):
     get:
-      summary: Gets a certain number of columns to the left of the given range
+      summary: Gets a certain number of columns to the left of the given range.
       operationId: getWorksheetRowsBelowRangeWithCount
       tags:
         - range
@@ -3833,7 +3848,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range/rowsBelow(count={rowCount}):
     get:
-      summary: Gets a certain number of columns to the left of the given range
+      summary: Gets a certain number of columns to the left of the given range.
       operationId: getWorksheetRowsBelowRangeWithCountItemPath
       tags:
         - range
@@ -3944,7 +3959,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/usedRange(valuesOnly={valuesOnly}):
     get:
-      summary: Get the used range of the given range.
+      summary: Gets the used range of the given range.
       operationId: getColumnUsedRangeWithItemPath
       tags:
         - range
@@ -3963,7 +3978,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/names/{name}/range/clear:
     post:
-      summary: Clear range values such as format, fill, and border.
+      summary: Clears range values such as format, fill, and border.
       operationId: clearNameRange
       tags:
         - range
@@ -3981,7 +3996,7 @@ paths:
           description: OK
   /me/drive/root:/{itemPath}:/workbook/names/{name}/range/clear:
     post:
-      summary: Clear range values such as format, fill, and border.
+      summary: Clears range values such as format, fill, and border.
       operationId: clearNameRangeWithItemPath
       tags:
         - range
@@ -3999,7 +4014,7 @@ paths:
           description: OK
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/clear:
     post:
-      summary: Clear range values such as format, fill, and border.
+      summary: Clears range values such as format, fill, and border.
       operationId: clearWorksheetRange
       tags:
         - range
@@ -4018,7 +4033,7 @@ paths:
           description: OK
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/clear:
     post:
-      summary: Clear range values such as format, fill, and border.
+      summary: Clears range values such as format, fill, and border.
       operationId: clearWorksheetRangeWithItemPath
       tags:
         - range
@@ -4037,7 +4052,7 @@ paths:
           description: OK
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/clear:
     post:
-      summary: Clear range values such as format, fill, and border.
+      summary: Clears range values such as format, fill, and border.
       operationId: clearColumnRange
       tags:
         - range
@@ -4056,7 +4071,7 @@ paths:
           description: OK
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/clear:
     post:
-      summary: Clear range values such as format, fill, and border.
+      summary: Clears range values such as format, fill, and border.
       operationId: clearColumnRangeWithItemPath
       tags:
         - range
@@ -4323,7 +4338,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/names/{name}/range/merge:
     post:
-      summary: Merge the range cells into one region in the worksheet.
+      summary: Merges the range cells into one region in the worksheet.
       operationId: mergeNameRange
       tags:
         - range
@@ -4341,7 +4356,7 @@ paths:
           description: OK
   /me/drive/root:/{itemPath}:/workbook/names/{name}/range/merge:
     post:
-      summary: Merge the range cells into one region in the worksheet.
+      summary: Merges the range cells into one region in the worksheet.
       operationId: mergeNameRangeWithItemPath
       tags:
         - range
@@ -4359,7 +4374,7 @@ paths:
           description: OK
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/merge:
     post:
-      summary: Merge the range cells into one region in the worksheet.
+      summary: Merges the range cells into one region in the worksheet.
       operationId: mergeWorksheetRange
       tags:
         - range
@@ -4378,7 +4393,7 @@ paths:
           description: OK
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/merge:
     post:
-      summary: Merge the range cells into one region in the worksheet.
+      summary: Merges the range cells into one region in the worksheet.
       operationId: mergeWorksheetRangeWithItemPath
       tags:
         - range
@@ -4397,7 +4412,7 @@ paths:
           description: OK
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/merge:
     post:
-      summary: Merge the range cells into one region in the worksheet.
+      summary: Merges the range cells into one region in the worksheet.
       operationId: mergeColumnRange
       tags:
         - range
@@ -4416,7 +4431,7 @@ paths:
           description: OK
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/merge:
     post:
-      summary: Merge the range cells into one region in the worksheet.
+      summary: Merges the range cells into one region in the worksheet.
       operationId: mergeColumnRangeWithItemPath
       tags:
         - range
@@ -4435,7 +4450,7 @@ paths:
           description: OK
   /me/drive/items/{itemId}/workbook/names/{name}/range/unmerge:
     post:
-      summary: Unmerge the range cells into separate cells.
+      summary: Unmerges the range cells into separate cells.
       operationId: unmergeNameRange
       tags:
         - range
@@ -4448,7 +4463,7 @@ paths:
           description: No Content
   /me/drive/root:/{itemPath}:/workbook/names/{name}/range/unmerge:
     post:
-      summary: Unmerge the range cells into separate cells.
+      summary: Unmerges the range cells into separate cells.
       operationId: unmergeNameRangeWithItemPath
       tags:
         - range
@@ -4461,7 +4476,7 @@ paths:
           description: No Content
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/unmerge:
     post:
-      summary: Unmerge the range cells into separate cells.
+      summary: Unmerges the range cells into separate cells.
       operationId: unmergeWorksheetRange
       tags:
         - range
@@ -4475,7 +4490,7 @@ paths:
           description: No Content
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/unmerge:
     post:
-      summary: Unmerge the range cells into separate cells.
+      summary: Unmerges the range cells into separate cells.
       operationId: unmergeWorksheetRangeWithItemPath
       tags:
         - range
@@ -4489,7 +4504,7 @@ paths:
           description: No Content
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/unmerge:
     post:
-      summary: Unmerge the range cells into separate cells.
+      summary: Unmerges the range cells into separate cells.
       operationId: unmergeColumnRange
       tags:
         - range
@@ -4503,7 +4518,7 @@ paths:
           description: No Content
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/unmerge:
     post:
-      summary: Unmerge the range cells into separate cells.
+      summary: Unmerges the range cells into separate cells.
       operationId: unmergeColumnRangeWithItemPath
       tags:
         - range
@@ -4517,7 +4532,7 @@ paths:
           description: No Content
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/visibleView:
     get:
-      summary: Get the range visible from a filtered range.
+      summary: Gets the range visible from a filtered range.
       operationId: getVisibleView
       tags:
         - range
@@ -4535,7 +4550,7 @@ paths:
                 $ref: '#/components/schemas/RangeView'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/visibleView:
     get:
-      summary: Get the range visible from a filtered range.
+      summary: Gets the range visible from a filtered range.
       operationId: getVisibleViewWithItemPath
       tags:
         - range
@@ -4553,7 +4568,7 @@ paths:
                 $ref: '#/components/schemas/RangeView'
   /me/drive/items/{itemId}/workbook/names/{name}/range/sort/apply:
     post:
-      summary: Perform a sort operation.
+      summary: Performs a sort operation.
       operationId: performNameRangeSort
       tags:
         - range
@@ -4571,7 +4586,7 @@ paths:
           description: OK.
   /me/drive/root:/{itemPath}:/workbook/names/{name}/range/sort/apply:
     post:
-      summary: Perform a sort operation.
+      summary: Performs a sort operation.
       operationId: performNameRangeSortWithItemPath
       tags:
         - range
@@ -4589,7 +4604,7 @@ paths:
           description: OK.
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/sort/apply:
     post:
-      summary: Perform a sort operation.
+      summary: Performs a sort operation.
       operationId: performWorksheetRangeSort
       tags:
         - range
@@ -4608,7 +4623,7 @@ paths:
           description: OK.
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/sort/apply:
     post:
-      summary: Perform a sort operation.
+      summary: Performs a sort operation.
       operationId: performWorksheetRangeSortWithItemPath
       tags:
         - range
@@ -4627,7 +4642,7 @@ paths:
           description: OK.
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/sort/apply:
     post:
-      summary: Perform a sort operation.
+      summary: Performs a sort operation.
       operationId: performColumnRangeSort
       tags:
         - range
@@ -4646,7 +4661,7 @@ paths:
           description: OK.
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/sort/apply:
     post:
-      summary: Perform a sort operation.
+      summary: Performs a sort operation.
       operationId: performColumnRangeSortWithItemPath
       tags:
         - range
@@ -4665,7 +4680,7 @@ paths:
           description: No Content
   /me/drive/items/{itemId}/workbook/names/{name}/range/format:
     get:
-      summary: Retrieve the properties and relationships of the range format.
+      summary: Retrieves the properties and relationships of the range format.
       operationId: getNameRangeFormat
       tags:
         - range
@@ -4690,7 +4705,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RangeFormat'
     patch:
-      summary: Update the properties of range format.
+      summary: Updates the properties of range format.
       operationId: updateNameRangeFormat
       tags:
         - range
@@ -4712,7 +4727,7 @@ paths:
                 $ref: '#/components/schemas/RangeFormat'
   /me/drive/root:/{itemPath}:/workbook/names/{name}/range/format:
     get:
-      summary: Retrieve the properties and relationships of the range format.
+      summary: Retrieves the properties and relationships of the range format.
       operationId: getNameRangeFormatWithItemPath
       tags:
         - range
@@ -4737,7 +4752,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RangeFormat'
     patch:
-      summary: Update the properties of range format.
+      summary: Updates the properties of range format.
       operationId: updateNameRangeFormatWithItemPath
       tags:
         - range
@@ -4759,7 +4774,7 @@ paths:
                 $ref: '#/components/schemas/RangeFormat'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/format:
     get:
-      summary: Retrieve the properties and relationships of the range format.
+      summary: Retrieves the properties and relationships of the range format.
       operationId: getWorksheetRangeFormat
       tags:
         - range
@@ -4785,7 +4800,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RangeFormat'
     patch:
-      summary: Update the properties of range format.
+      summary: Updates the properties of range format.
       operationId: updateWorksheetRangeFormat
       tags:
         - range
@@ -4808,7 +4823,7 @@ paths:
                 $ref: '#/components/schemas/RangeFormat'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/format:
     get:
-      summary: Retrieve the properties and relationships of the range format.
+      summary: Retrieves the properties and relationships of the range format.
       operationId: getWorksheetRangeFormatWithItemPath
       tags:
         - range
@@ -4834,7 +4849,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RangeFormat'
     patch:
-      summary: Update the properties of range format.
+      summary: Updates the properties of range format.
       operationId: updateWorksheetRangeFormatWithItemPath
       tags:
         - range
@@ -4857,7 +4872,7 @@ paths:
                 $ref: '#/components/schemas/RangeFormat'
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/format:
     get:
-      summary: Retrieve the properties and relationships of the range format.
+      summary: Retrieves the properties and relationships of the range format.
       operationId: getColumnRangeFormat
       tags:
         - range
@@ -4883,7 +4898,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RangeFormat'
     patch:
-      summary: Update the properties of range format.
+      summary: Updates the properties of range format.
       operationId: updateColumnRangeFormat
       tags:
         - range
@@ -4906,7 +4921,7 @@ paths:
                 $ref: '#/components/schemas/RangeFormat'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/format:
     get:
-      summary: Retrieve the properties and relationships of the range format.
+      summary: Retrieves the properties and relationships of the range format.
       operationId: getColumnRangeFormatWithItemPath
       tags:
         - range
@@ -4932,7 +4947,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RangeFormat'
     patch:
-      summary: Update the properties of range format.
+      summary: Updates the properties of range format.
       operationId: updateColumnRangeFormatWithItemPath
       tags:
         - range
@@ -4955,7 +4970,7 @@ paths:
                 $ref: '#/components/schemas/RangeFormat'
   /me/drive/items/{itemId}/workbook/names/{name}/range/format/borders:
     post:
-      summary: Create a new range border.
+      summary: Creates a new range border.
       operationId: createNameRangeBorder
       tags:
         - range
@@ -5002,7 +5017,7 @@ paths:
                 $ref: '#/components/schemas/RangeBorders'
   /me/drive/root:/{itemPath}:/workbook/names/{name}/range/format/borders:
     post:
-      summary: Create a new range border.
+      summary: Creates a new range border.
       operationId: createNameRangeBorderWithItemPath
       tags:
         - range
@@ -5049,7 +5064,7 @@ paths:
                 $ref: '#/components/schemas/RangeBorders'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/format/borders:
     post:
-      summary: Create a new range border.
+      summary: Creates a new range border.
       operationId: createWorksheetRangeBorder
       tags:
         - range
@@ -5098,7 +5113,7 @@ paths:
                 $ref: '#/components/schemas/RangeBorders'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range(address='{address}')/format/borders:
     post:
-      summary: Create a new range border.
+      summary: Creates a new range border.
       operationId: createWorksheetRangeBorderWithItemPath
       tags:
         - range
@@ -5147,7 +5162,7 @@ paths:
                 $ref: '#/components/schemas/RangeBorders'
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/format/borders:
     post:
-      summary: Create a new range border.
+      summary: Creates a new range border.
       operationId: createColumnRangeBorder
       tags:
         - range
@@ -5196,7 +5211,7 @@ paths:
                 $ref: '#/components/schemas/RangeBorders'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/range/format/borders:
     post:
-      summary: Create a new range border.
+      summary: Creates a new range border.
       operationId: createColumnRangeBorderWithItemPath
       tags:
         - range
@@ -5409,7 +5424,7 @@ paths:
           description: OK.
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/range/resizedRange(deltaRows={deltaRows}, deltaColumns={deltaColumns}):
     post:
-      summary: Get the resized range of a range.
+      summary: Gets the resized range of a range.
       operationId: getResizedRange
       tags:
         - range
@@ -5429,7 +5444,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/range/resizedRange(deltaRows={deltaRows}, deltaColumns={deltaColumns}):
     post:
-      summary: Get the resized range of a range.
+      summary: Gets the resized range of a range.
       operationId: getResizedRangeWithItemPath
       tags:
         - range
@@ -5995,7 +6010,7 @@ paths:
   #___________________________________ TABLES ________________________________________
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}:
     patch:
-      summary: Update the properties of table in the workbook.
+      summary: Updates the properties of table in the workbook.
       description: Update the properties of table
       operationId: updateWorkbookTable
       tags:
@@ -6029,7 +6044,7 @@ paths:
         '200':
           description: OK
     get:
-      summary: Retrieve the properties and relationships of table.
+      summary: Retrieves the properties and relationships of table.
       operationId: getWorkbookTable
       parameters:
         - $ref: '#/components/parameters/itemId'
@@ -6053,7 +6068,7 @@ paths:
                 $ref: '#/components/schemas/Table'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}:
     patch:
-      summary: Update the properties of table in the workbook.
+      summary: Updates the properties of table in the workbook.
       description: Update the properties of table
       operationId: updateWorkbookTableWithItemPath
       tags:
@@ -6087,7 +6102,7 @@ paths:
         '200':
           description: OK
     get:
-       summary: Retrieve the properties and relationships of table.
+       summary: Retrieves the properties and relationships of table.
        operationId: getWorkbookTableWithItemPath
        parameters:
          - $ref: '#/components/parameters/itemPath'
@@ -6111,7 +6126,7 @@ paths:
                  $ref: '#/components/schemas/Table'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}:
     patch:
-      summary: Update the properties of table in the worksheet.
+      summary: Updates the properties of table in the worksheet.
       operationId: updateWorksheetTable
       tags:
         - tables
@@ -6146,7 +6161,7 @@ paths:
         '200':
           description: OK
     get:
-       summary: Retrieve the properties and relationships of table.
+       summary: Retrieves the properties and relationships of table.
        operationId: getWorksheetTable
        parameters:
          - $ref: '#/components/parameters/itemId'
@@ -6171,7 +6186,7 @@ paths:
                  $ref: '#/components/schemas/Table'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}:
     patch:
-      summary: Update the properties of table in the worksheet.
+      summary: Updates the properties of table in the worksheet.
       operationId: updateWorksheetTableWithItemPath
       tags:
         - tables
@@ -6206,7 +6221,7 @@ paths:
         '200':
           description: OK
     get:
-       summary: Retrieve the properties and relationships of table.
+       summary: Retrieves the properties and relationships of table.
        operationId: getWorksheetTableWithItemPath
        parameters:
          - $ref: '#/components/parameters/itemPath'
@@ -6370,7 +6385,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/range:
     get:
-      summary: Get the range associated with the entire table.
+      summary: Gets the range associated with the entire table.
       operationId: getWorkbookTableRangeWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'
@@ -6385,7 +6400,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/range:
     get:
-      summary: Get the range associated with the entire table.
+      summary: Gets the range associated with the entire table.
       operationId: getWorksheetTableRange
       parameters:
         - $ref: '#/components/parameters/itemId'
@@ -6401,7 +6416,7 @@ paths:
                 $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/range:
     get:
-      summary: Get the range associated with the entire table.
+      summary: Gets the range associated with the entire table.
       operationId: getWorksheetTableRangeWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'
@@ -6634,7 +6649,7 @@ paths:
           description: OK
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables:
     get:
-      summary: Retrieve a list of table in the worksheet.
+      summary: Retrieves a list of table in the worksheet.
       operationId: listWorksheetTables
       tags:
         - tables
@@ -6660,7 +6675,7 @@ paths:
                 $ref: '#/components/schemas/Tables'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables:
     get:
-      summary: Retrieve a list of table in the worksheet.
+      summary: Retrieves a list of table in the worksheet.
       operationId: listWorksheetTablesWithItemPath
       tags:
         - tables
@@ -6686,7 +6701,7 @@ paths:
                 $ref: '#/components/schemas/Tables'
   /me/drive/items/{itemId}/workbook/tables/add:
     post:
-      summary: Create a new table in the workbook
+      summary: Creates a new table in the workbook
       operationId: addWorkbookTable
       tags:
         - tables
@@ -6707,7 +6722,7 @@ paths:
                 $ref: '#/components/schemas/Table'
   /me/drive/root:/{itemPath}:/workbook/tables/add:
     post:
-      summary: Create a new table in the workbook
+      summary: Creates a new table in the workbook
       operationId: addWorkbookTableWithItemPath
       tags:
         - tables
@@ -6728,7 +6743,7 @@ paths:
                 $ref: '#/components/schemas/Table'
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/sort:
     get:
-      summary: Retrieve the properties and relationships of table sort.
+      summary: Retrieves the properties and relationships of table sort.
       operationId: getWorkbookTableSort
       parameters:
         - $ref: '#/components/parameters/itemId'
@@ -6752,7 +6767,7 @@ paths:
                 $ref: '#/components/schemas/TableSort'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/sort:
     get:
-      summary: Retrieve the properties and relationships of table sort.
+      summary: Retrieves the properties and relationships of table sort.
       operationId: getWorkbookTableSortWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'
@@ -6776,7 +6791,7 @@ paths:
                 $ref: '#/components/schemas/TableSort'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/sort:
     get:
-      summary: Retrieve the properties and relationships of table sort.
+      summary: Retrieves the properties and relationships of table sort.
       operationId: getWorksheetTableSort
       parameters:
         - $ref: '#/components/parameters/itemId'
@@ -6801,7 +6816,7 @@ paths:
                 $ref: '#/components/schemas/TableSort'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/sort:
     get:
-      summary: Retrieve the properties and relationships of table sort.
+      summary: Retrieves the properties and relationships of table sort.
       operationId: getWorksheetTableSortWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'
@@ -6826,7 +6841,7 @@ paths:
                 $ref: '#/components/schemas/TableSort'
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/sort/apply:
     post:
-      summary: Perform a sort operation to the table.
+      summary: Performs a sort operation to the table.
       operationId: performWorkbookTableSort
       parameters:
         - $ref: '#/components/parameters/itemId'
@@ -6837,7 +6852,7 @@ paths:
           description: OK.
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/sort/apply:
     post:
-      summary: Perform a sort operation to the table.
+      summary: Performs a sort operation to the table.
       operationId: performWorkbookTableSortWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'
@@ -6848,7 +6863,7 @@ paths:
           description: OK.
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/sort/apply:
     post:
-      summary: Perform a sort operation to the table.
+      summary: Performs a sort operation to the table.
       operationId: performWorksheetTableSort
       parameters:
         - $ref: '#/components/parameters/itemId'
@@ -6865,7 +6880,7 @@ paths:
           description: OK
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/sort/apply:
     post:
-      summary: Perform a sort operation to the table.
+      summary: Performs a sort operation to the table.
       operationId: performWorksheetTableSortWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'
@@ -6975,7 +6990,7 @@ paths:
   #___________________________________ TABLE ROWS ________________________________________
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows:
     get:
-      summary: Retrieve a list of table row in the worksheet.
+      summary: Retrieves a list of table row in the worksheet.
       operationId: listWorksheetTableRows
       tags:
         - row
@@ -7024,7 +7039,7 @@ paths:
                 $ref: '#/components/schemas/Row'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows:
     get:
-      summary: Retrieve a list of table row in the worksheet.
+      summary: Retrieves a list of table row in the worksheet.
       operationId: listWorksheetTableRowsWithItemPath
       tags:
         - row
@@ -7136,55 +7151,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Row'
-  /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows/itemAt(index={index}):
-    get:
-      summary: Gets a row based on its position in the collection.
-      operationId: getWorksheetTableRowWithIndexItemPath
-      tags:
-        - row
-      parameters:
-        - $ref: '#/components/parameters/itemPath'
-        - $ref: '#/components/parameters/worksheetIdOrName'
-        - $ref: '#/components/parameters/tableIdOrName'
-        - $ref: '#/components/parameters/index'
-        - $ref: '#/components/parameters/sessionId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Row'
-  /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows/{index}:
-    get:
-      summary: Retrieve the properties and relationships of table row.
-      operationId: getWorksheetTableRow
-      tags:
-        - row
-      parameters:
-        - $ref: '#/components/parameters/itemId'
-        - $ref: '#/components/parameters/worksheetIdOrName'
-        - $ref: '#/components/parameters/tableIdOrName'
-        - $ref: '#/components/parameters/index'
-        - $ref: '#/components/parameters/sessionId'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/expand'
-        - $ref: '#/components/parameters/filter'
-        - $ref: '#/components/parameters/format'
-        - $ref: '#/components/parameters/orderBy'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/select'
-        - $ref: '#/components/parameters/skip'
-        - $ref: '#/components/parameters/top'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Row'
     patch:
-      summary: Update the properties of table row.
+      summary: Updates the properties of table row.
       operationId: updateWorksheetTableRow
       tags:
         - row
@@ -7220,10 +7188,10 @@ paths:
       responses:
         '200':
           description: OK
-  /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows/{index}:
+  /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows/itemAt(index={index}):
     get:
-      summary: Retrieve the properties and relationships of table row.
-      operationId: getWorksheetTableRowWithItemPath
+      summary: Gets a row based on its position in the collection.
+      operationId: getWorksheetTableRowWithIndexItemPath
       tags:
         - row
       parameters:
@@ -7232,15 +7200,6 @@ paths:
         - $ref: '#/components/parameters/tableIdOrName'
         - $ref: '#/components/parameters/index'
         - $ref: '#/components/parameters/sessionId'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/expand'
-        - $ref: '#/components/parameters/filter'
-        - $ref: '#/components/parameters/format'
-        - $ref: '#/components/parameters/orderBy'
-        - $ref: '#/components/parameters/search'
-        - $ref: '#/components/parameters/select'
-        - $ref: '#/components/parameters/skip'
-        - $ref: '#/components/parameters/top'
       responses:
         '200':
           description: OK
@@ -7249,7 +7208,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Row'
     patch:
-      summary: Update the properties of table row.
+      summary: Updates the properties of table row.
       operationId: updateWorksheetTableRowWithItemPath
       tags:
         - row
@@ -7285,9 +7244,65 @@ paths:
       responses:
         '200':
           description: OK
+  /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows/{index}:
+    get:
+      summary: Retrieves the properties and relationships of table row.
+      operationId: getWorksheetTableRow
+      tags:
+        - row
+      parameters:
+        - $ref: '#/components/parameters/itemId'
+        - $ref: '#/components/parameters/worksheetIdOrName'
+        - $ref: '#/components/parameters/tableIdOrName'
+        - $ref: '#/components/parameters/index'
+        - $ref: '#/components/parameters/sessionId'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/expand'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/format'
+        - $ref: '#/components/parameters/orderBy'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/select'
+        - $ref: '#/components/parameters/skip'
+        - $ref: '#/components/parameters/top'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Row'
+  /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows/{index}:
+    get:
+      summary: Retrieves the properties and relationships of table row.
+      operationId: getWorksheetTableRowWithItemPath
+      tags:
+        - row
+      parameters:
+        - $ref: '#/components/parameters/itemPath'
+        - $ref: '#/components/parameters/worksheetIdOrName'
+        - $ref: '#/components/parameters/tableIdOrName'
+        - $ref: '#/components/parameters/index'
+        - $ref: '#/components/parameters/sessionId'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/expand'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/format'
+        - $ref: '#/components/parameters/orderBy'
+        - $ref: '#/components/parameters/search'
+        - $ref: '#/components/parameters/select'
+        - $ref: '#/components/parameters/skip'
+        - $ref: '#/components/parameters/top'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Row'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/rows/itemAt(index={index})/range:
     get:
-      summary: Get the range associated with the entire row.
+      summary: Gets the range associated with the entire row.
       operationId: getWorksheetTableRowRange
       tags:
         - row
@@ -7326,7 +7341,7 @@ paths:
   #___________________________________ TABLE COLUMNS ________________________________________
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns:
     post:
-      summary: Create a new table column in the workbook.
+      summary: Creates a new table column in the workbook.
       operationId: createWorkbookTableColumn
       tags:
         - column
@@ -7347,7 +7362,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Column'
     get:
-      summary: Retrieve a list of table column in the workbook.
+      summary: Retrieves a list of table column in the workbook.
       operationId: listWorkbookTableColumns
       tags:
         - column
@@ -7373,7 +7388,7 @@ paths:
                 $ref: '#/components/schemas/Columns'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns:
     post:
-      summary: Create a new table column in the workbook.
+      summary: Creates a new table column in the workbook.
       operationId: createWorkbookTableColumnWithItemPath
       tags:
         - column
@@ -7394,7 +7409,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Column'
     get:
-      summary: Retrieve a list of table column in the workbook.
+      summary: Retrieves a list of table column in the workbook.
       operationId: listWorkbookTableColumnsWithItemPath
       tags:
         - column
@@ -7420,7 +7435,7 @@ paths:
                 $ref: '#/components/schemas/Columns'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/columns:
     post:
-      summary: Create a new table column in the workbook.
+      summary: Creates a new table column in the workbook.
       operationId: createWorksheetTableColumn
       tags:
         - tableColumn
@@ -7442,7 +7457,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Column'
     get:
-      summary: Retrieve a list of table column in the workbook.
+      summary: Retrieves a list of table column in the workbook.
       operationId: listWorksheetTableColumns
       tags:
         - tableColumn
@@ -7469,7 +7484,7 @@ paths:
                 $ref: '#/components/schemas/Columns'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/columns:
     post:
-      summary: Create a new table column in the workbook.
+      summary: Creates a new table column in the workbook.
       operationId: createWorksheetTableColumnWithItemPath
       tags:
         - tableColumn
@@ -7491,7 +7506,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Column'
     get:
-      summary: Retrieve a list of table column in the workbook.
+      summary: Retrieves a list of table column in the workbook.
       operationId: listWorksheetTableColumnsWithItemPath
       tags:
         - tableColumn
@@ -7531,7 +7546,7 @@ paths:
         '204':
           description: No Content.
     get:
-      summary: Retrieve the properties and relationships of table column.
+      summary: Retrieves the properties and relationships of table column.
       operationId: getWorkbookTableColumn
       tags:
         - tableColumn
@@ -7557,7 +7572,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Column'
     patch:
-      summary: Update the properties of table column
+      summary: Updates the properties of table column
       operationId: updateWorkbookTableColumn
       tags:
         - tableColumn
@@ -7593,7 +7608,7 @@ paths:
         '204':
           description: No Content.
     get:
-      summary: Retrieve the properties and relationships of table column.
+      summary: Retrieves the properties and relationships of table column.
       operationId: getWorkbookTableColumnWithItemPath
       tags:
         - tableColumn
@@ -7619,7 +7634,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Column'
     patch:
-      summary: Update the properties of table column
+      summary: Updates the properties of table column
       operationId: updateWorkbookTableColumnWithItemPath
       tags:
         - tableColumn
@@ -7642,7 +7657,7 @@ paths:
                 $ref: '#/components/schemas/Column'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/columns/{columnIdOrName}:
     delete:
-      summary: Delete a column from a table.
+      summary: Deletes a column from a table.
       operationId: deleteWorksheetTableColumn
       tags:
         - tableColumn
@@ -7656,7 +7671,7 @@ paths:
         '204':
           description: No Content.
     get:
-      summary: Retrieve the properties and relationships of table column.
+      summary: Retrieves the properties and relationships of table column.
       operationId: getWorksheetTableColumn
       tags:
         - tableColumn
@@ -7683,7 +7698,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Column'
     patch:
-      summary: Update the properties of table column
+      summary: Updates the properties of table column.
       operationId: updateWorksheetTableColumn
       tags:
         - tableColumn
@@ -7707,7 +7722,7 @@ paths:
                 $ref: '#/components/schemas/Column'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/columns/{columnIdOrName}:
     delete:
-      summary: Delete a column from a table.
+      summary: Deletes a column from a table.
       operationId: deleteWorksheetTableColumnWithItemPath
       tags:
         - tableColumn
@@ -7721,7 +7736,7 @@ paths:
         '204':
           description: No Content.
     get:
-      summary: Retrieve the properties and relationships of table column.
+      summary: Retrieves the properties and relationships of table column.
       operationId: getWorksheetTableColumnWithItemPath
       tags:
         - tableColumn
@@ -7748,7 +7763,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Column'
     patch:
-      summary: Update the properties of table column
+      summary: Updates the properties of table column.
       operationId: updateWorksheetTableColumnWithItemPath
       tags:
         - tableColumn
@@ -7772,7 +7787,7 @@ paths:
                 $ref: '#/components/schemas/Column'
   /me/drive/items/{itemId}/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/dataBodyRange:
     get:
-      summary: Gets the range associated with the data body of the column
+      summary: Gets the range associated with the data body of the column.
       operationId: getworkbookTableColumnsDataBodyRange
       tags:
         - tableColumn
@@ -7790,7 +7805,7 @@ paths:
                   $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/tables/{tableIdOrName}/columns/{columnIdOrName}/dataBodyRange:
     get:
-      summary: Gets the range associated with the data body of the column
+      summary: Gets the range associated with the data body of the column.
       operationId: getworkbookTableColumnsDataBodyRangeWithItemPath
       tags:
         - tableColumn
@@ -7808,7 +7823,7 @@ paths:
                   $ref: '#/components/schemas/Range'
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/columns/{columnIdOrName}/dataBodyRange:
     get:
-      summary: Gets the range associated with the data body of the column
+      summary: Gets the range associated with the data body of the column.
       operationId: getworksheetTableColumnsDataBodyRange
       tags:
         - tableColumn
@@ -7827,7 +7842,7 @@ paths:
                   $ref: '#/components/schemas/Range'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/tables/{tableIdOrName}/columns/{columnIdOrName}/dataBodyRange:
     get:
-      summary: Gets the range associated with the data body of the column
+      summary: Gets the range associated with the data body of the column.
       operationId: getworksheetTableColumnsDataBodyRangeWithItemPath
       tags:
         - tableColumn
@@ -8048,7 +8063,7 @@ paths:
           description: OK.
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/charts/{chartIdOrName}:
     get:
-      summary: Retrieve the properties and relationships of chart.
+      summary: Retrieves the properties and relationships of chart.
       operationId: getChartWithItemPath
       tags:
         - chart
@@ -8065,7 +8080,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Chart'
     patch:
-      summary: Update the properties of chart.
+      summary: Updates the properties of chart.
       operationId: updateChartWithItemPath
       tags:
         - chart
@@ -8101,7 +8116,7 @@ paths:
           description: OK.
   /me/drive/items/{itemId}/workbook/worksheets/{worksheetIdOrName}/charts/{chartIdOrName}/series:
     post:
-      summary: create a new chart series.
+      summary: creates a new chart series.
       operationId: createChartSeries
       tags:
         - chart
@@ -8123,7 +8138,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ChartSeries'
     get:
-      summary: Retrieve a list of chart series .
+      summary: Retrieves a list of chart series .
       operationId: listChartSeries
       tags:
         - chart
@@ -8150,7 +8165,7 @@ paths:
                 $ref: '#/components/schemas/collectionOfChartSeries'
   /me/drive/root:/{itemPath}:/workbook/worksheets/{worksheetIdOrName}/charts/{chartIdOrName}/series:
     post:
-      summary: create a new chart series.
+      summary: Creates a new chart series.
       operationId: createChartSeriesWithItemPath
       tags:
         - chart
@@ -8172,7 +8187,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ChartSeries'
     get:
-      summary: Retrieve a list of chart series .
+      summary: Retrieve a list of chart series.
       operationId: listChartSeriesWithItemPath
       tags:
         - chart
@@ -8499,7 +8514,7 @@ paths:
                 $ref: '#/components/schemas/NamedItems'
   /me/drive/root:/{itemPath}:/workbook/names:
     get:
-      summary: Retrieve a list of named item.
+      summary: Retrieves a list of named item.
       operationId: listNamedItemWithItemPath
       tags:
         - namedItem
@@ -8606,7 +8621,7 @@ paths:
                 $ref: '#/components/schemas/NamedItem'
   /me/drive/items/{itemId}/workbook/names/{name}:
     get:
-      summary: Retrieve the properties and relationships of the named item.
+      summary: Retrieves the properties and relationships of the named item.
       operationId: getNamedItem
       tags:
         - namedItem
@@ -8631,7 +8646,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/NamedItem'
     patch:
-      summary: Update the properties of the named item .
+      summary: Updates the properties of the named item .
       operationId: updateNamedItem
       tags:
         - namedItem
@@ -8653,7 +8668,7 @@ paths:
                 $ref: '#/components/schemas/NamedItem'
   /me/drive/root:/{itemPath}:/workbook/names/{name}:
     get:
-      summary: Retrieve the properties and relationships of the named item.
+      summary: Retrieves the properties and relationships of the named item.
       operationId: getNamedItemWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'
@@ -8676,7 +8691,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/NamedItem'
     patch:
-      summary: Update the properties of the named item .
+      summary: Updates the properties of the named item.
       operationId: updateNamedItemWithItemPath
       parameters:
         - $ref: '#/components/parameters/itemPath'

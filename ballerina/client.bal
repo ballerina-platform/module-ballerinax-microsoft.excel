@@ -29,7 +29,7 @@ public isolated client class Client {
     # + config - The configurations to be used when initializing the `connector` 
     # + serviceUrl - URL of the target service 
     # + return - An error if connector initialization failed 
-    public isolated function init(excel:ConnectionConfig config, string serviceUrl = "https://graph.microsoft.com/v1.0/") returns error? {
+    public isolated function init(ConnectionConfig config, string serviceUrl = "https://graph.microsoft.com/v1.0/") returns error? {
         self.excelClient = check new (config, serviceUrl);
     }
 
@@ -37,8 +37,8 @@ public isolated client class Client {
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + session - The properties of the session to be created 
-    # + return - A `excel:Session` or else an error on failure 
-    remote isolated function createSession(string itemIdOrPath, excel:Session session) returns excel:Session|error {
+    # + return - A `Session` or else an error on failure 
+    remote isolated function createSession(string itemIdOrPath, Session session) returns Session|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createSessionWithItemPath(itemIdOrPath, session);
         }
@@ -71,7 +71,7 @@ public isolated client class Client {
 
     # Retrieves a list of the worksheets.
     #
-    # + itemId - The ID of the drive containing the workbooks
+    # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + sessionId - The ID of the session
     # + count - Retrieves the total count of matching resources
     # + expand - Retrieves the related resources
@@ -82,11 +82,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Worksheets` or else an error on failure 
-    remote isolated function listWorksheets(string itemId, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Worksheet[]|error {
-        excel:Worksheets worksheets = check self.excelClient->listWorksheets(itemId, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
-        excel:Worksheet[]? value = worksheets.value;
-        return value is excel:Worksheet[] ? value : [];
+    # + return - A list of `Worksheet` or else an error on failure 
+    remote isolated function listWorksheets(string itemIdOrPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Worksheet[]|error {
+        Worksheets worksheets;
+        if isItemPath(itemIdOrPath) { 
+            worksheets = check self.excelClient->listWorksheetsWithItemPath(itemIdOrPath, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
+        } else {
+            worksheets = check self.excelClient->listWorksheets(itemIdOrPath, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
+        }
+        Worksheet[]? value = worksheets.value;
+        return value is Worksheet[] ? value : [];
     }
 
     # Recalculates all currently opened workbooks in Excel.
@@ -95,7 +100,7 @@ public isolated client class Client {
     # + calculationMode - Details of the mode used to calculate the application
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else error on failure 
-    remote isolated function calculateApplication(string itemIdOrPath, excel:CalculationMode calculationMode, string? sessionId = ()) returns http:Response|error {
+    remote isolated function calculateApplication(string itemIdOrPath, CalculationMode calculationMode, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->calculateApplicationWithItemPath(itemIdOrPath, calculationMode, sessionId);
         }
@@ -106,8 +111,8 @@ public isolated client class Client {
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + sessionId - The ID of the session
-    # + return - An `excel:Application` or else an error on failure 
-    remote isolated function getApplication(string itemIdOrPath, string? sessionId = ()) returns excel:Application|error {
+    # + return - An `Application` or else an error on failure 
+    remote isolated function getApplication(string itemIdOrPath, string? sessionId = ()) returns Application|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getApplicationWithItemPath(itemIdOrPath, sessionId);
         }
@@ -118,16 +123,16 @@ public isolated client class Client {
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + sessionId - The ID of the session
-    # + return - An `excel:Comments` or else an error on failure 
-    remote isolated function listComments(string itemIdOrPath, string? sessionId = ()) returns excel:Comment[]|error {
-        excel:Comments comments;
+    # + return - A A list of `Comment` or else an error on failure 
+    remote isolated function listComments(string itemIdOrPath, string? sessionId = ()) returns Comment[]|error {
+        Comments comments;
         if isItemPath(itemIdOrPath) {
             comments = check self.excelClient->listCommentsWithItemPath(itemIdOrPath, sessionId);
         } else {
             comments = check self.excelClient->listComments(itemIdOrPath, sessionId);
         }
-        excel:Comment[]? value = comments.value;
-        return value is excel:Comment[] ? value : [];
+        Comment[]? value = comments.value;
+        return value is Comment[] ? value : [];
     }
 
     # Retrieves the properties and relationships of the comment.
@@ -135,8 +140,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + commentId - The ID of the comment to get
     # + sessionId - The ID of the session
-    # + return - An `excel:Comment` or else an error on failure 
-    remote isolated function getComment(string itemIdOrPath, string commentId, string? sessionId = ()) returns excel:Comment|error {
+    # + return - A `Comment` or else an error on failure 
+    remote isolated function getComment(string itemIdOrPath, string commentId, string? sessionId = ()) returns Comment|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getCommentWithItemPath(itemIdOrPath, commentId, sessionId);
         }
@@ -149,8 +154,8 @@ public isolated client class Client {
     # + commentId - The ID of the comment to get
     # + reply - The properties of the reply to be created
     # + sessionId - The ID of the session
-    # + return - An `excel:Reply` or else an error on failure
-    remote isolated function createCommentReply(string itemIdOrPath, string commentId, excel:Reply reply, string? sessionId = ()) returns excel:Reply|error {
+    # + return - A `Reply` or else an error on failure
+    remote isolated function createCommentReply(string itemIdOrPath, string commentId, Reply reply, string? sessionId = ()) returns Reply|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createCommentReplyWithItemPath(itemIdOrPath, commentId, reply, sessionId);
         }
@@ -163,8 +168,8 @@ public isolated client class Client {
     # + commentId - The ID of the comment to get
     # + replyId - The ID of the reply
     # + sessionId - The ID of the session
-    # + return - An `excel:Reply` or else an error on failure 
-    remote isolated function getCommentReply(string itemIdOrPath, string commentId, string replyId, string? sessionId = ()) returns excel:Reply|error {
+    # + return - A `Reply` or else an error on failure 
+    remote isolated function getCommentReply(string itemIdOrPath, string commentId, string replyId, string? sessionId = ()) returns Reply|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getCommentReplyWithItemPath(itemIdOrPath, commentId, replyId, sessionId);
         }
@@ -176,16 +181,16 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + commentId - The ID of the comment to get
     # + sessionId - The ID of the session
-    # + return - An `excel:Replies` or else an error on failure 
-    remote isolated function listCommentReplies(string itemIdOrPath, string commentId, string? sessionId = ()) returns excel:Reply[]|error {
-        excel:Replies replies;
+    # + return - A list of  `Reply` or else an error on failure 
+    remote isolated function listCommentReplies(string itemIdOrPath, string commentId, string? sessionId = ()) returns Reply[]|error {
+        Replies replies;
         if isItemPath(itemIdOrPath) {
             replies = check self.excelClient->listCommentRepliesWithItemPath(itemIdOrPath, commentId, sessionId);
         } else {
             replies = check self.excelClient->listCommentReplies(itemIdOrPath, commentId, sessionId);
         }
-        excel:Reply[]? value = replies.value;
-        return value is excel:Reply[] ? value : [];
+        Reply[]? value = replies.value;
+        return value is Reply[] ? value : [];
     }
 
     # Retrieves a list of table row in the workbook.
@@ -202,16 +207,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Rows` or else an error on failure  
-    remote isolated function listWorkbookTableRows(string itemIdOrPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Row[]|error {
-        excel:Rows rows; 
+    # + return - A list of  `Row` or else an error on failure  
+    remote isolated function listWorkbookTableRows(string itemIdOrPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Row[]|error {
+        Rows rows; 
         if isItemPath(itemIdOrPath) {
             rows = check self.excelClient->listWorkbookTableRowsWithItemPath(itemIdOrPath, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
            rows = check self.excelClient->listWorkbookTableRows(itemIdOrPath, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:Row[]? value = rows.value;
-        return value is excel:Row[] ? value : [];
+        Row[]? value = rows.value;
+        return value is Row[] ? value : [];
     }
 
     # Adds rows to the end of a table in the workbook.
@@ -220,8 +225,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + row - The properties of the row to be added
     # + sessionId - The ID of the session
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function createWorkbookTableRow(string itemIdOrPath, string tableIdOrName, excel:Row row, string? sessionId = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function createWorkbookTableRow(string itemIdOrPath, string tableIdOrName, Row row, string? sessionId = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createWorkbookTableRowWithItemPath(itemIdOrPath, tableIdOrName, row, sessionId);
         }
@@ -243,8 +248,8 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function getWorkbookTableRow(string itemIdOrPath, string tableIdOrName, int index, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function getWorkbookTableRow(string itemIdOrPath, string tableIdOrName, int index, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableRowWithItemPath(itemIdOrPath, tableIdOrName, index, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
@@ -271,8 +276,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorkbookTableRowRange(string itemIdOrPath, string tableIdOrName, int index, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorkbookTableRowRange(string itemIdOrPath, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableRowRangeWithItemPath(itemIdOrPath, tableIdOrName, index, sessionId);
         }
@@ -286,8 +291,8 @@ public isolated client class Client {
     # + index - Index value of the object to be retrieved
     # + row - Details of the table row to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function updateWorkbookTableRow(string itemIdOrPath, string tableIdOrName, int index, excel:Row row, string? sessionId = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function updateWorkbookTableRow(string itemIdOrPath, string tableIdOrName, int index, Row row, string? sessionId = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorkbookTableRowWithItemPath(itemIdOrPath, tableIdOrName, index, row, sessionId);
         }
@@ -300,8 +305,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function getWorkbookTableRowWithIndex(string itemIdOrPath, string tableIdOrName, int index, string? sessionId = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function getWorkbookTableRowWithIndex(string itemIdOrPath, string tableIdOrName, int index, string? sessionId = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableRowWithIndexItemPath(itemIdOrPath, tableIdOrName, index, sessionId);
         }
@@ -313,8 +318,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheet - The properties of the worksheet to be created
     # + sessionId - The ID of the session
-    # + return - An `excel:Worksheet` or else an error on failure 
-    remote isolated function addWorksheet(string itemIdOrPath, excel:NewWorksheet worksheet, string? sessionId = ()) returns excel:Worksheet|error {
+    # + return - A `Worksheet` or else an error on failure 
+    remote isolated function addWorksheet(string itemIdOrPath, NewWorksheet worksheet, string? sessionId = ()) returns Worksheet|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->addWorksheetWithItemPath(itemIdOrPath, worksheet, sessionId);
         }
@@ -335,8 +340,8 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Worksheet` or else an error on failure 
-    remote isolated function getWorksheet(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Worksheet|error {
+    # + return - A `Worksheet` or else an error on failure 
+    remote isolated function getWorksheet(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Worksheet|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
@@ -349,8 +354,8 @@ public isolated client class Client {
     # + name - The name of the named item
     # + valuesOnly - A value indicating whether to return only the values in the used range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getNameUsedRange(string itemIdOrPath, string name, boolean valuesOnly, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getNameUsedRange(string itemIdOrPath, string name, boolean valuesOnly, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameUsedRangeWithItemPath(itemIdOrPath, name, valuesOnly, sessionId);
         }
@@ -363,8 +368,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + worksheet - The properties of the worksheet to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Worksheet` or else an error on failure 
-    remote isolated function updateWorksheet(string itemIdOrPath, string worksheetIdOrName, excel:Worksheet worksheet, string? sessionId = ()) returns excel:Worksheet|error {
+    # + return - A `Worksheet` or else an error on failure 
+    remote isolated function updateWorksheet(string itemIdOrPath, string worksheetIdOrName, Worksheet worksheet, string? sessionId = ()) returns Worksheet|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorksheetWithItemPath(itemIdOrPath, worksheetIdOrName, worksheet, sessionId);
         }
@@ -391,8 +396,8 @@ public isolated client class Client {
     # + row - Row number of the cell to be retrieved
     # + column - Column number of the cell to be retrieved
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getWorksheetCell(string itemIdOrPath, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getWorksheetCell(string itemIdOrPath, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetCellWithItemPath(itemIdOrPath, worksheetIdOrName, row, column, sessionId);
         }
@@ -413,8 +418,8 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
@@ -435,16 +440,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Tables` or else an error on failure  
-    remote isolated function listWorksheetTables(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Table[]|error {
-        excel:Tables tables;
+    # + return - A list of `Table` or else an error on failure  
+    remote isolated function listWorksheetTables(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table[]|error {
+        Tables tables;
         if isItemPath(itemIdOrPath) {
             tables = check self.excelClient->listWorksheetTablesWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             tables = check self.excelClient->listWorksheetTables(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:Table[]? value = tables.value;
-        return value is excel:Table[] ? value : [];
+        Table[]? value = tables.value;
+        return value is Table[] ? value : [];
     }
 
     # Adds a new table in the worksheet.
@@ -453,8 +458,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + 'table - Properties to create table
     # + sessionId - The ID of the session
-    # + return - An `excel:Table` or else an error on failure  
-    remote isolated function addWorksheetTable(string itemIdOrPath, string worksheetIdOrName, excel:NewTable 'table, string? sessionId = ()) returns excel:Table|error {
+    # + return - A `Table` or else an error on failure  
+    remote isolated function addWorksheetTable(string itemIdOrPath, string worksheetIdOrName, NewTable 'table, string? sessionId = ()) returns Table|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->addWorksheetTableWithItemPath(itemIdOrPath, worksheetIdOrName, 'table, sessionId);
         }
@@ -475,16 +480,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Charts` or else an error on failure  
-    remote isolated function listCharts(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Chart[]|error {
-        excel:Charts charts;
+    # + return - An `Charts` or else an error on failure  
+    remote isolated function listCharts(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Chart[]|error {
+        Charts charts;
         if isItemPath(itemIdOrPath) {
             charts = check self.excelClient->listChartsWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             charts = check self.excelClient->listCharts(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:Chart[]? value = charts.value;
-        return value is excel:Chart[] ? value : []; 
+        Chart[]? value = charts.value;
+        return value is Chart[] ? value : []; 
     }
 
     # Creates a new chart.
@@ -493,8 +498,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chart - Properties to create chart
     # + sessionId - The ID of the session
-    # + return - An `excel:Chart` or else an error on failure  
-    remote isolated function addChart(string itemIdOrPath, string worksheetIdOrName, excel:NewChart chart, string? sessionId = ()) returns excel:Chart|error {
+    # + return - A `Chart` or else an error on failure  
+    remote isolated function addChart(string itemIdOrPath, string worksheetIdOrName, NewChart chart, string? sessionId = ()) returns Chart|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->addChartWithItemPath(itemIdOrPath, worksheetIdOrName, chart, sessionId);
         }
@@ -515,16 +520,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:NamedItem` or else an error on failure  
-    remote isolated function listWorksheetNames(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:NamedItem[]|error {
-        excel:NamedItems namedItems;
+    # + return - A list of `NamedItem` or else an error on failure  
+    remote isolated function listWorksheetNames(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItem[]|error {
+        NamedItems namedItems;
         if isItemPath(itemIdOrPath) {
             namedItems = check self.excelClient->listWorksheetNamedItemWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             namedItems = check self.excelClient->listWorksheetNamedItem(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:NamedItem[]? value = namedItems.value;
-        return value is excel:NamedItem[] ? value : [];
+        NamedItem[]? value = namedItems.value;
+        return value is NamedItem[] ? value : [];
     }
     
     # Retrieves a list of the workbook pivot table.
@@ -541,16 +546,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:PivotTables` or else an error on failure 
-    remote isolated function listWorksheetPivotTables(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:PivotTable[]|error {
-        excel:PivotTables pivotTables;
+    # + return - A list of `PivotTables` or else an error on failure 
+    remote isolated function listWorksheetPivotTables(string itemIdOrPath, string worksheetIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns PivotTable[]|error {
+        PivotTables pivotTables;
         if isItemPath(itemIdOrPath) {
             pivotTables = check self.excelClient->listPivotTablesWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             pivotTables = check self.excelClient->listPivotTables(itemIdOrPath, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:PivotTable[]? value = pivotTables.value;
-        return value is excel:PivotTable[] ? value : [];
+        PivotTable[]? value = pivotTables.value;
+        return value is PivotTable[] ? value : [];
     }
 
     # Retrieves the properties and relationships of the pivot table.
@@ -568,8 +573,8 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:PivotTables` or else an error on failure 
-    remote isolated function getPivotTable(string itemIdOrPath, string worksheetIdOrName, string pivotTableId, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:PivotTable|error {
+    # + return - A `PivotTable` or else an error on failure 
+    remote isolated function getPivotTable(string itemIdOrPath, string worksheetIdOrName, string pivotTableId, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns PivotTable|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getPivotTableWithItemPath(itemIdOrPath, worksheetIdOrName, pivotTableId, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
@@ -618,8 +623,8 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getWorksheetRangeWithAddress(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getWorksheetRangeWithAddress(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeWithAddressItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
@@ -633,8 +638,8 @@ public isolated client class Client {
     # + address - The address of the range
     # + range - Details of the range to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function updateWorksheetRangeWithAddress(string itemIdOrPath, string worksheetIdOrName, string address, excel:Range range, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function updateWorksheetRangeWithAddress(string itemIdOrPath, string worksheetIdOrName, string address, Range range, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorksheetRangeWithAddressItemPath(itemIdOrPath, worksheetIdOrName, address, range, sessionId);
         }
@@ -656,8 +661,8 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
@@ -671,8 +676,8 @@ public isolated client class Client {
     # + columnIdOrName - The ID or name of the column
     # + range - Details of the range to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function updateColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:Range range, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function updateColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, Range range, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateColumnRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, range, sessionId);
         }
@@ -685,8 +690,8 @@ public isolated client class Client {
     # + namedItemName - The name of the named item
     # + range - The properties of the range to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function updateNameRange(string itemIdOrPath, string namedItemName, excel:Range range, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function updateNameRange(string itemIdOrPath, string namedItemName, Range range, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateNameRangeWithItemPath(itemIdOrPath, namedItemName, range, sessionId);
         }
@@ -700,8 +705,8 @@ public isolated client class Client {
     # + row - Row number of the cell to be retrieved
     # + column - Column number of the cell to be retrieved
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getNameRangeCell(string itemIdOrPath, string namedItemName, int row, int column, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getNameRangeCell(string itemIdOrPath, string namedItemName, int row, int column, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameRangeCell(itemIdOrPath, namedItemName, row, column, sessionId);
         }
@@ -715,8 +720,8 @@ public isolated client class Client {
     # + row - Row number of the cell to be retrieved
     # + column - Column number of the cell to be retrieved
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getWorksheetRangeCell(string itemIdOrPath, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getWorksheetRangeCell(string itemIdOrPath, string worksheetIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeCellWithItemPath(itemIdOrPath, worksheetIdOrName, row, column, sessionId);
         }
@@ -731,8 +736,8 @@ public isolated client class Client {
     # + row - Row number of the cell to be retrieved
     # + column - Column number of the cell to be retrieved
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getWorksheetRangeCellWithAddress(string itemIdOrPath, string worksheetIdOrName, string address, int row, int column, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getWorksheetRangeCellWithAddress(string itemIdOrPath, string worksheetIdOrName, string address, int row, int column, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeCellWithAddressItemPath(itemIdOrPath, worksheetIdOrName, address, row, column, sessionId);
         }
@@ -747,8 +752,8 @@ public isolated client class Client {
     # + row - Row number of the cell to be retrieved. Zero-indexed.
     # + column - Column number of the cell to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getColumnRangeCell(string itemIdOrPath, string tableIdOrName, string columnIdOrName, int row, int column, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getColumnRangeCell(string itemIdOrPath, string tableIdOrName, string columnIdOrName, int row, int column, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeCellWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, row, column, sessionId);
         }
@@ -761,8 +766,8 @@ public isolated client class Client {
     # + name - The name of the named item
     # + column - Column number of the cell to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getNameRangeColumn(string itemIdOrPath, string name, int column, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getNameRangeColumn(string itemIdOrPath, string name, int column, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameRangeColumnWithItemPath(itemIdOrPath, name, column, sessionId);
         }
@@ -776,8 +781,8 @@ public isolated client class Client {
     # + address - The address of the range
     # + column - Column number of the cell to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetRangeColumn(string itemIdOrPath, string worksheetIdOrName, string address, int column, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetRangeColumn(string itemIdOrPath, string worksheetIdOrName, string address, int column, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeColumnWithItemPath(itemIdOrPath, worksheetIdOrName, address, column,sessionId);
         }
@@ -791,8 +796,8 @@ public isolated client class Client {
     # + columnIdOrName - The ID or name of the column
     # + column - Column number of the cell to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getColumnRangeColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, int column, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getColumnRangeColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, int column, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeColumnWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, column,sessionId);
         }
@@ -804,8 +809,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetColumnsAfterRange(string itemIdOrPath, string worksheetIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetColumnsAfterRange(string itemIdOrPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetColumnsAfterRangeWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId);
         }
@@ -818,8 +823,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + columnCount - The number of columns to include in the resulting range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetColumnsAfterRangeWithCount(string itemIdOrPath, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetColumnsAfterRangeWithCount(string itemIdOrPath, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetColumnsAfterRangeWithCountItemPath(itemIdOrPath, worksheetIdOrName, columnCount, sessionId);
         }
@@ -831,8 +836,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetColumnsBeforeRange(string itemIdOrPath, string worksheetIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetColumnsBeforeRange(string itemIdOrPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetColumnsBeforeRangeWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId);
         }
@@ -845,8 +850,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + columnCount - The number of columns to include in the resulting range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetColumnsBeforeRangeWithCount(string itemIdOrPath, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetColumnsBeforeRangeWithCount(string itemIdOrPath, string worksheetIdOrName, int columnCount, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetColumnsBeforeRangeWithCountItemPath(itemIdOrPath, worksheetIdOrName, columnCount, sessionId);
         }
@@ -858,8 +863,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + namedItemName - The name of the named item
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getNameRangeEntireColumn(string itemIdOrPath, string namedItemName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getNameRangeEntireColumn(string itemIdOrPath, string namedItemName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameRangeEntireColumnWithItemPath(itemIdOrPath, namedItemName, sessionId);
         }
@@ -872,8 +877,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetRangeEntireColumn(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetRangeEntireColumn(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeEntireColumnWithItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId);
         }
@@ -886,8 +891,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getColumnRangeEntireColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getColumnRangeEntireColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeEntireColumnWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -899,8 +904,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + namedItemName - The name of the named item
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getNameRangeEntireRow(string itemIdOrPath, string namedItemName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getNameRangeEntireRow(string itemIdOrPath, string namedItemName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameRangeEntireRowWithItemPath(itemIdOrPath, namedItemName, sessionId);
         }
@@ -913,8 +918,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getRangeEntireRow(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getRangeEntireRow(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeEntireRowWithItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId);
         }
@@ -927,8 +932,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getColumnRangeEntireRow(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getColumnRangeEntireRow(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeEntireRowWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -940,8 +945,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getNameRangeLastCell(string itemIdOrPath, string name, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getNameRangeLastCell(string itemIdOrPath, string name, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameRangeLastCellWithItemPath(itemIdOrPath, name, sessionId);
         }
@@ -954,8 +959,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getRangeLastCell(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getRangeLastCell(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeLastCellWithItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId);
         }
@@ -968,8 +973,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getColumnRangeLastCell(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getColumnRangeLastCell(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeLastCellWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -981,8 +986,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getNameRangeLastColumn(string itemIdOrPath, string name, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getNameRangeLastColumn(string itemIdOrPath, string name, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameRangeLastColumnWithItemPath(itemIdOrPath, name, sessionId);
         }
@@ -995,8 +1000,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetRangeLastColumn(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetRangeLastColumn(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeLastColumnWithItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId);
         }
@@ -1009,8 +1014,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getColumnRangeLastColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getColumnRangeLastColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeLastColumnWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -1022,8 +1027,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getNameRangeLastRow(string itemIdOrPath, string name, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getNameRangeLastRow(string itemIdOrPath, string name, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameRangeLastRowWithItemPath(itemIdOrPath, name, sessionId);
         }
@@ -1036,8 +1041,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetRangeLastRow(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetRangeLastRow(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeLastRowWithItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId);
         }
@@ -1050,8 +1055,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getColumnRangeLastRow(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getColumnRangeLastRow(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeLastRowWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -1063,8 +1068,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetRowsAboveRange(string itemIdOrPath, string worksheetIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetRowsAboveRange(string itemIdOrPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRowsAboveRangeWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId);
         }
@@ -1077,8 +1082,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + rowCount - The number of rows to include in the resulting range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetRowsAboveRangeWithCount(string itemIdOrPath, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetRowsAboveRangeWithCount(string itemIdOrPath, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRowsAboveRangeWithCountItemPath(itemIdOrPath, worksheetIdOrName, rowCount, sessionId);
         }
@@ -1090,8 +1095,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetRangeRowsBelow(string itemIdOrPath, string worksheetIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetRangeRowsBelow(string itemIdOrPath, string worksheetIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRowsBelowRangeWithItemPath(itemIdOrPath, worksheetIdOrName, sessionId);
         }
@@ -1104,8 +1109,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + rowCount - The number of rows to include in the resulting range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetRangeRowsBelowWithCount(string itemIdOrPath, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetRangeRowsBelowWithCount(string itemIdOrPath, string worksheetIdOrName, int rowCount, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRowsBelowRangeWithCountItemPath(itemIdOrPath, worksheetIdOrName, rowCount, sessionId);
         }
@@ -1119,8 +1124,8 @@ public isolated client class Client {
     # + address - The address of the range
     # + valuesOnly - A value indicating whether to return only the values in the used range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getWorksheetUsedRange(string itemIdOrPath, string worksheetIdOrName, string address, boolean valuesOnly, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getWorksheetUsedRange(string itemIdOrPath, string worksheetIdOrName, string address, boolean valuesOnly, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetUsedRangeWithItemPath(itemIdOrPath, worksheetIdOrName, address, valuesOnly, sessionId);
         }
@@ -1134,8 +1139,8 @@ public isolated client class Client {
     # + columnIdOrName - The ID or name of the column
     # + valuesOnly - A value indicating whether to return only the values in the used range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getColumnUsedRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, boolean valuesOnly, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getColumnUsedRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, boolean valuesOnly, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnUsedRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, valuesOnly, sessionId);
         }
@@ -1149,7 +1154,7 @@ public isolated client class Client {
     # + applyTo - Determines the type of clear action
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure 
-    remote isolated function clearNameRange(string itemIdOrPath, string name, excel:ApplyTo applyTo, string? sessionId = ()) returns http:Response|error {
+    remote isolated function clearNameRange(string itemIdOrPath, string name, ApplyTo applyTo, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->clearNameRangeWithItemPath(itemIdOrPath, name, applyTo, sessionId);
         }
@@ -1164,7 +1169,7 @@ public isolated client class Client {
     # + applyTo - Determines the type of clear action
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure 
-    remote isolated function clearWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string address, excel:ApplyTo applyTo, string? sessionId = ()) returns http:Response|error {
+    remote isolated function clearWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string address, ApplyTo applyTo, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->clearWorksheetRangeWithItemPath(itemIdOrPath, worksheetIdOrName, address, applyTo, sessionId);
         }
@@ -1179,7 +1184,7 @@ public isolated client class Client {
     # + applyTo - Determines the type of clear action
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure  
-    remote isolated function clearColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:ApplyTo applyTo, string? sessionId = ()) returns http:Response|error {
+    remote isolated function clearColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, ApplyTo applyTo, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->clearColumnRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, applyTo, sessionId);
         }
@@ -1193,7 +1198,7 @@ public isolated client class Client {
     # + shift - Represents the ways to shift the cells
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure  
-    remote isolated function deleteNameRangeCell(string itemIdOrPath, string name, excel:Shift shift, string? sessionId = ()) returns http:Response|error {
+    remote isolated function deleteNameRangeCell(string itemIdOrPath, string name, Shift shift, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->deleteNameRangeCellWithItemPath(itemIdOrPath, name, shift, sessionId);
         }
@@ -1208,7 +1213,7 @@ public isolated client class Client {
     # + shift - Represents the ways to shift the cells
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure  
-    remote isolated function deleteWorksheetRangeCell(string itemIdOrPath, string worksheetIdOrName, string address, excel:Shift shift, string? sessionId = ()) returns http:Response|error {
+    remote isolated function deleteWorksheetRangeCell(string itemIdOrPath, string worksheetIdOrName, string address, Shift shift, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->deleteWorksheetRangeCellWithItemPath(itemIdOrPath, worksheetIdOrName, address, shift, sessionId);
         }
@@ -1223,7 +1228,7 @@ public isolated client class Client {
     # + shift - Represents the ways to shift the cells
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure  
-    remote isolated function deleteColumnRangeCell(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:Shift shift, string? sessionId = ()) returns http:Response|error {
+    remote isolated function deleteColumnRangeCell(string itemIdOrPath, string tableIdOrName, string columnIdOrName, Shift shift, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->deleteColumnRangeCellWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, shift, sessionId);
         }
@@ -1236,8 +1241,8 @@ public isolated client class Client {
     # + name - The name of the named item
     # + shift - Represents the ways to shift the cells
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function insertNameRange(string itemIdOrPath, string name, excel:Shift shift, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function insertNameRange(string itemIdOrPath, string name, Shift shift, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->insertNameRangeWithItemPath(itemIdOrPath, name, shift, sessionId);
         }
@@ -1251,8 +1256,8 @@ public isolated client class Client {
     # + address - The address of the range
     # + shift - Represents the ways to shift the cells
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function insertWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string address, excel:Shift shift, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function insertWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string address, Shift shift, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->insertWorksheetRangeWithItemPath(itemIdOrPath, worksheetIdOrName, address, shift, sessionId);
         }
@@ -1266,52 +1271,52 @@ public isolated client class Client {
     # + columnIdOrName - The ID or name of the column
     # + shift - Represents the ways to shift the cells
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function insertColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:Shift shift, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function insertColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, Shift shift, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->insertColumnRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, shift, sessionId);
         }
         return self.excelClient->insertColumnRange(itemIdOrPath, tableIdOrName, columnIdOrName, shift, sessionId);
     }
 
-    # Merge the range cells into one region in the worksheet.
+    # Merges the range cells into one region in the worksheet.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
     # + across - The properties to the merge range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function mergeNameRange(string itemIdOrPath, string name, excel:Across across, string? sessionId = ()) returns http:Response|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function mergeNameRange(string itemIdOrPath, string name, Across across, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->mergeNameRangeWithItemPath(itemIdOrPath, name, across, sessionId);
         }
         return self.excelClient->mergeNameRange(itemIdOrPath, name, across, sessionId);
     }
 
-    # Merge the range cells into one region in the worksheet.
+    # Merges the range cells into one region in the worksheet.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + across - The properties to the merge range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function mergeWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string address, excel:Across across, string? sessionId = ()) returns http:Response|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function mergeWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string address, Across across, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->mergeWorksheetRangeWithItemPath(itemIdOrPath, worksheetIdOrName, address, across, sessionId);
         }
         return self.excelClient->mergeWorksheetRange(itemIdOrPath, worksheetIdOrName, address, across, sessionId);
     }
 
-    # Merge the range cells into one region in the worksheet.
+    # Merges the range cells into one region in the worksheet.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + across - The properties to the merge range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function mergeColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:Across across, string? sessionId = ()) returns http:Response|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function mergeColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, Across across, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->mergeColumnRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, across, sessionId);
         }
@@ -1323,7 +1328,7 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
+    # + return - A `Range` or else an error on failure 
     remote isolated function unmergeNameRange(string itemIdOrPath, string name, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->unmergeNameRangeWithItemPath(itemIdOrPath, name, sessionId);
@@ -1331,13 +1336,13 @@ public isolated client class Client {
         return self.excelClient->unmergeNameRange(itemIdOrPath, name, sessionId);
     }
 
-    # Unmerge the range cells into separate cells.
+    # Unmerges the range cells into separate cells.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
+    # + return - A `Range` or else an error on failure 
     remote isolated function unmergeWorksheetRange(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->unmergeWorksheetRangeWithItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId);
@@ -1345,13 +1350,13 @@ public isolated client class Client {
         return self.excelClient->unmergeWorksheetRange(itemIdOrPath, worksheetIdOrName, address, sessionId);
     }
 
-    # Unmerge the range cells into separate cells.
+    # Unmerges the range cells into separate cells.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
+    # + return - A `Range` or else an error on failure 
     remote isolated function unmergeColumnRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->unmergeColumnRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
@@ -1359,7 +1364,7 @@ public isolated client class Client {
         return self.excelClient->unmergeColumnRange(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
     }
 
-    # Retrieve the properties and relationships of the range format
+    # Retrieves the properties and relationships of the range format
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
@@ -1373,29 +1378,29 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getNameRangeFormat(string itemIdOrPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:RangeFormat|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getNameRangeFormat(string itemIdOrPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNameRangeFormatWithItemPath(itemIdOrPath, name, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
         return self.excelClient->getNameRangeFormat(itemIdOrPath, name, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
     }
 
-    # Update the properties of range format.
+    # Updates the properties of range format.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
     # + rangeFormat - Properties of the range format to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function updateNameRangeFormat(string itemIdOrPath, string name, excel:RangeFormat rangeFormat, string? sessionId = ()) returns excel:RangeFormat|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function updateNameRangeFormat(string itemIdOrPath, string name, RangeFormat rangeFormat, string? sessionId = ()) returns RangeFormat|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateNameRangeFormat(itemIdOrPath, name, rangeFormat, sessionId);
         }
         return self.excelClient->updateNameRangeFormat(itemIdOrPath, name, rangeFormat, sessionId);
     }
 
-    # Retrieve the properties and relationships of the range format
+    # Retrieves the properties and relationships of the range format
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -1410,30 +1415,30 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getWorksheetRangeFormat(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:RangeFormat|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getWorksheetRangeFormat(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetRangeFormat(itemIdOrPath, worksheetIdOrName, address, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
         return self.excelClient->getWorksheetRangeFormat(itemIdOrPath, worksheetIdOrName, address, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
     }
 
-    # Update the properties of range format.
+    # Updates the properties of range format.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + rangeFormat - Properties of the range format to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function updateWorksheetRangeFormat(string itemIdOrPath, string worksheetIdOrName, string address, excel:RangeFormat rangeFormat, string? sessionId = ()) returns excel:RangeFormat|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function updateWorksheetRangeFormat(string itemIdOrPath, string worksheetIdOrName, string address, RangeFormat rangeFormat, string? sessionId = ()) returns RangeFormat|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorksheetRangeFormatWithItemPath(itemIdOrPath, worksheetIdOrName, address, rangeFormat, sessionId);
         }
         return self.excelClient->updateWorksheetRangeFormat(itemIdOrPath, worksheetIdOrName, address, rangeFormat, sessionId);
     }
 
-    # Retrieve the properties and relationships of the range format
+    # Retrieves the properties and relationships of the range format
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
@@ -1448,67 +1453,67 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function getColumnRangeFormat(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:RangeFormat|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function getColumnRangeFormat(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeFormat|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getColumnRangeFormatWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
         return self.excelClient->getColumnRangeFormat(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
     }
 
-    # Update the properties of range format.
+    # Updates the properties of range format.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + rangeFormat - Properties of the range format to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure 
-    remote isolated function updateColumnRangeFormat(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:RangeFormat rangeFormat, string? sessionId = ()) returns excel:RangeFormat|error {
+    # + return - A `Range` or else an error on failure 
+    remote isolated function updateColumnRangeFormat(string itemIdOrPath, string tableIdOrName, string columnIdOrName, RangeFormat rangeFormat, string? sessionId = ()) returns RangeFormat|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateColumnRangeFormatWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, rangeFormat, sessionId);
         }
         return self.excelClient->updateColumnRangeFormat(itemIdOrPath, tableIdOrName, columnIdOrName, rangeFormat, sessionId);
     }
 
-    # Create a new range border.
+    # Creates a new range border.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
     # + rangeBorder - Details of the range border to be created 
     # + sessionId - The ID of the session
-    # + return - An `excel:RangeBorder` or else an error on failure 
-    remote isolated function createNameRangeBorder(string itemIdOrPath, string name, excel:RangeBorder rangeBorder, string? sessionId = ()) returns excel:RangeBorder|error {
+    # + return - An`RangeBorder` or else an error on failure 
+    remote isolated function createNameRangeBorder(string itemIdOrPath, string name, RangeBorder rangeBorder, string? sessionId = ()) returns RangeBorder|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createNameRangeBorderWithItemPath(itemIdOrPath, name, rangeBorder, sessionId);
         }
         return self.excelClient->createNameRangeBorder(itemIdOrPath, name, rangeBorder, sessionId);
     }
 
-    # Create a new range border.
+    # Creates a new range border.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + rangeBorder - Details of the range border to be created 
     # + sessionId - The ID of the session
-    # + return - An `excel:RangeBorder` or else an error on failure 
-    remote isolated function createWorksheetRangeBorder(string itemIdOrPath, string worksheetIdOrName, string address, excel:RangeBorder rangeBorder, string? sessionId = ()) returns excel:RangeBorder|error {
+    # + return - A `RangeBorder` or else an error on failure 
+    remote isolated function createWorksheetRangeBorder(string itemIdOrPath, string worksheetIdOrName, string address, RangeBorder rangeBorder, string? sessionId = ()) returns RangeBorder|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createWorksheetRangeBorderWithItemPath(itemIdOrPath, worksheetIdOrName, address, rangeBorder, sessionId);
         }
         return self.excelClient->createWorksheetRangeBorder(itemIdOrPath, worksheetIdOrName, address, rangeBorder, sessionId);
     }
 
-    # Create a new range border.
+    # Creates a new range border.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + rangeBorder - Properties to create range border 
     # + sessionId - The ID of the session
-    # + return - An `excel:RangeBorder` or else an error on failure 
-    remote isolated function createColumnRangeBorder(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:RangeBorder rangeBorder, string? sessionId = ()) returns excel:RangeBorder|error {
+    # + return - A `RangeBorder` or else an error on failure 
+    remote isolated function createColumnRangeBorder(string itemIdOrPath, string tableIdOrName, string columnIdOrName, RangeBorder rangeBorder, string? sessionId = ()) returns RangeBorder|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createColumnRangeBorderWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, rangeBorder, sessionId);
         }
@@ -1529,16 +1534,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:RangeBorders` or else an error on failure 
-    remote isolated function listNameRangeBorders(string itemIdOrPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:RangeBorder[]|error {
-        excel:RangeBorders rangeBorders;
+    # + return - A list of `RangeBorder` or else an error on failure 
+    remote isolated function listNameRangeBorders(string itemIdOrPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorder[]|error {
+        RangeBorders rangeBorders;
         if isItemPath(itemIdOrPath) {
             rangeBorders = check self.excelClient->listNameRangeBordersWithItemPath(itemIdOrPath, name, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             rangeBorders = check self.excelClient->listNameRangeBorders(itemIdOrPath, name, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:RangeBorder[]? value = rangeBorders.value;
-        return value is excel:RangeBorder[] ? value : [];
+        RangeBorder[]? value = rangeBorders.value;
+        return value is RangeBorder[] ? value : [];
     }
 
     # Retrieves a list of range borders.
@@ -1556,15 +1561,15 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:RangeBorders` or else an error on failure 
-    remote isolated function listColumnRangeBorders(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:RangeBorder[]|error {
-        excel:RangeBorders rangeBorders;
+    # + return - A list of `RangeBorder` or else an error on failure 
+    remote isolated function listColumnRangeBorders(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorder[]|error {
+        RangeBorders rangeBorders;
         if isItemPath(itemIdOrPath) {
             rangeBorders = check self.excelClient->listColumnRangeBordersWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
         rangeBorders = check self.excelClient->listColumnRangeBorders(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
-        excel:RangeBorder[]? value = rangeBorders.value;
-        return value is excel:RangeBorder[] ? value : [];
+        RangeBorder[]? value = rangeBorders.value;
+        return value is RangeBorder[] ? value : [];
     }
 
     # Retrieves a list of range borders.
@@ -1582,16 +1587,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:RangeBorders` or else an error on failure 
-    remote isolated function listRangeBorders(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:RangeBorder[]|error {
-        excel:RangeBorders rangeBorders;
+    # + return - A list of `RangeBorder` or else an error on failure 
+    remote isolated function listRangeBorders(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns RangeBorder[]|error {
+        RangeBorders rangeBorders;
         if isItemPath(itemIdOrPath) {
             rangeBorders = check self.excelClient->listColumnRangeBordersWithItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             rangeBorders = check self.excelClient->listColumnRangeBorders(itemIdOrPath, worksheetIdOrName, address, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:RangeBorder[]? value = rangeBorders.value;
-        return value is excel:RangeBorder[] ? value : [];
+        RangeBorder[]? value = rangeBorders.value;
+        return value is RangeBorder[] ? value : [];
     }
 
     # Changes the width of the columns of the current range to achieve the best fit, based on the current data in the columns.
@@ -1676,21 +1681,21 @@ public isolated client class Client {
         return self.excelClient->autofitColumnRangeRows(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
     }
 
-    # Perform a sort operation.
+    # Performs a sort operation.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item
     # + rangeSort - The properties to the sort operation
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure 
-    remote isolated function performNameRangeSort(string itemIdOrPath, string name, excel:RangeSort rangeSort, string? sessionId = ()) returns http:Response|error {
+    remote isolated function performNameRangeSort(string itemIdOrPath, string name, RangeSort rangeSort, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->performNameRangeSortWithItemPath(itemIdOrPath, name, rangeSort, sessionId);
         }
         return self.excelClient->performNameRangeSort(itemIdOrPath, name, rangeSort, sessionId);
     }
     
-    # Perform a sort operation.
+    # Performs a sort operation.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -1698,14 +1703,14 @@ public isolated client class Client {
     # + rangeSort - The properties to the sort operation
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure 
-    remote isolated function performRangeSort(string itemIdOrPath, string worksheetIdOrName, string address, excel:RangeSort rangeSort, string? sessionId = ()) returns http:Response|error {
+    remote isolated function performRangeSort(string itemIdOrPath, string worksheetIdOrName, string address, RangeSort rangeSort, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->performWorksheetRangeSortWithItemPath(itemIdOrPath, worksheetIdOrName, address, rangeSort, sessionId);
         }
         return self.excelClient->performWorksheetRangeSort(itemIdOrPath, worksheetIdOrName, address, rangeSort, sessionId);
     }
 
-    # Perform a sort operation.
+    # Performs a sort operation.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
@@ -1713,43 +1718,43 @@ public isolated client class Client {
     # + rangeSort - The properties to the perform sort operation
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure 
-    remote isolated function performColumnRangeSort(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:RangeSort rangeSort, string? sessionId = ()) returns http:Response|error {
+    remote isolated function performColumnRangeSort(string itemIdOrPath, string tableIdOrName, string columnIdOrName, RangeSort rangeSort, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->performColumnRangeSortWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, rangeSort, sessionId);
         }
         return self.excelClient->performColumnRangeSort(itemIdOrPath, tableIdOrName, columnIdOrName, rangeSort, sessionId);
     }
 
-    # Get the resized range of a range.
+    # Gets the resized range of a range.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + deltaRows - The number of rows to expand or contract the bottom-right corner of the range by. If deltaRows is positive, the range will be expanded. If deltaRows is negative, the range will be contracted.
     # + deltaColumns - The number of columns to expand or contract the bottom-right corner of the range by. If deltaColumns is positive, the range will be expanded. If deltaColumns is negative, the range will be contracted.
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getResizedRange(string itemIdOrPath, string worksheetIdOrName, int deltaRows, int deltaColumns, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getResizedRange(string itemIdOrPath, string worksheetIdOrName, int deltaRows, int deltaColumns, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getResizedRangeWithItemPath(itemIdOrPath, worksheetIdOrName, deltaRows, deltaColumns, sessionId);
         }
         return self.excelClient->getResizedRange(itemIdOrPath, worksheetIdOrName, deltaRows, deltaColumns, sessionId);
     }
 
-    # Get the range visible from a filtered range
+    # Gets the range visible from a filtered range
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + address - The address of the range
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getVisibleView(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns excel:RangeView|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getVisibleView(string itemIdOrPath, string worksheetIdOrName, string address, string? sessionId = ()) returns RangeView|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getVisibleViewWithItemPath(itemIdOrPath, worksheetIdOrName, address, sessionId);
         }
         return self.excelClient->getVisibleView(itemIdOrPath, worksheetIdOrName, address, sessionId);
     }
 
-    # Retrieve the properties and relationships of table.
+    # Retrieves the properties and relationships of table.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
@@ -1763,15 +1768,15 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Table` or else an error on failure  
-    remote isolated function getWorkbookTable(string itemIdOrPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Table|error {
+    # + return - A `Table` or else an error on failure  
+    remote isolated function getWorkbookTable(string itemIdOrPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableWithItemPath(itemIdOrPath, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
         return self.excelClient->getWorkbookTable(itemIdOrPath, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
     }
 
-    # Retrieve the properties and relationships of table.
+    # Retrieves the properties and relationships of table.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -1786,28 +1791,28 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Table` or else an error on failure  
-    remote isolated function getWorksheetTable(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Table|error {
+    # + return - A `Table` or else an error on failure  
+    remote isolated function getWorksheetTable(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
         return self.excelClient->getWorksheetTable(itemIdOrPath, tableIdOrName, worksheetIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
     }
 
-    # Create a new table in the workbook
+    # Creates a new table in the workbook
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + table - The properties to create table
     # + sessionId - The ID of the session
-    # + return - An `excel:Table` or else an error on failure  
-    remote isolated function addWorkbookTable(string itemIdOrPath, excel:NewTable 'table, string? sessionId = ()) returns excel:Table|error {
+    # + return - A `Table` or else an error on failure  
+    remote isolated function addWorkbookTable(string itemIdOrPath, NewTable 'table, string? sessionId = ()) returns Table|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->addWorkbookTableWithItemPath(itemIdOrPath, 'table, sessionId);
         }
         return self.excelClient->addWorkbookTable(itemIdOrPath, 'table, sessionId);
     }
 
-    # Retrieve a list of table in the workbook.
+    # Retrieves a list of table in the workbook.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + sessionId - The ID of the session
@@ -1820,16 +1825,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Tables` or else an error on failure  
-    remote isolated function listWorkbookTables(string itemIdOrPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Table[]|error {
-        excel:Tables tables;
+    # + return - A list of `Table` or else an error on failure  
+    remote isolated function listWorkbookTables(string itemIdOrPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Table[]|error {
+        Tables tables;
         if isItemPath(itemIdOrPath) {
             tables = check self.excelClient->listWorkbookTablesWithItemPath(itemIdOrPath, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             tables = check self.excelClient->listWorkbookTables(itemIdOrPath, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:Table[]? value = tables.value;
-        return value is excel:Table[] ? value : [];
+        Table[]? value = tables.value;
+        return value is Table[] ? value : [];
     }
 
     # Deletes the table from the workbook.
@@ -1851,8 +1856,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + table - The properties of the table to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Table` or else an error on failure  
-    remote isolated function updateWorkbookTable(string itemIdOrPath, string tableIdOrName, excel:Table 'table, string? sessionId = ()) returns excel:Table|error {
+    # + return - A `Table` or else an error on failure  
+    remote isolated function updateWorkbookTable(string itemIdOrPath, string tableIdOrName, Table 'table, string? sessionId = ()) returns Table|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorkbookTableWithItemPath(itemIdOrPath, tableIdOrName, 'table, sessionId);
         }
@@ -1880,8 +1885,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + table - The properties of the table to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Table` or else an error on failure  
-    remote isolated function updateWorksheetTable(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, excel:Table 'table, string? sessionId = ()) returns excel:Table|error {
+    # + return - A `Table` or else an error on failure  
+    remote isolated function updateWorksheetTable(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, Table 'table, string? sessionId = ()) returns Table|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorksheetTableWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, 'table, sessionId);
         }
@@ -1893,8 +1898,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorkbookTableBodyRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorkbookTableBodyRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableBodyRangeWithItemPath(itemIdOrPath, tableIdOrName,sessionId);
         }
@@ -1907,8 +1912,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetTableBodyRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetTableBodyRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableBodyRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName,sessionId);
         }
@@ -1920,8 +1925,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorkbookTableHeaderRowRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorkbookTableHeaderRowRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableHeaderRowRangeWithItemPath(itemIdOrPath, tableIdOrName,sessionId);
         }
@@ -1934,8 +1939,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetTableHeaderRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetTableHeaderRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableHeaderRowRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName,sessionId);
         }
@@ -1947,8 +1952,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorkbookTableTotalRowRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorkbookTableTotalRowRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableTotalRowRangeWithItemPath(itemIdOrPath, tableIdOrName,sessionId);
         }
@@ -1961,8 +1966,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetTableTotalRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetTableTotalRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableTotalRowRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName,sessionId);
         }
@@ -2001,8 +2006,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function convertWorkbookTableToRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function convertWorkbookTableToRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->convertWorkbookTableToRangeWithItemPath(itemIdOrPath, tableIdOrName,sessionId);
         }
@@ -2015,8 +2020,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function convertWorksheetTableToRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function convertWorksheetTableToRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->convertWorksheetTableToRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName,sessionId);
         }
@@ -2028,7 +2033,7 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `http:Response` or else an error on failure  
+    # + return - A `http:Response` or else an error on failure  
     remote isolated function reapplyWorkbookTableFilters(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->reapplyWorkbookTableFiltersWithItemPath(itemIdOrPath, tableIdOrName, sessionId);
@@ -2042,7 +2047,7 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `http:Response` or else an error on failure  
+    # + return - A `http:Response` or else an error on failure  
     remote isolated function reapplyWorksheetTableFilters(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->reapplyWorksheetTableFiltersWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId);
@@ -2050,7 +2055,7 @@ public isolated client class Client {
         return self.excelClient->reapplyWorksheetTableFilters(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId);
     } 
 
-    # Retrieve the properties and relationships of table sort.
+    # Retrieves the properties and relationships of table sort.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
@@ -2064,15 +2069,15 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:TableSort` or else an error on failure  
-    remote isolated function getWorkbookTableSort(string itemIdOrPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:TableSort|error {
+    # + return - A `TableSort` or else an error on failure  
+    remote isolated function getWorkbookTableSort(string itemIdOrPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns TableSort|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableSortWithItemPath(itemIdOrPath, tableIdOrName, sessionId);
         }
         return self.excelClient->getWorkbookTableSort(itemIdOrPath, tableIdOrName, sessionId);
     }  
 
-    # Retrieve the properties and relationships of table sort.
+    # Retrieves the properties and relationships of table sort.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2087,15 +2092,15 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:TableSort` or else an error on failure  
-    remote isolated function getWorksheetTableSort(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:TableSort|error {
+    # + return - A `TableSort` or else an error on failure  
+    remote isolated function getWorksheetTableSort(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns TableSort|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableSortWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId);
         }
         return self.excelClient->getWorksheetTableSort(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId);
     }  
 
-    # Perform a sort operation to the table.
+    # Performs a sort operation to the table.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
@@ -2108,7 +2113,7 @@ public isolated client class Client {
         return self.excelClient->performWorkbookTableSort(itemIdOrPath, tableIdOrName, sessionId);
     }  
 
-    # Perform a sort operation to the table.
+    # Performs a sort operation to the table.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2116,7 +2121,7 @@ public isolated client class Client {
     # + tableSort - The properties to the sort operation
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure  
-    remote isolated function performWorksheetTableSort(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, excel:TableSort tableSort,  string? sessionId = ()) returns http:Response|error {
+    remote isolated function performWorksheetTableSort(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, TableSort tableSort,  string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->performWorksheetTableSortWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, tableSort, sessionId);
         }
@@ -2182,29 +2187,29 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorkbookTableRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorkbookTableRange(string itemIdOrPath, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableRangeWithItemPath(itemIdOrPath, tableIdOrName, sessionId);
         }
         return self.excelClient->getWorkbookTableRange(itemIdOrPath, tableIdOrName, sessionId);
     }
 
-    # Get the range associated with the entire table.
+    # Gets the range associated with the entire table.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetTableRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetTableRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId);
         }
         return self.excelClient->getWorksheetTableRange(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId);
     }  
 
-    # Retrieve a list of table row in the worksheet.
+    # Retrieves a list of table row in the worksheet.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2219,16 +2224,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Rows` or else an error on failure  
-    remote isolated function listWorksheetTableRows(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Row[]|error {
-        excel:Rows rows; 
+    # + return - A lost of `Row` or else an error on failure  
+    remote isolated function listWorksheetTableRows(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Row[]|error {
+        Rows rows; 
         if isItemPath(itemIdOrPath) {
             rows = check self.excelClient->listWorksheetTableRowsWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             rows = check self.excelClient->listWorksheetTableRows(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:Row[]? value = rows.value;
-        return value is excel:Row[] ? value : [];
+        Row[]? value = rows.value;
+        return value is Row[] ? value : [];
     }
 
     # Adds rows to the end of a table in the worksheet.
@@ -2238,15 +2243,15 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + row - The properties of the table row to be created
     # + sessionId - The ID of the session
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function createWorksheetTableRow(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, excel:Row row, string? sessionId = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function createWorksheetTableRow(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, Row row, string? sessionId = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createWorksheetTableRowWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, row, sessionId);
         }
         return self.excelClient->createWorksheetTableRow(itemIdOrPath, worksheetIdOrName, tableIdOrName, row, sessionId);
     }
 
-    # Update the properties of table row.
+    # Updates the properties of table row.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2254,8 +2259,8 @@ public isolated client class Client {
     # + rowIndex - The index of the table row
     # + row - The properties of the table row to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function updateWorksheetTableRow(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, int rowIndex, excel:Row row, string? sessionId = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function updateWorksheetTableRow(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, int rowIndex, Row row, string? sessionId = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorksheetTableRowWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, rowIndex, row, sessionId);
         }
@@ -2268,8 +2273,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + row - The properties of the table row to be added
     # + sessionId - The ID of the session
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function addWorkbookTableRow(string itemIdOrPath, string tableIdOrName, excel:Row row, string? sessionId = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function addWorkbookTableRow(string itemIdOrPath, string tableIdOrName, Row row, string? sessionId = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->addWorkbookTableRowWithItemPath(itemIdOrPath, tableIdOrName, row, sessionId);
         }
@@ -2283,8 +2288,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + row - The properties of the table row to be added
     # + sessionId - The ID of the session
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function addWorksheetTableRow(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, excel:Row row, string? sessionId = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function addWorksheetTableRow(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, Row row, string? sessionId = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->addWorksheetTableRowWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, row, sessionId);
         }
@@ -2298,15 +2303,15 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function getWorksheetTableRowWithIndex(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function getWorksheetTableRowWithIndex(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableRowWithIndexItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, index, sessionId);
         }
         return self.excelClient->getWorksheetTableRowWithIndex(itemIdOrPath, worksheetIdOrName, tableIdOrName, index, sessionId);
     }
 
-    # Retrieve the properties and relationships of table row.
+    # Retrieves the properties and relationships of table row.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2322,8 +2327,8 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Row` or else an error on failure  
-    remote isolated function getWorksheetTableRow(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Row|error {
+    # + return - A `Row` or else an error on failure  
+    remote isolated function getWorksheetTableRow(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Row|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableRowWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, index, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
@@ -2345,22 +2350,22 @@ public isolated client class Client {
         return self.excelClient->deleteWorksheetTableRow(itemIdOrPath, worksheetIdOrName, tableIdOrName, index, sessionId);
     }
 
-    # Get the range associated with the entire row.
+    # Gets the range associated with the entire row.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getWorksheetTableRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getWorksheetTableRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, int index, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableRowRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, index, sessionId);
         }
         return self.excelClient->getWorksheetTableRowRange(itemIdOrPath, worksheetIdOrName, tableIdOrName, index, sessionId);
     }
 
-    # Retrieve a list of table column in the workbook.
+    # Retrieves a list of table column in the workbook.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
@@ -2374,19 +2379,19 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Columns` or else an error on failure  
-    remote isolated function listWorkbookTableColumns(string itemIdOrPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Column[]|error {
-        excel:Columns columns;
+    # + return - A list of `Column` or else an error on failure  
+    remote isolated function listWorkbookTableColumns(string itemIdOrPath, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Column[]|error {
+        Columns columns;
         if isItemPath(itemIdOrPath) {
             columns = check self.excelClient->listWorkbookTableColumnsWithItemPath(itemIdOrPath, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             columns = check  self.excelClient->listWorkbookTableColumns(itemIdOrPath, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:Column[]? value = columns.value;
-        return value is excel:Column[] ? value : [];
+        Column[]? value = columns.value;
+        return value is Column[] ? value : [];
     }
 
-    # Retrieve a list of table column in the workbook.
+    # Retrieves a list of table column in the workbook.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2401,41 +2406,41 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Columns` or else an error on failure  
-    remote isolated function listWorksheetTableColumns(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Column[]|error {
-        excel:Columns columns;
+    # + return - A list of `Column` or else an error on failure  
+    remote isolated function listWorksheetTableColumns(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Column[]|error {
+        Columns columns;
         if isItemPath(itemIdOrPath) {
             columns = check self.excelClient->listWorksheetTableColumnsWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             columns = check  self.excelClient->listWorksheetTableColumns(itemIdOrPath, worksheetIdOrName, tableIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:Column[]? value = columns.value;
-        return value is excel:Column[] ? value : [];
+        Column[]? value = columns.value;
+        return value is Column[] ? value : [];
     }
 
-    # Create a new table column in the workbook.
+    # Creates a new table column in the workbook.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + column - The properties of the table column to be created
     # + sessionId - The ID of the session
-    # + return - An `excel:Column` or else an error on failure  
-    remote isolated function createWorkbookTableColumn(string itemIdOrPath, string tableIdOrName, excel:Column column, string? sessionId = ()) returns excel:Column|error {
+    # + return - A `Column` or else an error on failure  
+    remote isolated function createWorkbookTableColumn(string itemIdOrPath, string tableIdOrName, Column column, string? sessionId = ()) returns Column|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createWorkbookTableColumnWithItemPath(itemIdOrPath, tableIdOrName, column, sessionId);
         }
         return self.excelClient->createWorkbookTableColumn(itemIdOrPath, tableIdOrName, column, sessionId);
     }
 
-    # Create a new table column in the workbook.
+    # Creates a new table column in the workbook.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + column - The properties of the table column to be created
     # + sessionId - The ID of the session
-    # + return - An `excel:Column` or else an error on failure  
-    remote isolated function createWorksheetTableColumn(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, excel:Column column, string? sessionId = ()) returns excel:Column|error {
+    # + return - A `Column` or else an error on failure  
+    remote isolated function createWorksheetTableColumn(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, Column column, string? sessionId = ()) returns Column|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->createWorksheetTableColumnWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, column, sessionId);
         }
@@ -2456,7 +2461,7 @@ public isolated client class Client {
         return self.excelClient->deleteWorkbookTableColumn(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
     }
 
-    # Delete a column from a table.
+    # Deletes a column from a table.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2471,7 +2476,7 @@ public isolated client class Client {
         return self.excelClient->deleteWorksheetTableColumn(itemIdOrPath, worksheetIdOrName, tableIdOrName, columnIdOrName, sessionId);
     }
 
-    # Retrieve the properties and relationships of table column.
+    # Retrieves the properties and relationships of table column.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
@@ -2486,15 +2491,15 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Column` or else an error on failure  
-    remote isolated function getWorkbookTableColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Column|error {
+    # + return - A `Column` or else an error on failure  
+    remote isolated function getWorkbookTableColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Column|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorkbookTableColumnWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
         return self.excelClient->getWorkbookTableColumn(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
     }
 
-    # Retrieve the properties and relationships of table column.
+    # Retrieves the properties and relationships of table column.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2510,15 +2515,15 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:Column` or else an error on failure  
-    remote isolated function getWorksheetTableColumn(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:Column|error {
+    # + return - A `Column` or else an error on failure  
+    remote isolated function getWorksheetTableColumn(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderby = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns Column|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getWorksheetTableColumnWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, columnIdOrName, sessionId);
         }
         return self.excelClient->getWorksheetTableColumn(itemIdOrPath, worksheetIdOrName, tableIdOrName, columnIdOrName, sessionId);
     }
 
-    # Update the properties of table column
+    # Updates the properties of table column.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2526,8 +2531,8 @@ public isolated client class Client {
     # + columnIdOrName - The ID or name of the column
     # + column - The properties of the table column to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Column` or else an error on failure  
-    remote isolated function updateWorksheetTableColumn(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, excel:Column column, string? sessionId = ()) returns excel:Column|error {
+    # + return - A `Column` or else an error on failure  
+    remote isolated function updateWorksheetTableColumn(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, Column column, string? sessionId = ()) returns Column|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorksheetTableColumnWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, columnIdOrName, column, sessionId);
         }
@@ -2535,44 +2540,44 @@ public isolated client class Client {
     }
 
 
-    # Update the properties of table column
+    # Updates the properties of table column.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
-    # + column - 
+    # + column - The properties of the table column to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Column` or else an error on failure  
-    remote isolated function updateWorkbookTableColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, excel:Column column, string? sessionId = ()) returns excel:Column|error {
+    # + return - An `Column` or else an error on failure  
+    remote isolated function updateWorkbookTableColumn(string itemIdOrPath, string tableIdOrName, string columnIdOrName, Column column, string? sessionId = ()) returns Column|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateWorkbookTableColumnWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, column, sessionId);
         }
         return self.excelClient->updateWorkbookTableColumn(itemIdOrPath, tableIdOrName, columnIdOrName, column, sessionId);
     }
 
-    # Gets the range associated with the data body of the column
+    # Gets the range associated with the data body of the column.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Column` or else an error on failure  
-    remote isolated function getworkbookTableColumnsDataBodyRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Column` or else an error on failure  
+    remote isolated function getworkbookTableColumnsDataBodyRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getworkbookTableColumnsDataBodyRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
         return self.excelClient->getworkbookTableColumnsDataBodyRange(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
     }
 
-    # Gets the range associated with the data body of the column
+    # Gets the range associated with the data body of the column.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getworksheetTableColumnsDataBodyRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getworksheetTableColumnsDataBodyRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getworksheetTableColumnsDataBodyRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -2585,8 +2590,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getworkbookTableColumnsHeaderRowRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getworkbookTableColumnsHeaderRowRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getworkbookTableColumnsHeaderRowRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -2600,8 +2605,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getworksheetTableColumnsHeaderRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getworksheetTableColumnsHeaderRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getworksheetTableColumnsHeaderRowRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -2614,8 +2619,8 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getworkbookTableColumnsTotalRowRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getworkbookTableColumnsTotalRowRange(string itemIdOrPath, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getworkbookTableColumnsTotalRowRangeWithItemPath(itemIdOrPath, tableIdOrName, columnIdOrName, sessionId);
         }
@@ -2629,22 +2634,22 @@ public isolated client class Client {
     # + tableIdOrName - The ID or name of the table
     # + columnIdOrName - The ID or name of the column
     # + sessionId - The ID of the session
-    # + return - An `excel:Range` or else an error on failure  
-    remote isolated function getworksheetTableColumnsTotalRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `Range` or else an error on failure  
+    remote isolated function getworksheetTableColumnsTotalRowRange(string itemIdOrPath, string worksheetIdOrName, string tableIdOrName, string columnIdOrName, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getworksheetTableColumnsTotalRowRangeWithItemPath(itemIdOrPath, worksheetIdOrName, tableIdOrName, columnIdOrName, sessionId);
         }
         return self.excelClient->getworksheetTableColumnsTotalRowRange(itemIdOrPath, worksheetIdOrName, tableIdOrName, columnIdOrName, sessionId);
     }
 
-    # Retrieve the properties and relationships of chart.
+    # Retrieves the properties and relationships of chart.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chartIdOrName - The ID or name of the chart
     # + sessionId - The ID of the session
-    # + return - An `excel:Chart` or else an error on failure  
-    remote isolated function getChart(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, string? sessionId = ()) returns excel:Chart|error {
+    # + return - A `Chart` or else an error on failure  
+    remote isolated function getChart(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, string? sessionId = ()) returns Chart|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getChartWithItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, sessionId);
         }
@@ -2665,15 +2670,15 @@ public isolated client class Client {
         return self.excelClient->deleteChart(itemIdOrPath, worksheetIdOrName, chartIdOrName, sessionId);
     }
 
-    # Update the properties of chart.
+    # Updates the properties of chart.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chartIdOrName - The ID or name of the chart
     # + chart - The properties of the chart to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:Chart` or else an error on failure  
-    remote isolated function updateChart(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, excel:Chart chart, string? sessionId = ()) returns excel:Chart|error {
+    # + return - A `Chart` or else an error on failure  
+    remote isolated function updateChart(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, Chart chart, string? sessionId = ()) returns Chart|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateChartWithItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, chart, sessionId);
         }
@@ -2688,14 +2693,14 @@ public isolated client class Client {
     # + resetData - The properties of the reset data
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure  
-    remote isolated function resetChartData(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, excel:ResetData resetData, string? sessionId = ()) returns http:Response|error {
+    remote isolated function resetChartData(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, ResetData resetData, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->resetChartDataWithItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, resetData, sessionId);
         }
         return self.excelClient->resetChartData(itemIdOrPath, worksheetIdOrName, chartIdOrName, resetData, sessionId);
     }
 
-    # Positions the chart relative to cells on the worksheet
+    # Positions the chart relative to cells on the worksheet.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2703,14 +2708,14 @@ public isolated client class Client {
     # + position - the properties of the position
     # + sessionId - The ID of the session
     # + return - An `http:Response` or else an error on failure  
-    remote isolated function setChartPosition(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, excel:Position position, string? sessionId = ()) returns http:Response|error {
+    remote isolated function setChartPosition(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, Position position, string? sessionId = ()) returns http:Response|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->setChartPositionWithItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, position, sessionId);
         }
         return self.excelClient->setChartPosition(itemIdOrPath, worksheetIdOrName, chartIdOrName, position, sessionId);
     }
 
-    # Retrieve a list of chart series .
+    # Retrieves a list of chart series .
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + worksheetIdOrName - The ID or name of the worksheet
@@ -2725,16 +2730,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:CollectionOfChartSeries` or else an error on failure  
-    remote isolated function listChartSeries(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:ChartSeries[]|error {
-        excel:CollectionOfChartSeries chartSeries;
+    # + return - A list of `ChartSeries` or else an error on failure  
+    remote isolated function listChartSeries(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns ChartSeries[]|error {
+        CollectionOfChartSeries chartSeries;
         if isItemPath(itemIdOrPath) {
             chartSeries = check self.excelClient->listChartSeriesWithItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             chartSeries = check self.excelClient->listChartSeries(itemIdOrPath, worksheetIdOrName, chartIdOrName, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:ChartSeries[]? value = chartSeries.value;
-        return value is excel:ChartSeries[] ? value : [];
+        ChartSeries[]? value = chartSeries.value;
+        return value is ChartSeries[] ? value : [];
     }
 
     # Gets a chart based on its position in the collection.
@@ -2743,8 +2748,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + index - Index value of the object to be retrieved. Zero-indexed.
     # + sessionId - The ID of the session
-    # + return - An `excel:Chart` or else an error on failure  
-    remote isolated function getChartBasedOnPosition(string itemIdOrPath, string worksheetIdOrName, int index, string? sessionId = ()) returns excel:Chart|error {
+    # + return - An `Chart` or else an error on failure  
+    remote isolated function getChartBasedOnPosition(string itemIdOrPath, string worksheetIdOrName, int index, string? sessionId = ()) returns Chart|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getChartBasedOnPositionWithItemPath(itemIdOrPath, worksheetIdOrName, index, sessionId);
         }
@@ -2757,8 +2762,8 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + chartIdOrName - The ID or name of the chart
     # + sessionId - The ID of the session
-    # + return - An `excel:Image` or else an error on failure  
-    remote isolated function getChartImage(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, string? sessionId = ()) returns excel:Image|error {
+    # + return - An `Image` or else an error on failure  
+    remote isolated function getChartImage(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, string? sessionId = ()) returns Image|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getChartImageWithItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, sessionId);
         }
@@ -2772,8 +2777,8 @@ public isolated client class Client {
     # + chartIdOrName - The ID or name of the chart
     # + width - The desired width of the resulting image.
     # + sessionId - The ID of the session
-    # + return - An `excel:Image` or else an error on failure  
-    remote isolated function getChartImageWithWidth(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, int width, string? sessionId = ()) returns excel:Image|error {
+    # + return - An `Image` or else an error on failure  
+    remote isolated function getChartImageWithWidth(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, int width, string? sessionId = ()) returns Image|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getChartImageWithWidthItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, width, sessionId);
         }
@@ -2788,8 +2793,8 @@ public isolated client class Client {
     # + width - The desired width of the resulting image.
     # + height - The desired height of the resulting image.
     # + sessionId - The ID of the session
-    # + return - An `excel:Image` or else an error on failure  
-    remote isolated function getChartImageWithWidthHeight(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, int width, int height, string? sessionId = ()) returns excel:Image|error {
+    # + return - An `Image` or else an error on failure  
+    remote isolated function getChartImageWithWidthHeight(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, int width, int height, string? sessionId = ()) returns Image|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getChartImageWithWidthHeightItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, width, height, sessionId);
         }
@@ -2805,8 +2810,8 @@ public isolated client class Client {
     # + height - The desired height of the resulting image.
     # + fittingMode - The method used to scale the chart to the specified dimensions (if both height and width are set)."
     # + sessionId - The ID of the session
-    # + return - An `excel:Image` or else an error on failure  
-    remote isolated function getChartImageWithWidthHeightFittingMode(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, int width, int height, "Fit"|"FitAndCenter"|"Fill" fittingMode, string? sessionId = ()) returns excel:Image|error {
+    # + return - An `Image` or else an error on failure  
+    remote isolated function getChartImageWithWidthHeightFittingMode(string itemIdOrPath, string worksheetIdOrName, string chartIdOrName, int width, int height, "Fit"|"FitAndCenter"|"Fill" fittingMode, string? sessionId = ()) returns Image|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getChartImageWithWidthHeightFittingModeItemPath(itemIdOrPath, worksheetIdOrName, chartIdOrName, width, height, fittingMode, sessionId);
         }
@@ -2826,16 +2831,16 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:NamedItems` or else an error on failure  
-    remote isolated function listNamedItem(string itemIdOrPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:NamedItem[]|error {
-        excel:NamedItems namedItems;
+    # + return - A list of `NamedItem` or else an error on failure  
+    remote isolated function listNamedItem(string itemIdOrPath, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItem[]|error {
+        NamedItems namedItems;
         if isItemPath(itemIdOrPath) {
             namedItems = check self.excelClient->listNamedItemWithItemPath(itemIdOrPath, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         } else {
             namedItems = check self.excelClient->listNamedItem(itemIdOrPath, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
-        excel:NamedItem[]? value = namedItems.value;
-        return value is excel:NamedItem[] ? value : [];
+        NamedItem[]? value = namedItems.value;
+        return value is NamedItem[] ? value : [];
     }
 
     # Adds a new name to the collection of the given scope using the user's locale for the formula.
@@ -2843,8 +2848,8 @@ public isolated client class Client {
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + namedItem - The properties of the named item to be added
     # + sessionId - The ID of the session
-    # + return - An `excel:NamedItem` or else an error on failure  
-    remote isolated function addWorkbookNamedItem(string itemIdOrPath, excel:NewNamedItem namedItem, string? sessionId = ()) returns excel:NamedItem|error {
+    # + return - A `NamedItem` or else an error on failure  
+    remote isolated function addWorkbookNamedItem(string itemIdOrPath, NewNamedItem namedItem, string? sessionId = ()) returns NamedItem|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->addWorkbookNamedItemWithItemPath(itemIdOrPath, namedItem, sessionId);
         }
@@ -2857,15 +2862,15 @@ public isolated client class Client {
     # + worksheetIdOrName - The ID or name of the worksheet
     # + namedItem - The properties of the named item to be added
     # + sessionId - The ID of the session
-    # + return - An `excel:NamedItem` or else an error on failure  
-    remote isolated function addWorksheetNamedItem(string itemIdOrPath, string worksheetIdOrName, excel:NewNamedItem namedItem, string? sessionId = ()) returns excel:NamedItem|error {
+    # + return - A `NamedItem` or else an error on failure  
+    remote isolated function addWorksheetNamedItem(string itemIdOrPath, string worksheetIdOrName, NewNamedItem namedItem, string? sessionId = ()) returns NamedItem|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->addWorksheetNamedItemWithItemPath(itemIdOrPath, worksheetIdOrName, namedItem, sessionId);
         }
         return self.excelClient->addWorksheetNamedItem(itemIdOrPath, worksheetIdOrName, namedItem, sessionId);
     }
 
-    # Retrieve the properties and relationships of the named item.
+    # Retrieves the properties and relationships of the named item.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item to get.
@@ -2879,35 +2884,35 @@ public isolated client class Client {
     # + 'select - Filters properties(columns)
     # + skip - Indexes into a result set
     # + top - Sets the page size of results
-    # + return - An `excel:NamedItem` or else an error on failure  
-    remote isolated function getNamedItem(string itemIdOrPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns excel:NamedItem|error {
+    # + return - A `NamedItem` or else an error on failure  
+    remote isolated function getNamedItem(string itemIdOrPath, string name, string? sessionId = (), string? count = (), string? expand = (), string? filter = (), string? format = (), string? orderBy = (), string? search = (), string? 'select = (), int? skip = (), int? top = ()) returns NamedItem|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNamedItemWithItemPath(itemIdOrPath, name, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
         }
         return self.excelClient->getNamedItem(itemIdOrPath, name, sessionId, count, expand, filter, format, orderBy, search, 'select, skip, top);
     }
 
-    # Update the properties of the named item.
+    # Updates the properties of the named item.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item to get
     # + namedItem - The properties of the named item to be updated
     # + sessionId - The ID of the session
-    # + return - An `excel:NamedItem` or else an error on failure  
-    remote isolated function updateNamedItem(string itemIdOrPath, string name, excel:NamedItem namedItem, string? sessionId = ()) returns excel:NamedItem|error {
+    # + return - A `NamedItem` or else an error on failure  
+    remote isolated function updateNamedItem(string itemIdOrPath, string name, NamedItem namedItem, string? sessionId = ()) returns NamedItem|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->updateNamedItemWithItemPath(itemIdOrPath, name, namedItem, sessionId);
         }
         return self.excelClient->updateNamedItem(itemIdOrPath, name, namedItem, sessionId);
     }
 
-    # Retrieve the range object that is associated with the name.
+    # Retrieves the range object that is associated with the name.
     #
     # + itemIdOrPath - The ID of the drive containing the workbook or the path to the workbook
     # + name - The name of the named item to get.
     # + sessionId - The ID of the session
-    # + return - An `excel:NamedItem` or else an error on failure  
-    remote isolated function getNamedItemRange(string itemIdOrPath, string name, string? sessionId = ()) returns excel:Range|error {
+    # + return - A `NamedItem` or else an error on failure  
+    remote isolated function getNamedItemRange(string itemIdOrPath, string name, string? sessionId = ()) returns Range|error {
         if isItemPath(itemIdOrPath) {
             return self.excelClient->getNamedItemRangeWithItemPath(itemIdOrPath, name, sessionId);
         }
