@@ -14,15 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/os;
 import ballerina/log;
 import ballerina/test;
-
-configurable string clientId = os:getEnv("CLIENT_ID");
-configurable string clientSecret = os:getEnv("CLIENT_SECRET");
-configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
-configurable string refreshUrl = os:getEnv("REFRESH_URL");
-configurable string workbookIdOrPath = os:getEnv("WORKBOOK_PATH");
 
 ConnectionConfig configuration = {
     auth: {

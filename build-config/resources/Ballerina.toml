@@ -1,0 +1,17 @@
+[package]
+distribution = "2201.8.0"
+org = "ballerinax"
+name = "microsoft.excel"
+version = "@toml.version@"
+authors = ["Ballerina"]
+export = ["microsoft.excel"]
+repository = "https://github.com/ballerina-platform/module-ballerinax-googleapis.gmail"
+keywords = ["Productivity/Spreadsheets", "Cost/Free", "Vendor/Microsoft"]
+icon = "icon.png"
+license = ["Apache-2.0"]
+
+[build-options]
+observabilityIncluded = true
+
+[platform.java17]
+graalvmCompatible = true
