@@ -70,7 +70,7 @@ task buildExamples {
     }
 }
 
-buildExamples.dependsOn ":microsoft.excel.-ballerina:build"
+buildExamples.dependsOn ":microsoft.excel-ballerina:build"
 testExamples.dependsOn ":microsoft.excel-ballerina:build"
 test.dependsOn testExamples
 build.dependsOn buildExamples
