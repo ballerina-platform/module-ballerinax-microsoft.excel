@@ -15,7 +15,6 @@ Config.toml
 
 # Package Files #
 *.jar
-!gradle-wrapper/*.jar
 *.war
 *.ear
 *.zip
