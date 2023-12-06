@@ -13,35 +13,88 @@ This connector provides operations for connecting and interacting with Microsoft
 For more information about configuration and operations, go to the module. 
 - [`microsoft.excel`](excel/Module.md) - Perform CRUD operations in Microsoft Excel worksheet table, and chart.
 
-## Building from the source
-### Setting up the prerequisites
+## Issues and projects
 
-1. Download and install Java SE Development Kit (JDK) version 11. You can install either [OpenJDK](https://adoptopenjdk.net/) or [Oracle JDK](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
+The **Issues** and **Projects** tabs are disabled for this repository as this is part of the Ballerina library. To report bugs, request new features, start new discussions, view project boards, etc., visit the Ballerina library [parent repository](https://github.com/ballerina-platform/ballerina-library).
 
-    > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
+This repository only contains the source code for the package.
 
-2. Download and install [Ballerina Swan Lake](https://ballerina.io/). 
+## Build from the source
 
-### Building the source
-Execute the commands below to build from the source after installing Ballerina.
+### Prerequisites
+
+1. Download and install Java SE Development Kit (JDK) version 17. You can download it from either of the following sources:
+
+   * [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
+   * [OpenJDK](https://adoptium.net/)
+
+   > **Note:** After installation, remember to set the `JAVA_HOME` environment variable to the directory where JDK was installed.
+
+2. Download and install [Ballerina Swan Lake](https://ballerina.io/).
+
+3. Download and install [Docker](https://www.docker.com/get-started).
+
+   > **Note**: Ensure that the Docker daemon is running before executing any tests.
+
+### Build options
+
+Execute the commands below to build from the source.
 
 1. To build the package:
-    ```    
-    bal build ./ballerina
-    ```
-2. To run tests after build:
-    ```
-    bal test ./ballerina
-    ```
-## Contributing to Ballerina
-As an open source project, Ballerina welcomes contributions from the community. 
 
-For more information, go to the [contribution guidelines](https://github.com/ballerina-platform/ballerina-lang/blob/main/CONTRIBUTING.md).
+   ```bash
+   ./gradlew clean build
+   ```
+
+2. To run the tests:
+
+   ```bash
+   ./gradlew clean test
+   ```
+
+3. To build the without the tests:
+
+   ```bash
+   ./gradlew clean build -x test
+   ```
+
+4. To debug package with a remote debugger:
+
+   ```bash
+   ./gradlew clean build -Pdebug=<port>
+   ```
+
+5. To debug with the Ballerina language:
+
+   ```bash
+   ./gradlew clean build -PbalJavaDebug=<port>
+   ```
+
+6. Publish the generated artifacts to the local Ballerina Central repository:
+
+    ```bash
+    ./gradlew clean build -PpublishToLocalCentral=true
+    ```
+
+7. Publish the generated artifacts to the Ballerina Central repository:
+
+   ```bash
+   ./gradlew clean build -PpublishToCentral=true
+   ```
+
+## Contribute to Ballerina
+
+As an open-source project, Ballerina welcomes contributions from the community.
+
+For more information, go to the [contribution guidelines](https://github.com/ballerina-platform/ballerina-lang/blob/master/CONTRIBUTING.md).
 
 ## Code of conduct
-All contributors are encouraged to read the [Ballerina Code of Conduct](https://ballerina.io/code-of-conduct).
+
+All the contributors are encouraged to read the [Ballerina Code of Conduct](https://ballerina.io/code-of-conduct).
 
 ## Useful links
-* Discuss about code changes of the Ballerina project in [ballerina-dev@googlegroups.com](mailto:ballerina-dev@googlegroups.com).
+
+* For more information go to the [`microsoft.excel` package](https://lib.ballerina.io/ballerinax/microsoft.excel/latest).
+* For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
 * Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
 * Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.
