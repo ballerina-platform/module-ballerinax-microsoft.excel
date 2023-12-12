@@ -28,7 +28,7 @@ cd "$BAL_HOME_DIR" &&
   bal push --repository=local
 
 # Remove the cache directories in the repositories
-cacheDirs=($(ls -d "$BAL_CENTRAL_DIR"/cache-* 2>/dev/null))
+cacheDirs=$(ls -d $BAL_CENTRAL_DIR/cache-* 2>/dev/null) || true
 for dir in "${cacheDirs[@]}"; do
   [ -d "$dir" ] && rm -r "$dir"
 done
