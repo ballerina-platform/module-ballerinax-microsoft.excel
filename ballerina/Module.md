@@ -1,8 +1,16 @@
 ## Overview
 
-Ballerina connector for Microsoft Excel connects the Microsoft Graph Excel API via [Ballerina](https://ballerina.io/). It provides the capability to perform CRUD (Create, Read, Update, and Delete) operations on [Excel workbooks](https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in a Microsoft OneDrive.  
+The connector for Microsoft Excel connects the Microsoft Graph Excel API via [Ballerina](https://ballerina.io/). It provides the capability to perform CRUD (Create, Read, Update, and Delete) operations on [Excel workbooks](https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0) stored in a Microsoft OneDrive.  
 
 This module supports [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) v1.0 version and only allows to perform functions behalf of the currently logged in user.
+
+
+### Key Features
+
+- Read and write data to Excel workbooks via Microsoft Graph
+- Manage worksheets, tables, and charts
+- Execute Excel functions and formulas programmatically
+- Support for named ranges and cell formatting
 
 ## Prerequisites
 Before using this connector in your Ballerina application, complete the following:
