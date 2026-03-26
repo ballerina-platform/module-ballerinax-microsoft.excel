@@ -5,6 +5,6 @@ name= "microsoft.excel"
 version= "2.3.0"
 license= ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["Productivity/Spreadsheets", "Cost/Free", "Vendor/Microsoft"]
+keywords = ["Productivity/Spreadsheets", "Cost/Free", "Vendor/Microsoft", "Area/Productivity & Collaboration", "Type/Connector"]
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.excel"
