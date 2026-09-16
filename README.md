@@ -18,7 +18,7 @@
 
 ## Examples
 
-The `Microsoft Excel` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-microsoft.excel/tree/main/examples/), covering the following use cases:
+The `Microsoft Excel` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-microsoft.excel/tree/main/examples/), covering the following use cases:
 
 [//]: # (TODO: Add examples)
 

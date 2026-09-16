@@ -20,12 +20,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'java'
 
-def graalvmFlag = ""
-
 task testExamples {
-    if (project.hasProperty("balGraalVMTest")) {
-        graalvmFlag = "--graalvm"
-    }
     doLast {
         try {
             exec {

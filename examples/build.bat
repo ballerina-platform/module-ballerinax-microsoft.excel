@@ -32,8 +32,20 @@ for /f "tokens=2 delims== " %%A in ('findstr /r "^name" "%BAL_HOME_DIR%\Ballerin
 
 :: Push the package to the local repository
 cd /d "%BAL_HOME_DIR%"
+if errorlevel 1 (
+    echo Failed to change directory to "%BAL_HOME_DIR%".
+    exit /b 1
+)
 call bal pack
+if errorlevel 1 (
+    echo bal pack failed.
+    exit /b 1
+)
 call bal push --repository=local
+if errorlevel 1 (
+    echo bal push failed.
+    exit /b 1
+)
 
 :: Remove the cache directories in the repositories
 for /d %%D in ("%BAL_CENTRAL_DIR%\cache-*") do (
