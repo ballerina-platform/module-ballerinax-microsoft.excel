@@ -17,6 +17,8 @@ Audits the tables on an inventory worksheet by listing each table, its columns, 
   clientId = "<CLIENT_ID>"
   clientSecret = "<CLIENT_SECRET>"
   refreshToken = "<REFRESH_TOKEN>"
+  # your tenant id for a single-tenant app, or "common" for a multi-tenant one
+  refreshUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
   driveId = "<DRIVE_ID>"
   driveItemId = "<DRIVE_ITEM_ID>"
   worksheetId = "<WORKSHEET_ID>"

@@ -27,7 +27,6 @@ final string driveId = isLiveServer ? os:getEnv("MS_EXCEL_DRIVE_ID") : "b!testDr
 final string driveItemId = isLiveServer ? os:getEnv("MS_EXCEL_ITEM_ID") : "01BYE5RZYRQEQ6EJ6DVJHZDF6TYMLRQKAP";
 final string worksheetId = isLiveServer ? os:getEnv("MS_EXCEL_WORKSHEET_ID") : "{00000000-0001-0000-0000-000000000000}";
 final string tableId = isLiveServer ? os:getEnv("MS_EXCEL_TABLE_ID") : "1";
-final string columnId = isLiveServer ? os:getEnv("MS_EXCEL_COLUMN_ID") : "1";
 final string rowId = isLiveServer ? os:getEnv("MS_EXCEL_ROW_ID") : "0";
 final string chartId = isLiveServer ? os:getEnv("MS_EXCEL_CHART_ID") : "{6F6D2F1A-0000-0000-0000-000000000000}";
 
@@ -67,14 +66,32 @@ isolated function testCreateSession() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testRefreshSession() returns error? {
-    error? response = excelClient->refreshSession(driveId, driveItemId);
+    string sessionId = check createTestSession();
+    error? response =
+        excelClient->refreshSession(driveId, driveItemId, {workbookSessionId: sessionId});
     test:assertTrue(response is (), "refreshSession should complete without a body");
+    check excelClient->closeSession(driveId, driveItemId, {workbookSessionId: sessionId});
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testCloseSession() returns error? {
-    error? response = excelClient->closeSession(driveId, driveItemId);
+    string sessionId = check createTestSession();
+    error? response =
+        excelClient->closeSession(driveId, driveItemId, {workbookSessionId: sessionId});
     test:assertTrue(response is (), "closeSession should complete without a body");
+}
+
+# Creates a fresh non-persistent workbook session and returns its ID. Each test that needs a
+# session creates its own, so no session ID is shared between tests.
+#
+# + return - The ID of the newly created session
+isolated function createTestSession() returns string|error {
+    SessionInfoResponse session =
+        check excelClient->createSession(driveId, driveItemId, {persistChanges: false});
+    if session !is SessionInfo {
+        return error("createSession did not return session information");
+    }
+    return session?.id ?: "";
 }
 
 // -------------------------------------------------------------- worksheets --
@@ -106,7 +123,12 @@ isolated function testUpdateWorksheet() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testDeleteWorksheet() returns error? {
-    error? response = excelClient->deleteWorksheet(driveId, driveItemId, worksheetId);
+    AddWorksheetResponse created =
+        check excelClient->addWorksheet(driveId, driveItemId, {name: "ToDelete"});
+    if created !is Worksheet {
+        return error("addWorksheet did not return the created worksheet");
+    }
+    error? response = excelClient->deleteWorksheet(driveId, driveItemId, created.id ?: "");
     test:assertTrue(response is (), "deleteWorksheet should return no content");
 }
 
@@ -140,7 +162,13 @@ isolated function testUpdateWorksheetTable() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testDeleteWorksheetTable() returns error? {
-    error? response = excelClient->deleteWorksheetTable(driveId, driveItemId, worksheetId, tableId);
+    AddTableResponse created = check excelClient->addWorksheetTable(
+            driveId, driveItemId, worksheetId, {address: "A1:C3", hasHeaders: true});
+    if created !is Table {
+        return error("addWorksheetTable did not return the created table");
+    }
+    error? response =
+        excelClient->deleteWorksheetTable(driveId, driveItemId, worksheetId, created.id ?: "");
     test:assertTrue(response is (), "deleteWorksheetTable should return no content");
 }
 
@@ -182,7 +210,13 @@ isolated function testAddColumn() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testDeleteColumn() returns error? {
-    error? response = excelClient->deleteColumn(driveId, driveItemId, worksheetId, tableId, columnId);
+    AddColumnResponse created = check excelClient->addColumn(
+            driveId, driveItemId, worksheetId, tableId, {name: "ToDelete", values: [["ToDelete"]]});
+    if created !is TableColumn {
+        return error("addColumn did not return the created column");
+    }
+    error? response = excelClient->deleteColumn(
+            driveId, driveItemId, worksheetId, tableId, created.id ?: "");
     test:assertTrue(response is (), "deleteColumn should return no content");
 }
 
@@ -216,7 +250,13 @@ isolated function testUpdateChart() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testDeleteChart() returns error? {
-    error? response = excelClient->deleteChart(driveId, driveItemId, worksheetId, chartId);
+    AddChartResponse created = check excelClient->addChart(driveId, driveItemId, worksheetId,
+            {'type: "ColumnClustered", sourceData: "A1:C3", seriesBy: "Auto"});
+    if created !is Chart {
+        return error("addChart did not return the created chart");
+    }
+    error? response =
+        excelClient->deleteChart(driveId, driveItemId, worksheetId, created.id ?: "");
     test:assertTrue(response is (), "deleteChart should return no content");
 }
 

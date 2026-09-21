@@ -23,7 +23,6 @@ Set `IS_LIVE_SERVER=true` and supply credentials and workbook identifiers as env
 | `MS_EXCEL_ITEM_ID` | Identifier of the workbook `driveItem` |
 | `MS_EXCEL_WORKSHEET_ID` | Identifier of a worksheet in that workbook |
 | `MS_EXCEL_TABLE_ID` | Identifier of a table in that worksheet |
-| `MS_EXCEL_COLUMN_ID` | Identifier of a column in that table |
 | `MS_EXCEL_ROW_ID` | Index of a row in that table |
 | `MS_EXCEL_CHART_ID` | Identifier of a chart in that worksheet |
 

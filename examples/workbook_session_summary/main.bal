@@ -8,17 +8,13 @@ import ballerinax/microsoft.excel;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
+configurable string refreshUrl = ?;
 configurable string driveId = ?;
 configurable string driveItemId = ?;
 
 public function main() returns error? {
     excel:Client excel = check new ({
-        auth: {
-            clientId,
-            clientSecret,
-            refreshToken,
-            refreshUrl: "https://login.microsoftonline.com/common/oauth2/v2.0/token"
-        }
+        auth: {clientId, clientSecret, refreshToken, refreshUrl}
     });
 
     // Step 1: Open a session. Microsoft recommends passing a session id with every
@@ -26,7 +22,13 @@ public function main() returns error? {
     excel:SessionInfoResponse session =
         check excel->createSession(driveId, driveItemId, {persistChanges: false});
 
-    string sessionId = session is excel:SessionInfo ? (session?.id ?: "") : "";
+    if session !is excel:SessionInfo {
+        return error("createSession did not return session information");
+    }
+    string sessionId = session?.id ?: "";
+    if sessionId == "" {
+        return error("createSession returned a session without an id");
+    }
 
     // Step 2: List every worksheet in the workbook.
     excel:WorksheetCollectionResponse worksheets =

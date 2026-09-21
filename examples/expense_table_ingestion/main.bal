@@ -8,17 +8,13 @@ import ballerinax/microsoft.excel;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
+configurable string refreshUrl = ?;
 configurable string driveId = ?;
 configurable string driveItemId = ?;
 
 public function main() returns error? {
     excel:Client excel = check new ({
-        auth: {
-            clientId,
-            clientSecret,
-            refreshToken,
-            refreshUrl: "https://login.microsoftonline.com/common/oauth2/v2.0/token"
-        }
+        auth: {clientId, clientSecret, refreshToken, refreshUrl}
     });
 
     // Step 1: Add a worksheet to hold the expense records.
