@@ -148,9 +148,13 @@ isolated function testGetWorksheetTable() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testAddWorksheetTable() returns error? {
-    AddTableResponse response = check excelClient->addWorksheetTable(driveId, driveItemId, worksheetId,
-        {address: "Sheet1!A1:C3", hasHeaders: true});
-    test:assertTrue(response !is (), "addWorksheetTable should return the created table");
+    // Own the worksheet so the new table never overlaps a table on the configured worksheet.
+    string ownWorksheetId = check createOwnedWorksheet("AddTableSheet");
+    AddTableResponse|error response = excelClient->addWorksheetTable(driveId, driveItemId, ownWorksheetId,
+        {address: "A1:C3", hasHeaders: true});
+    check excelClient->deleteWorksheet(driveId, driveItemId, ownWorksheetId);
+    AddTableResponse created = check response;
+    test:assertTrue(created !is (), "addWorksheetTable should return the created table");
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
@@ -162,14 +166,28 @@ isolated function testUpdateWorksheetTable() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testDeleteWorksheetTable() returns error? {
+    // Own the worksheet so the new table never overlaps a table on the configured worksheet.
+    string ownWorksheetId = check createOwnedWorksheet("DeleteTableSheet");
+    error? response = deleteOwnedTable(ownWorksheetId);
+    check excelClient->deleteWorksheet(driveId, driveItemId, ownWorksheetId);
+    test:assertTrue(response is (), "deleteWorksheetTable should return no content");
+}
+
+isolated function deleteOwnedTable(string ownWorksheetId) returns error? {
     AddTableResponse created = check excelClient->addWorksheetTable(
-            driveId, driveItemId, worksheetId, {address: "A1:C3", hasHeaders: true});
+            driveId, driveItemId, ownWorksheetId, {address: "A1:C3", hasHeaders: true});
     if created !is Table {
         return error("addWorksheetTable did not return the created table");
     }
-    error? response =
-        excelClient->deleteWorksheetTable(driveId, driveItemId, worksheetId, created.id ?: "");
-    test:assertTrue(response is (), "deleteWorksheetTable should return no content");
+    return excelClient->deleteWorksheetTable(driveId, driveItemId, ownWorksheetId, created.id ?: "");
+}
+
+isolated function createOwnedWorksheet(string name) returns string|error {
+    AddWorksheetResponse created = check excelClient->addWorksheet(driveId, driveItemId, {name});
+    if created !is Worksheet {
+        return error("addWorksheet did not return the created worksheet");
+    }
+    return created.id ?: "";
 }
 
 // -------------------------------------------------------------------- rows --
@@ -189,7 +207,18 @@ isolated function testAddRow() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function testDeleteRow() returns error? {
-    error? response = excelClient->deleteRow(driveId, driveItemId, worksheetId, tableId, rowId);
+    // Own the table so the row being deleted is never one another test relies on.
+    AddTableResponse ownTable = check excelClient->addWorksheetTable(
+            driveId, driveItemId, worksheetId, {address: "A1:C3", hasHeaders: true});
+    if ownTable !is Table {
+        return error("addWorksheetTable did not return the created table");
+    }
+    string ownTableId = ownTable.id ?: "";
+    TableRowOperationResponse _ = check excelClient->addRow(
+            driveId, driveItemId, worksheetId, ownTableId, {index: 0, values: [["a", "b", "c"]]});
+
+    error? response =
+        excelClient->deleteRow(driveId, driveItemId, worksheetId, ownTableId, rowId);
     test:assertTrue(response is (), "deleteRow should return no content");
 }
 

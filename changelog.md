@@ -47,7 +47,6 @@ It contains breaking changes. See the "Migrating from 2.x" section below.
 - `@odata.type` is optional on every generated record. It was previously required on 51 records,
   which caused response binding to fail whenever Microsoft Graph omitted it — Graph returns it
   only for polymorphic instances.
-- The package now requires Ballerina distribution `2201.12.0` (was `2201.3.0`).
 - Generated documentation no longer carries the OData "navigation property" boilerplate.
   149 doc lines and 72 generic `Success` return descriptions were replaced with resource-specific
   wording, in the specification, so regeneration reproduces them.
