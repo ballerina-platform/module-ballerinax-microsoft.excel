@@ -82,6 +82,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update workbook
+      description: Update the properties of the workbook.
       operationId: updateWorkbook
       parameters:
       - name: workbook-session-id
@@ -113,7 +114,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the workbook.
     parameters:
     - name: driveId
       in: path
@@ -140,6 +140,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get application from drives
+      description: Retrieve the Excel application object in the workbook.
       operationId: getApplication
       parameters:
       - name: $select
@@ -188,11 +189,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Retrieve the Excel application object in the workbook.
     patch:
       tags:
       - drives.driveItem
       summary: Update Excel application
+      description: Update the properties of the Excel application object in the workbook.
       operationId: updateApplication
       parameters:
       - name: workbook-session-id
@@ -224,7 +225,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the Excel application object in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -375,6 +375,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create workbook comment
+      description: Create a new comment in the workbook.
       operationId: createComment
       parameters:
       - name: workbook-session-id
@@ -406,7 +407,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new comment in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -485,6 +485,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete workbook comment
+      description: Delete the comment from the workbook.
       operationId: deleteComment
       parameters:
       - name: If-Match
@@ -514,11 +515,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the comment from the workbook.
     patch:
       tags:
       - drives.driveItem
       summary: Update workbook comment
+      description: Update the properties of the comment in the workbook.
       operationId: updateComment
       parameters:
       - name: workbook-session-id
@@ -550,7 +551,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the comment in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -655,6 +655,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create comment reply
+      description: Create a new comment reply in the comment.
       operationId: createReply
       parameters:
       - name: workbook-session-id
@@ -686,7 +687,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new comment reply in the comment.
     parameters:
     - name: driveId
       in: path
@@ -775,6 +775,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete comment reply
+      description: Delete the comment reply from the comment.
       operationId: deleteReply
       parameters:
       - name: If-Match
@@ -804,11 +805,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the comment reply from the comment.
     patch:
       tags:
       - drives.driveItem
       summary: Update comment reply
+      description: Update the properties of the comment reply in the comment.
       operationId: updateReply
       parameters:
       - name: workbook-session-id
@@ -840,7 +841,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the comment reply in the comment.
     parameters:
     - name: driveId
       in: path
@@ -884,6 +884,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of comment replies in the comment.
       operationId: countReplies
       parameters:
       - $ref: '#/components/parameters/search'
@@ -905,7 +906,6 @@ paths:
           $ref: '#/components/responses/error'
         5XX:
           $ref: '#/components/responses/error'
-      description: Retrieve the number of comment replies in the comment.
     parameters:
     - name: driveId
       in: path
@@ -940,6 +940,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of comments in the workbook.
       operationId: countComments
       parameters:
       - $ref: '#/components/parameters/search'
@@ -961,7 +962,6 @@ paths:
           $ref: '#/components/responses/error'
         5XX:
           $ref: '#/components/responses/error'
-      description: Retrieve the number of comments in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -1138,6 +1138,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function sessionInfoResource
+      description: Retrieve workbook session information for the given key.
       operationId: getSessionInfo
       parameters:
       - name: workbook-session-id
@@ -1162,7 +1163,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve workbook session information for the given key.
     parameters:
     - name: driveId
       in: path
@@ -1338,6 +1338,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create named item
+      description: Create a new named item in the workbook.
       operationId: createNamedItem
       parameters:
       - name: workbook-session-id
@@ -1369,7 +1370,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new named item in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -1449,6 +1449,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete named item
+      description: Delete the named item from the workbook.
       operationId: deleteNamedItem
       parameters:
       - name: If-Match
@@ -1478,11 +1479,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the named item from the workbook.
     patch:
       tags:
       - drives.driveItem
       summary: Update named item
+      description: Update the properties of the named item in the workbook.
       operationId: updateNamedItem
       parameters:
       - name: workbook-session-id
@@ -1514,7 +1515,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the named item in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -1715,6 +1715,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of named items in the workbook.
       operationId: countNamedItems
       parameters:
       - $ref: '#/components/parameters/search'
@@ -1736,7 +1737,6 @@ paths:
           $ref: '#/components/responses/error'
         5XX:
           $ref: '#/components/responses/error'
-      description: Retrieve the number of named items in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -1968,6 +1968,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create workbook operation
+      description: Create a new workbook operation in the workbook.
       operationId: createOperation
       parameters:
       - name: workbook-session-id
@@ -1999,7 +2000,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new workbook operation in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -2081,6 +2081,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete workbook operation
+      description: Delete the workbook operation from the workbook.
       operationId: deleteOperation
       parameters:
       - name: If-Match
@@ -2110,11 +2111,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the workbook operation from the workbook.
     patch:
       tags:
       - drives.driveItem
       summary: Update workbook operation
+      description: Update the properties of the workbook operation in the workbook.
       operationId: updateOperation
       parameters:
       - name: workbook-session-id
@@ -2146,7 +2147,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the workbook operation in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -2181,6 +2181,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of workbook operations in the workbook.
       operationId: countOperations
       parameters:
       - $ref: '#/components/parameters/search'
@@ -2202,7 +2203,6 @@ paths:
           $ref: '#/components/responses/error'
         5XX:
           $ref: '#/components/responses/error'
-      description: Retrieve the number of workbook operations in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -2297,6 +2297,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create table
+      description: Create a new table in the workbook.
       operationId: createTable
       parameters:
       - name: workbook-session-id
@@ -2328,7 +2329,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new table in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -2424,6 +2424,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create worksheet
+      description: Create a new worksheet in the workbook.
       operationId: createWorksheet
       parameters:
       - name: workbook-session-id
@@ -2455,7 +2456,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new worksheet in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -2535,6 +2535,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete worksheet
+      description: Delete the worksheet from the workbook.
       operationId: deleteWorksheet
       parameters:
       - name: If-Match
@@ -2564,11 +2565,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the worksheet from the workbook.
     patch:
       tags:
       - drives.driveItem
       summary: Update worksheet
+      description: Update the properties of the worksheet in the workbook.
       operationId: updateWorksheet
       parameters:
       - name: workbook-session-id
@@ -2600,7 +2601,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the worksheet in the workbook.
     parameters:
     - name: driveId
       in: path
@@ -2705,6 +2705,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create chart
+      description: Create a new chart in the worksheet.
       operationId: createChart
       parameters:
       - name: workbook-session-id
@@ -2736,7 +2737,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new chart in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -2825,6 +2825,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete chart
+      description: Delete the chart from the worksheet.
       operationId: deleteChart
       parameters:
       - name: If-Match
@@ -2854,11 +2855,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the chart from the worksheet.
     patch:
       tags:
       - drives.driveItem
       summary: Update chart
+      description: Update the properties of the chart in the worksheet.
       operationId: updateChart
       parameters:
       - name: workbook-session-id
@@ -2890,7 +2891,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the chart in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -2988,6 +2988,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update chart axes
+      description: Update the properties of the chart axes in the chart.
       operationId: updateChartAxes
       parameters:
       - name: workbook-session-id
@@ -3019,7 +3020,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the chart axes in the chart.
     parameters:
     - name: driveId
       in: path
@@ -3120,6 +3120,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update category axis
+      description: Update the properties of the category axis in the chart axes.
       operationId: updateCategoryAxis
       parameters:
       - name: workbook-session-id
@@ -3151,7 +3152,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the category axis in the chart axes.
     parameters:
     - name: driveId
       in: path
@@ -3249,6 +3249,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update series axis
+      description: Update the properties of the series axis in the chart axes.
       operationId: updateSeriesAxis
       parameters:
       - name: workbook-session-id
@@ -3280,7 +3281,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the series axis in the chart axes.
     parameters:
     - name: driveId
       in: path
@@ -3378,6 +3378,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update value axis
+      description: Update the properties of the value axis in the chart axes.
       operationId: updateValueAxis
       parameters:
       - name: workbook-session-id
@@ -3409,7 +3410,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the value axis in the chart axes.
     parameters:
     - name: driveId
       in: path
@@ -3507,6 +3507,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update chart data labels
+      description: Update the properties of the data labels in the chart.
       operationId: updateDataLabels
       parameters:
       - name: workbook-session-id
@@ -3538,7 +3539,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the data labels in the chart.
     parameters:
     - name: driveId
       in: path
@@ -3639,6 +3639,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update chart format
+      description: Update the properties of the format in the chart.
       operationId: updateChartFormat
       parameters:
       - name: workbook-session-id
@@ -3670,7 +3671,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the format in the chart.
     parameters:
     - name: driveId
       in: path
@@ -3771,6 +3771,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update chart legend
+      description: Update the properties of the chart legend in the chart.
       operationId: updateLegend
       parameters:
       - name: workbook-session-id
@@ -3802,7 +3803,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the chart legend in the chart.
     parameters:
     - name: driveId
       in: path
@@ -3849,6 +3849,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function image
+      description: Render the chart as a base64-encoded image.
       operationId: getChartImage
       parameters:
       - name: workbook-session-id
@@ -3873,7 +3874,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Render the chart as a base64-encoded image.
     parameters:
     - name: driveId
       in: path
@@ -3929,6 +3929,8 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function image
+      description: Render the chart as a base64-encoded image scaled to the given width and height using
+        the specified fitting mode.
       operationId: getChartImageFitted
       parameters:
       - name: workbook-session-id
@@ -3954,8 +3956,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Render the chart as a base64-encoded image scaled to the given width and height using
-        the specified fitting mode.
     parameters:
     - name: driveId
       in: path
@@ -4041,6 +4041,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function image
+      description: Render the chart as a base64-encoded image scaled to the given width and height.
       operationId: getChartImageBySize
       parameters:
       - name: workbook-session-id
@@ -4065,7 +4066,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Render the chart as a base64-encoded image scaled to the given width and height.
     parameters:
     - name: driveId
       in: path
@@ -4143,6 +4143,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function image
+      description: Render the chart as a base64-encoded image scaled to the given width.
       operationId: getChartImageByWidth
       parameters:
       - name: workbook-session-id
@@ -4167,7 +4168,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Render the chart as a base64-encoded image scaled to the given width.
     parameters:
     - name: driveId
       in: path
@@ -4458,6 +4458,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create chart series
+      description: Create a new chart series in the chart.
       operationId: createChartSeries
       parameters:
       - name: workbook-session-id
@@ -4489,7 +4490,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new chart series in the chart.
     parameters:
     - name: driveId
       in: path
@@ -4590,6 +4590,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete chart series
+      description: Delete the chart series from the chart.
       operationId: deleteChartSeries
       parameters:
       - name: If-Match
@@ -4619,11 +4620,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the chart series from the chart.
     patch:
       tags:
       - drives.driveItem
       summary: Update chart series
+      description: Update the properties of the chart series in the chart.
       operationId: updateChartSeries
       parameters:
       - name: workbook-session-id
@@ -4655,7 +4656,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the chart series in the chart.
     parameters:
     - name: driveId
       in: path
@@ -4708,6 +4708,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the chart series.
       operationId: countChartSeries
       parameters:
       - name: workbook-session-id
@@ -4732,7 +4733,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the number of count in the chart series.
     parameters:
     - name: driveId
       in: path
@@ -4841,6 +4841,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update chart title
+      description: Update the properties of the chart title in the chart.
       operationId: updateChartTitle
       parameters:
       - name: workbook-session-id
@@ -4872,7 +4873,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the chart title in the chart.
     parameters:
     - name: driveId
       in: path
@@ -5094,6 +5094,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the chart.
       operationId: countCharts
       parameters:
       - name: workbook-session-id
@@ -5118,7 +5119,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the number of count in the chart.
     parameters:
     - name: driveId
       in: path
@@ -5274,6 +5274,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function range
+      description: Retrieve the range of cells associated with the worksheet.
       operationId: getRange
       parameters:
       - name: workbook-session-id
@@ -5298,7 +5299,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the range of cells associated with the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -5404,6 +5404,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update range format
+      description: Update the properties of the format in the range.
       operationId: updateRangeFormat
       parameters:
       - name: workbook-session-id
@@ -5435,7 +5436,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the format in the range.
     parameters:
     - name: driveId
       in: path
@@ -5495,6 +5495,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action clear
+      description: Clear the contents, formatting, or both from the range.
       operationId: clearRange
       parameters:
       - name: workbook-session-id
@@ -5522,7 +5523,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Clear the contents, formatting, or both from the range.
     parameters:
     - name: driveId
       in: path
@@ -5602,6 +5602,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action delete
+      description: Delete the range and shift the surrounding cells.
       operationId: deleteRange
       parameters:
       - name: workbook-session-id
@@ -5629,7 +5630,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Delete the range and shift the surrounding cells.
     parameters:
     - name: driveId
       in: path
@@ -5689,6 +5689,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action insert
+      description: Insert a new range and shift the surrounding cells.
       operationId: insertRange
       parameters:
       - name: workbook-session-id
@@ -5720,7 +5721,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Insert a new range and shift the surrounding cells.
     parameters:
     - name: driveId
       in: path
@@ -5780,6 +5780,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action merge
+      description: Merge the cells of the range into a single cell.
       operationId: mergeRange
       parameters:
       - name: workbook-session-id
@@ -5807,7 +5808,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Merge the cells of the range into a single cell.
     parameters:
     - name: driveId
       in: path
@@ -5867,6 +5867,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action unmerge
+      description: Unmerge the merged cells of the range.
       operationId: unmergeRange
       parameters:
       - name: workbook-session-id
@@ -5887,7 +5888,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Unmerge the merged cells of the range.
     parameters:
     - name: driveId
       in: path
@@ -6001,6 +6001,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update range sort
+      description: Update the properties of the sort in the range.
       operationId: updateRangeSort
       parameters:
       - name: workbook-session-id
@@ -6032,7 +6033,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the sort in the range.
     parameters:
     - name: driveId
       in: path
@@ -6092,6 +6092,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function range
+      description: Retrieve a range of cells identified by its address, such as A1:D5.
       operationId: getRangeByAddress
       parameters:
       - name: workbook-session-id
@@ -6116,7 +6117,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve a range of cells identified by its address, such as A1:D5.
     parameters:
     - name: driveId
       in: path
@@ -6231,6 +6231,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update addressed range format
+      description: Update the properties of the format in the range.
       operationId: updateRangeByAddressFormat
       parameters:
       - name: workbook-session-id
@@ -6262,7 +6263,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the format in the range.
     parameters:
     - name: driveId
       in: path
@@ -6331,6 +6331,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action clear
+      description: Clear the contents, formatting, or both from the range.
       operationId: clearRangeByAddress
       parameters:
       - name: workbook-session-id
@@ -6358,7 +6359,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Clear the contents, formatting, or both from the range.
     parameters:
     - name: driveId
       in: path
@@ -6447,6 +6447,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action delete
+      description: Delete the range and shift the surrounding cells.
       operationId: deleteRangeByAddress
       parameters:
       - name: workbook-session-id
@@ -6474,7 +6475,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Delete the range and shift the surrounding cells.
     parameters:
     - name: driveId
       in: path
@@ -6543,6 +6543,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action insert
+      description: Insert a new range and shift the surrounding cells.
       operationId: insertRangeByAddress
       parameters:
       - name: workbook-session-id
@@ -6574,7 +6575,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Insert a new range and shift the surrounding cells.
     parameters:
     - name: driveId
       in: path
@@ -6643,6 +6643,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action merge
+      description: Merge the cells of the range into a single cell.
       operationId: mergeRangeByAddress
       parameters:
       - name: workbook-session-id
@@ -6670,7 +6671,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Merge the cells of the range into a single cell.
     parameters:
     - name: driveId
       in: path
@@ -6739,6 +6739,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action unmerge
+      description: Unmerge the merged cells of the range.
       operationId: unmergeRangeByAddress
       parameters:
       - name: workbook-session-id
@@ -6759,7 +6760,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Unmerge the merged cells of the range.
     parameters:
     - name: driveId
       in: path
@@ -6882,6 +6882,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update addressed range sort
+      description: Update the properties of the sort in the range.
       operationId: updateRangeByAddressSort
       parameters:
       - name: workbook-session-id
@@ -6913,7 +6914,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the sort in the range.
     parameters:
     - name: driveId
       in: path
@@ -6982,6 +6982,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function usedRange
+      description: Retrieve the used range of the worksheet.
       operationId: getUsedRange
       parameters:
       - name: workbook-session-id
@@ -7006,7 +7007,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the used range of the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -7144,6 +7144,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update used range format
+      description: Update the properties of the format in the used range.
       operationId: updateUsedRangeFormat
       parameters:
       - name: workbook-session-id
@@ -7175,7 +7176,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the format in the used range.
     parameters:
     - name: driveId
       in: path
@@ -7235,6 +7235,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action clear
+      description: Clear the contents, formatting, or both from the used range.
       operationId: clearUsedRange
       parameters:
       - name: workbook-session-id
@@ -7262,7 +7263,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Clear the contents, formatting, or both from the used range.
     parameters:
     - name: driveId
       in: path
@@ -7342,6 +7342,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action delete
+      description: Delete the used range and shift the surrounding cells.
       operationId: deleteUsedRange
       parameters:
       - name: workbook-session-id
@@ -7369,7 +7370,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Delete the used range and shift the surrounding cells.
     parameters:
     - name: driveId
       in: path
@@ -7429,6 +7429,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action insert
+      description: Insert a new used range and shift the surrounding cells.
       operationId: insertUsedRange
       parameters:
       - name: workbook-session-id
@@ -7460,7 +7461,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Insert a new used range and shift the surrounding cells.
     parameters:
     - name: driveId
       in: path
@@ -7520,6 +7520,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action merge
+      description: Merge the cells of the used range into a single cell.
       operationId: mergeUsedRange
       parameters:
       - name: workbook-session-id
@@ -7547,7 +7548,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Merge the cells of the used range into a single cell.
     parameters:
     - name: driveId
       in: path
@@ -7607,6 +7607,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action unmerge
+      description: Unmerge the merged cells of the used range.
       operationId: unmergeUsedRange
       parameters:
       - name: workbook-session-id
@@ -7627,7 +7628,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Unmerge the merged cells of the used range.
     parameters:
     - name: driveId
       in: path
@@ -7741,6 +7741,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update used range sort
+      description: Update the properties of the sort in the used range.
       operationId: updateUsedRangeSort
       parameters:
       - name: workbook-session-id
@@ -7772,7 +7773,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the sort in the used range.
     parameters:
     - name: driveId
       in: path
@@ -7832,6 +7832,8 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function usedRange
+      description: Retrieve the used range of the worksheet, optionally restricted to cells that contain
+        values.
       operationId: getUsedRangeValuesOnly
       parameters:
       - name: workbook-session-id
@@ -7856,8 +7858,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the used range of the worksheet, optionally restricted to cells that contain
-        values.
     parameters:
     - name: driveId
       in: path
@@ -8019,6 +8019,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create worksheet named item
+      description: Create a new named item in the worksheet.
       operationId: createWorksheetNamedItem
       parameters:
       - name: workbook-session-id
@@ -8050,7 +8051,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new named item in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -8139,6 +8139,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete worksheet named item
+      description: Delete the named item from the worksheet.
       operationId: deleteWorksheetNamedItem
       parameters:
       - name: If-Match
@@ -8168,11 +8169,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the named item from the worksheet.
     patch:
       tags:
       - drives.driveItem
       summary: Update worksheet named item
+      description: Update the properties of the named item in the worksheet.
       operationId: updateWorksheetNamedItem
       parameters:
       - name: workbook-session-id
@@ -8204,7 +8205,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the named item in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -8432,6 +8432,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of named items in the worksheet.
       operationId: countWorksheetNamedItems
       parameters:
       - $ref: '#/components/parameters/search'
@@ -8453,7 +8454,6 @@ paths:
           $ref: '#/components/responses/error'
         5XX:
           $ref: '#/components/responses/error'
-      description: Retrieve the number of named items in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -8710,6 +8710,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create PivotTable
+      description: Create a new PivotTable in the worksheet.
       operationId: createPivotTable
       parameters:
       - name: workbook-session-id
@@ -8741,7 +8742,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new PivotTable in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -8830,6 +8830,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete PivotTable
+      description: Delete the PivotTable from the worksheet.
       operationId: deletePivotTable
       parameters:
       - name: If-Match
@@ -8859,11 +8860,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the PivotTable from the worksheet.
     patch:
       tags:
       - drives.driveItem
       summary: Update PivotTable
+      description: Update the properties of the PivotTable in the worksheet.
       operationId: updatePivotTable
       parameters:
       - name: workbook-session-id
@@ -8895,7 +8896,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the PivotTable in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -9099,6 +9099,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of PivotTables in the worksheet.
       operationId: countPivotTables
       parameters:
       - $ref: '#/components/parameters/search'
@@ -9120,7 +9121,6 @@ paths:
           $ref: '#/components/responses/error'
         5XX:
           $ref: '#/components/responses/error'
-      description: Retrieve the number of PivotTables in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -9267,6 +9267,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update worksheet protection
+      description: Update the properties of the worksheet protection in the worksheet.
       operationId: updateProtection
       parameters:
       - name: workbook-session-id
@@ -9298,7 +9299,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the worksheet protection in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -9526,6 +9526,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create worksheet table
+      description: Create a new table in the worksheet.
       operationId: createWorksheetTable
       parameters:
       - name: workbook-session-id
@@ -9557,7 +9558,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new table in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -9646,6 +9646,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete worksheet table
+      description: Delete the table from the worksheet.
       operationId: deleteWorksheetTable
       parameters:
       - name: If-Match
@@ -9675,11 +9676,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the table from the worksheet.
     patch:
       tags:
       - drives.driveItem
       summary: Update worksheet table
+      description: Update the properties of the table in the worksheet.
       operationId: updateWorksheetTable
       parameters:
       - name: workbook-session-id
@@ -9711,7 +9712,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the table in the worksheet.
     parameters:
     - name: driveId
       in: path
@@ -9825,6 +9825,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create table column
+      description: Create a new table column in the table.
       operationId: createColumn
       parameters:
       - name: workbook-session-id
@@ -9856,7 +9857,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new table column in the table.
     parameters:
     - name: driveId
       in: path
@@ -9958,6 +9958,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete table column
+      description: Delete the table column from the table.
       operationId: deleteColumn
       parameters:
       - name: If-Match
@@ -9987,11 +9988,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the table column from the table.
     patch:
       tags:
       - drives.driveItem
       summary: Update table column
+      description: Update the properties of the table column in the table.
       operationId: updateColumn
       parameters:
       - name: workbook-session-id
@@ -10023,7 +10024,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the table column in the table.
     parameters:
     - name: driveId
       in: path
@@ -10132,6 +10132,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update table column filter
+      description: Update the properties of the filter in the table column.
       operationId: updateColumnFilter
       parameters:
       - name: workbook-session-id
@@ -10163,7 +10164,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the filter in the table column.
     parameters:
     - name: driveId
       in: path
@@ -10307,6 +10307,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyBottomItemsFilter
+      description: Apply a bottom-N-items filter to the table column.
       operationId: applyBottomItemsFilter
       parameters:
       - name: workbook-session-id
@@ -10334,7 +10335,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a bottom-N-items filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -10389,6 +10389,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyBottomPercentFilter
+      description: Apply a bottom-N-percent filter to the table column.
       operationId: applyBottomPctFilter
       parameters:
       - name: workbook-session-id
@@ -10416,7 +10417,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a bottom-N-percent filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -10471,6 +10471,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyCellColorFilter
+      description: Apply a cell-color filter to the table column.
       operationId: applyCellColorFilter
       parameters:
       - name: workbook-session-id
@@ -10498,7 +10499,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a cell-color filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -10553,6 +10553,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyCustomFilter
+      description: Apply a custom criteria filter to the table column.
       operationId: applyCustomFilter
       parameters:
       - name: workbook-session-id
@@ -10580,7 +10581,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a custom criteria filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -10635,6 +10635,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyDynamicFilter
+      description: Apply a dynamic filter to the table column.
       operationId: applyDynamicFilter
       parameters:
       - name: workbook-session-id
@@ -10662,7 +10663,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a dynamic filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -10717,6 +10717,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyFontColorFilter
+      description: Apply a font-color filter to the table column.
       operationId: applyFontColorFilter
       parameters:
       - name: workbook-session-id
@@ -10744,7 +10745,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a font-color filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -10799,6 +10799,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyIconFilter
+      description: Apply an icon filter to the table column.
       operationId: applyIconFilter
       parameters:
       - name: workbook-session-id
@@ -10826,7 +10827,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply an icon filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -10881,6 +10881,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyTopItemsFilter
+      description: Apply a top-N-items filter to the table column.
       operationId: applyTopItemsFilter
       parameters:
       - name: workbook-session-id
@@ -10908,7 +10909,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a top-N-items filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -10963,6 +10963,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyTopPercentFilter
+      description: Apply a top-N-percent filter to the table column.
       operationId: applyTopPctFilter
       parameters:
       - name: workbook-session-id
@@ -10990,7 +10991,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a top-N-percent filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -11045,6 +11045,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyValuesFilter
+      description: Apply a values filter to the table column.
       operationId: applyValuesFilter
       parameters:
       - name: workbook-session-id
@@ -11072,7 +11073,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: action
-      description: Apply a values filter to the table column.
     parameters:
     - name: driveId
       in: path
@@ -11696,6 +11696,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the table column.
       operationId: countColumns
       parameters:
       - name: workbook-session-id
@@ -11720,7 +11721,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the number of count in the table column.
     parameters:
     - name: driveId
       in: path
@@ -12385,6 +12385,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Create table row
+      description: Create a new table row in the table.
       operationId: createRow
       parameters:
       - name: workbook-session-id
@@ -12416,7 +12417,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Create a new table row in the table.
     parameters:
     - name: driveId
       in: path
@@ -12518,6 +12518,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Delete table row
+      description: Delete the table row from the table.
       operationId: deleteRow
       parameters:
       - name: If-Match
@@ -12547,11 +12548,11 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Delete the table row from the table.
     patch:
       tags:
       - drives.driveItem
       summary: Update table row
+      description: Update the properties of the table row in the table.
       operationId: updateRow
       parameters:
       - name: workbook-session-id
@@ -12583,7 +12584,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the table row in the table.
     parameters:
     - name: driveId
       in: path
@@ -12638,6 +12638,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function range
+      description: Retrieve the range of cells associated with the table row.
       operationId: getTableRowRange
       parameters:
       - name: workbook-session-id
@@ -12662,7 +12663,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the range of cells associated with the table row.
     parameters:
     - name: driveId
       in: path
@@ -12824,6 +12824,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the table row.
       operationId: countRows
       parameters:
       - name: workbook-session-id
@@ -12848,7 +12849,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the number of count in the table row.
     parameters:
     - name: driveId
       in: path
@@ -12956,6 +12956,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Update table sort
+      description: Update the properties of the sort in the table.
       operationId: updateTableSort
       parameters:
       - name: workbook-session-id
@@ -12987,7 +12988,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: operation
-      description: Update the properties of the sort in the table.
     parameters:
     - name: driveId
       in: path
@@ -13473,6 +13473,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the table.
       operationId: countWorksheetTables
       parameters:
       - name: workbook-session-id
@@ -13497,7 +13498,6 @@ paths:
         5XX:
           $ref: '#/components/responses/error'
       x-ms-docs-operation-type: function
-      description: Retrieve the number of count in the table.
     parameters:
     - name: driveId
       in: path
@@ -13542,6 +13542,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of worksheets in the workbook.
       operationId: countWorksheets
       parameters:
       - $ref: '#/components/parameters/search'
@@ -13563,7 +13564,6 @@ paths:
           $ref: '#/components/responses/error'
         5XX:
           $ref: '#/components/responses/error'
-      description: Retrieve the number of worksheets in the workbook.
     parameters:
     - name: driveId
       in: path

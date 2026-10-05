@@ -65,7 +65,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved workbook
           content:
             application/json:
               schema:
@@ -78,7 +78,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property workbook in drives
+      summary: Update workbook
+      description: Update the properties of the workbook.
       operationId: drives.items.UpdateWorkbook
       parameters:
       - name: workbook-session-id
@@ -91,7 +92,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The workbook properties to update
         content:
           application/json:
             schema:
@@ -99,7 +100,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated workbook
           content:
             application/json:
               schema:
@@ -135,6 +136,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get application from drives
+      description: Retrieve the Excel application object in the workbook.
       operationId: drives.items.workbook.GetApplication
       parameters:
       - name: $select
@@ -170,7 +172,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved Excel application
           content:
             application/json:
               schema:
@@ -183,7 +185,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property application in drives
+      summary: Update Excel application
+      description: Update the properties of the Excel application object in the workbook.
       operationId: drives.items.workbook.UpdateApplication
       parameters:
       - name: workbook-session-id
@@ -196,7 +199,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The Excel application properties to update
         content:
           application/json:
             schema:
@@ -204,7 +207,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated Excel application
           content:
             application/json:
               schema:
@@ -359,7 +362,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to comments for drives
+      summary: Create workbook comment
+      description: Create a new comment in the workbook.
       operationId: drives.items.workbook.CreateComments
       parameters:
       - name: workbook-session-id
@@ -372,7 +376,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The workbook comment to create
         content:
           application/json:
             schema:
@@ -380,7 +384,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created workbook comment.
           content:
             application/json:
               schema:
@@ -452,7 +456,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved workbook comment
           content:
             application/json:
               schema:
@@ -465,7 +469,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property comments for drives
+      summary: Delete workbook comment
+      description: Delete the comment from the workbook.
       operationId: drives.items.workbook.DeleteComments
       parameters:
       - name: If-Match
@@ -496,7 +501,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property comments in drives
+      summary: Update workbook comment
+      description: Update the properties of the comment in the workbook.
       operationId: drives.items.workbook.UpdateComments
       parameters:
       - name: workbook-session-id
@@ -509,7 +515,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The workbook comment properties to update
         content:
           application/json:
             schema:
@@ -517,7 +523,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated workbook comment
           content:
             application/json:
               schema:
@@ -626,7 +632,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to replies for drives
+      summary: Create comment reply
+      description: Create a new comment reply in the comment.
       operationId: drives.items.workbook.comments.CreateReplies
       parameters:
       - name: workbook-session-id
@@ -639,7 +646,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The comment reply to create
         content:
           application/json:
             schema:
@@ -647,7 +654,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created comment reply.
           content:
             application/json:
               schema:
@@ -728,7 +735,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved comment reply
           content:
             application/json:
               schema:
@@ -741,7 +748,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property replies for drives
+      summary: Delete comment reply
+      description: Delete the comment reply from the comment.
       operationId: drives.items.workbook.comments.DeleteReplies
       parameters:
       - name: If-Match
@@ -772,7 +780,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property replies in drives
+      summary: Update comment reply
+      description: Update the properties of the comment reply in the comment.
       operationId: drives.items.workbook.comments.UpdateReplies
       parameters:
       - name: workbook-session-id
@@ -785,7 +794,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The comment reply properties to update
         content:
           application/json:
             schema:
@@ -793,7 +802,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated comment reply
           content:
             application/json:
               schema:
@@ -846,6 +855,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of comment replies in the comment.
       operationId: drives.items.workbook.comments.replies.GetCount-5e78
       parameters:
       - $ref: "#/components/parameters/search"
@@ -900,6 +910,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of comments in the workbook.
       operationId: drives.items.workbook.comments.GetCount-8437
       parameters:
       - $ref: "#/components/parameters/search"
@@ -1013,7 +1024,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created workbook session
           content:
             application/json:
               schema:
@@ -1096,6 +1107,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function sessionInfoResource
+      description: Retrieve workbook session information for the given key.
       operationId: drives.drive.items.driveItem.workbook.sessionInfoResource
       parameters:
       - name: workbook-session-id
@@ -1109,7 +1121,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The workbook session information
           content:
             application/json:
               schema:
@@ -1182,7 +1194,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The result of the table row operation
           content:
             application/json:
               schema:
@@ -1291,7 +1303,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to names for drives
+      summary: Create named item
+      description: Create a new named item in the workbook.
       operationId: drives.items.workbook.CreateNames
       parameters:
       - name: workbook-session-id
@@ -1304,7 +1317,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The named item to create
         content:
           application/json:
             schema:
@@ -1312,7 +1325,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created named item.
           content:
             application/json:
               schema:
@@ -1385,7 +1398,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved named item
           content:
             application/json:
               schema:
@@ -1398,7 +1411,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property names for drives
+      summary: Delete named item
+      description: Delete the named item from the workbook.
       operationId: drives.items.workbook.DeleteNames
       parameters:
       - name: If-Match
@@ -1429,7 +1443,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property names in drives
+      summary: Update named item
+      description: Update the properties of the named item in the workbook.
       operationId: drives.items.workbook.UpdateNames
       parameters:
       - name: workbook-session-id
@@ -1442,7 +1457,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The named item properties to update
         content:
           application/json:
             schema:
@@ -1450,7 +1465,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated named item
           content:
             application/json:
               schema:
@@ -1512,7 +1527,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved named item range
           content:
             application/json:
               schema:
@@ -1610,7 +1625,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet
           content:
             application/json:
               schema:
@@ -1656,6 +1671,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of named items in the workbook.
       operationId: drives.items.workbook.names.GetCount-eada
       parameters:
       - $ref: "#/components/parameters/search"
@@ -1726,7 +1742,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created named item
           content:
             application/json:
               schema:
@@ -1796,7 +1812,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created named item
           content:
             application/json:
               schema:
@@ -1900,7 +1916,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to operations for drives
+      summary: Create workbook operation
+      description: Create a new workbook operation in the workbook.
       operationId: drives.items.workbook.CreateOperations
       parameters:
       - name: workbook-session-id
@@ -1913,7 +1930,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The workbook operation to create
         content:
           application/json:
             schema:
@@ -1921,7 +1938,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created workbook operation.
           content:
             application/json:
               schema:
@@ -1995,7 +2012,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved workbook operation
           content:
             application/json:
               schema:
@@ -2008,7 +2025,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property operations for drives
+      summary: Delete workbook operation
+      description: Delete the workbook operation from the workbook.
       operationId: drives.items.workbook.DeleteOperations
       parameters:
       - name: If-Match
@@ -2039,7 +2057,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property operations in drives
+      summary: Update workbook operation
+      description: Update the properties of the workbook operation in the workbook.
       operationId: drives.items.workbook.UpdateOperations
       parameters:
       - name: workbook-session-id
@@ -2052,7 +2071,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The workbook operation properties to update
         content:
           application/json:
             schema:
@@ -2060,7 +2079,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated workbook operation
           content:
             application/json:
               schema:
@@ -2104,6 +2123,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of workbook operations in the workbook.
       operationId: drives.items.workbook.operations.GetCount-67f8
       parameters:
       - $ref: "#/components/parameters/search"
@@ -2215,7 +2235,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to tables for drives
+      summary: Create table
+      description: Create a new table in the workbook.
       operationId: drives.items.workbook.CreateTables
       parameters:
       - name: workbook-session-id
@@ -2228,7 +2249,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The table to create
         content:
           application/json:
             schema:
@@ -2236,7 +2257,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created table.
           content:
             application/json:
               schema:
@@ -2337,7 +2358,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to worksheets for drives
+      summary: Create worksheet
+      description: Create a new worksheet in the workbook.
       operationId: drives.items.workbook.CreateWorksheets
       parameters:
       - name: workbook-session-id
@@ -2350,7 +2372,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The worksheet to create
         content:
           application/json:
             schema:
@@ -2358,7 +2380,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created worksheet.
           content:
             application/json:
               schema:
@@ -2431,7 +2453,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet
           content:
             application/json:
               schema:
@@ -2444,7 +2466,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property worksheets for drives
+      summary: Delete worksheet
+      description: Delete the worksheet from the workbook.
       operationId: drives.items.workbook.DeleteWorksheets
       parameters:
       - name: If-Match
@@ -2475,7 +2498,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property worksheets in drives
+      summary: Update worksheet
+      description: Update the properties of the worksheet in the workbook.
       operationId: drives.items.workbook.UpdateWorksheets
       parameters:
       - name: workbook-session-id
@@ -2488,7 +2512,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The worksheet properties to update
         content:
           application/json:
             schema:
@@ -2496,7 +2520,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated worksheet
           content:
             application/json:
               schema:
@@ -2605,7 +2629,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to charts for drives
+      summary: Create chart
+      description: Create a new chart in the worksheet.
       operationId: drives.items.workbook.worksheets.CreateCharts
       parameters:
       - name: workbook-session-id
@@ -2618,7 +2643,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The chart to create
         content:
           application/json:
             schema:
@@ -2626,7 +2651,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created chart.
           content:
             application/json:
               schema:
@@ -2707,7 +2732,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved chart
           content:
             application/json:
               schema:
@@ -2720,7 +2745,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property charts for drives
+      summary: Delete chart
+      description: Delete the chart from the worksheet.
       operationId: drives.items.workbook.worksheets.DeleteCharts
       parameters:
       - name: If-Match
@@ -2751,7 +2777,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property charts in drives
+      summary: Update chart
+      description: Update the properties of the chart in the worksheet.
       operationId: drives.items.workbook.worksheets.UpdateCharts
       parameters:
       - name: workbook-session-id
@@ -2764,7 +2791,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The chart properties to update
         content:
           application/json:
             schema:
@@ -2772,7 +2799,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated chart
           content:
             application/json:
               schema:
@@ -2862,7 +2889,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved chart axes
           content:
             application/json:
               schema:
@@ -2875,7 +2902,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property axes in drives
+      summary: Update chart axes
+      description: Update the properties of the chart axes in the chart.
       operationId: drives.items.workbook.worksheets.charts.UpdateAxes
       parameters:
       - name: workbook-session-id
@@ -2888,7 +2916,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The chart axes properties to update
         content:
           application/json:
             schema:
@@ -2896,7 +2924,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated chart axes
           content:
             application/json:
               schema:
@@ -2989,7 +3017,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved category axis
           content:
             application/json:
               schema:
@@ -3002,7 +3030,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property categoryAxis in drives
+      summary: Update category axis
+      description: Update the properties of the category axis in the chart axes.
       operationId: drives.items.workbook.worksheets.charts.axes.UpdateCategoryAxis
       parameters:
       - name: workbook-session-id
@@ -3015,7 +3044,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The category axis properties to update
         content:
           application/json:
             schema:
@@ -3023,7 +3052,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated category axis
           content:
             application/json:
               schema:
@@ -3113,7 +3142,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved series axis
           content:
             application/json:
               schema:
@@ -3126,7 +3155,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property seriesAxis in drives
+      summary: Update series axis
+      description: Update the properties of the series axis in the chart axes.
       operationId: drives.items.workbook.worksheets.charts.axes.UpdateSeriesAxis
       parameters:
       - name: workbook-session-id
@@ -3139,7 +3169,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The series axis properties to update
         content:
           application/json:
             schema:
@@ -3147,7 +3177,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated series axis
           content:
             application/json:
               schema:
@@ -3237,7 +3267,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved value axis
           content:
             application/json:
               schema:
@@ -3250,7 +3280,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property valueAxis in drives
+      summary: Update value axis
+      description: Update the properties of the value axis in the chart axes.
       operationId: drives.items.workbook.worksheets.charts.axes.UpdateValueAxis
       parameters:
       - name: workbook-session-id
@@ -3263,7 +3294,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The value axis properties to update
         content:
           application/json:
             schema:
@@ -3271,7 +3302,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated value axis
           content:
             application/json:
               schema:
@@ -3361,7 +3392,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved chart data labels
           content:
             application/json:
               schema:
@@ -3374,7 +3405,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property dataLabels in drives
+      summary: Update chart data labels
+      description: Update the properties of the data labels in the chart.
       operationId: drives.items.workbook.worksheets.charts.UpdateDataLabels
       parameters:
       - name: workbook-session-id
@@ -3387,7 +3419,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The chart data labels properties to update
         content:
           application/json:
             schema:
@@ -3395,7 +3427,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated chart data labels
           content:
             application/json:
               schema:
@@ -3488,7 +3520,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved chart format
           content:
             application/json:
               schema:
@@ -3501,7 +3533,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property format in drives
+      summary: Update chart format
+      description: Update the properties of the format in the chart.
       operationId: drives.items.workbook.worksheets.charts.UpdateFormat
       parameters:
       - name: workbook-session-id
@@ -3514,7 +3547,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The chart format properties to update
         content:
           application/json:
             schema:
@@ -3522,7 +3555,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated chart format
           content:
             application/json:
               schema:
@@ -3615,7 +3648,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved chart legend
           content:
             application/json:
               schema:
@@ -3628,7 +3661,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property legend in drives
+      summary: Update chart legend
+      description: Update the properties of the chart legend in the chart.
       operationId: drives.items.workbook.worksheets.charts.UpdateLegend
       parameters:
       - name: workbook-session-id
@@ -3641,7 +3675,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The chart legend properties to update
         content:
           application/json:
             schema:
@@ -3649,7 +3683,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated chart legend
           content:
             application/json:
               schema:
@@ -3705,6 +3739,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function image
+      description: Render the chart as a base64-encoded image.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.charts.workbookChart.image-8f13
       parameters:
       - name: workbook-session-id
@@ -3718,7 +3753,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The chart image as a base64-encoded string
           content:
             application/json:
               schema:
@@ -3783,6 +3818,8 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function image
+      description: Render the chart as a base64-encoded image scaled to the given
+        width and height using the specified fitting mode.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.charts.workbookChart.image-4f04
       parameters:
       - name: workbook-session-id
@@ -3796,7 +3833,8 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: "The chart image as a base64-encoded string, scaled to the\
+            \ given width and height using the specified fitting mode"
           content:
             application/json:
               schema:
@@ -3891,6 +3929,8 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function image
+      description: Render the chart as a base64-encoded image scaled to the given
+        width and height.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.charts.workbookChart.image-664c
       parameters:
       - name: workbook-session-id
@@ -3904,7 +3944,8 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: "The chart image as a base64-encoded string, scaled to the\
+            \ given width and height"
           content:
             application/json:
               schema:
@@ -3991,6 +4032,8 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function image
+      description: Render the chart as a base64-encoded image scaled to the given
+        width.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.charts.workbookChart.image-9795
       parameters:
       - name: workbook-session-id
@@ -4004,7 +4047,8 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: "The chart image as a base64-encoded string, scaled to the\
+            \ given width"
           content:
             application/json:
               schema:
@@ -4298,7 +4342,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to series for drives
+      summary: Create chart series
+      description: Create a new chart series in the chart.
       operationId: drives.items.workbook.worksheets.charts.CreateSeries
       parameters:
       - name: workbook-session-id
@@ -4311,7 +4356,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The chart series to create
         content:
           application/json:
             schema:
@@ -4319,7 +4364,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created chart series.
           content:
             application/json:
               schema:
@@ -4413,7 +4458,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved chart series
           content:
             application/json:
               schema:
@@ -4426,7 +4471,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property series for drives
+      summary: Delete chart series
+      description: Delete the chart series from the chart.
       operationId: drives.items.workbook.worksheets.charts.DeleteSeries
       parameters:
       - name: If-Match
@@ -4457,7 +4503,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property series in drives
+      summary: Update chart series
+      description: Update the properties of the chart series in the chart.
       operationId: drives.items.workbook.worksheets.charts.UpdateSeries
       parameters:
       - name: workbook-session-id
@@ -4470,7 +4517,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The chart series properties to update
         content:
           application/json:
             schema:
@@ -4478,7 +4525,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated chart series
           content:
             application/json:
               schema:
@@ -4540,6 +4587,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the chart series.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.charts.workbookChart.series.count
       parameters:
       - name: workbook-session-id
@@ -4553,7 +4601,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The number of chart series
           content:
             application/json:
               schema:
@@ -4654,7 +4702,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved chart title
           content:
             application/json:
               schema:
@@ -4667,7 +4715,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property title in drives
+      summary: Update chart title
+      description: Update the properties of the chart title in the chart.
       operationId: drives.items.workbook.worksheets.charts.UpdateTitle
       parameters:
       - name: workbook-session-id
@@ -4680,7 +4729,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The chart title properties to update
         content:
           application/json:
             schema:
@@ -4688,7 +4737,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated chart title
           content:
             application/json:
               schema:
@@ -4781,7 +4830,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet
           content:
             application/json:
               schema:
@@ -4861,7 +4910,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created chart
           content:
             application/json:
               schema:
@@ -4915,6 +4964,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the chart.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.charts.count
       parameters:
       - name: workbook-session-id
@@ -4928,7 +4978,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The number of charts
           content:
             application/json:
               schema:
@@ -5001,7 +5051,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved cell
           content:
             application/json:
               schema:
@@ -5092,6 +5142,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function range
+      description: Retrieve the range of cells associated with the worksheet.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range-bc5e
       parameters:
       - name: workbook-session-id
@@ -5105,7 +5156,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved range
           content:
             application/json:
               schema:
@@ -5203,7 +5254,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved range format
           content:
             application/json:
               schema:
@@ -5216,7 +5267,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property format in drives
+      summary: Update range format
+      description: Update the properties of the format in the range.
       operationId: drives.items.workbook.worksheets.range.UpdateFormat-bc5e
       parameters:
       - name: workbook-session-id
@@ -5229,7 +5281,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The range format properties to update
         content:
           application/json:
             schema:
@@ -5237,7 +5289,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated range format
           content:
             application/json:
               schema:
@@ -5306,6 +5358,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action clear
+      description: "Clear the contents, formatting, or both from the range."
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.clear-bc5e
       parameters:
       - name: workbook-session-id
@@ -5411,6 +5464,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action delete
+      description: Delete the range and shift the surrounding cells.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.delete-bc5e
       parameters:
       - name: workbook-session-id
@@ -5496,6 +5550,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action insert
+      description: Insert a new range and shift the surrounding cells.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.insert-bc5e
       parameters:
       - name: workbook-session-id
@@ -5516,7 +5571,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The inserted range
           content:
             application/json:
               schema:
@@ -5585,6 +5640,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action merge
+      description: Merge the cells of the range into a single cell.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.merge-bc5e
       parameters:
       - name: workbook-session-id
@@ -5670,6 +5726,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action unmerge
+      description: Unmerge the merged cells of the range.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.unmerge-bc5e
       parameters:
       - name: workbook-session-id
@@ -5785,7 +5842,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved range sort
           content:
             application/json:
               schema:
@@ -5798,7 +5855,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property sort in drives
+      summary: Update range sort
+      description: Update the properties of the sort in the range.
       operationId: drives.items.workbook.worksheets.range.UpdateSort-bc5e
       parameters:
       - name: workbook-session-id
@@ -5811,7 +5869,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The range sort properties to update
         content:
           application/json:
             schema:
@@ -5819,7 +5877,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated range sort
           content:
             application/json:
               schema:
@@ -5888,6 +5946,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function range
+      description: "Retrieve a range of cells identified by its address, such as A1:D5."
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range-b0fa
       parameters:
       - name: workbook-session-id
@@ -5901,7 +5960,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved range at the given address
           content:
             application/json:
               schema:
@@ -6008,7 +6067,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved addressed range format
           content:
             application/json:
               schema:
@@ -6021,7 +6080,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property format in drives
+      summary: Update addressed range format
+      description: Update the properties of the format in the range.
       operationId: drives.items.workbook.worksheets.range.UpdateFormat-b0fa
       parameters:
       - name: workbook-session-id
@@ -6034,7 +6094,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The addressed range format properties to update
         content:
           application/json:
             schema:
@@ -6042,7 +6102,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated format of the range at the given address
           content:
             application/json:
               schema:
@@ -6120,6 +6180,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action clear
+      description: "Clear the contents, formatting, or both from the range."
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.clear-b0fa
       parameters:
       - name: workbook-session-id
@@ -6234,6 +6295,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action delete
+      description: Delete the range and shift the surrounding cells.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.delete-b0fa
       parameters:
       - name: workbook-session-id
@@ -6328,6 +6390,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action insert
+      description: Insert a new range and shift the surrounding cells.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.insert-b0fa
       parameters:
       - name: workbook-session-id
@@ -6348,7 +6411,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The inserted range at the given address
           content:
             application/json:
               schema:
@@ -6426,6 +6489,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action merge
+      description: Merge the cells of the range into a single cell.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.merge-b0fa
       parameters:
       - name: workbook-session-id
@@ -6520,6 +6584,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action unmerge
+      description: Unmerge the merged cells of the range.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.range.unmerge-b0fa
       parameters:
       - name: workbook-session-id
@@ -6644,7 +6709,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved addressed range sort
           content:
             application/json:
               schema:
@@ -6657,7 +6722,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property sort in drives
+      summary: Update addressed range sort
+      description: Update the properties of the sort in the range.
       operationId: drives.items.workbook.worksheets.range.UpdateSort-b0fa
       parameters:
       - name: workbook-session-id
@@ -6670,7 +6736,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The addressed range sort properties to update
         content:
           application/json:
             schema:
@@ -6678,7 +6744,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated sort of the range at the given address
           content:
             application/json:
               schema:
@@ -6756,6 +6822,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function usedRange
+      description: Retrieve the used range of the worksheet.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.usedRange-5ff6
       parameters:
       - name: workbook-session-id
@@ -6769,7 +6836,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved used range
           content:
             application/json:
               schema:
@@ -6899,7 +6966,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved used range format
           content:
             application/json:
               schema:
@@ -6912,7 +6979,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property format in drives
+      summary: Update used range format
+      description: Update the properties of the format in the used range.
       operationId: drives.items.workbook.worksheets.usedRange.UpdateFormat-5ff6
       parameters:
       - name: workbook-session-id
@@ -6925,7 +6993,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The used range format properties to update
         content:
           application/json:
             schema:
@@ -6933,7 +7001,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated used range format
           content:
             application/json:
               schema:
@@ -7002,6 +7070,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action clear
+      description: "Clear the contents, formatting, or both from the used range."
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.usedRange.clear-5ff6
       parameters:
       - name: workbook-session-id
@@ -7107,6 +7176,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action delete
+      description: Delete the used range and shift the surrounding cells.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.usedRange.delete-5ff6
       parameters:
       - name: workbook-session-id
@@ -7192,6 +7262,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action insert
+      description: Insert a new used range and shift the surrounding cells.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.usedRange.insert-5ff6
       parameters:
       - name: workbook-session-id
@@ -7212,7 +7283,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The inserted range
           content:
             application/json:
               schema:
@@ -7281,6 +7352,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action merge
+      description: Merge the cells of the used range into a single cell.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.usedRange.merge-5ff6
       parameters:
       - name: workbook-session-id
@@ -7366,6 +7438,7 @@ paths:
       tags:
       - drives.drive.Actions
       summary: Invoke action unmerge
+      description: Unmerge the merged cells of the used range.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.usedRange.unmerge-5ff6
       parameters:
       - name: workbook-session-id
@@ -7481,7 +7554,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved used range sort
           content:
             application/json:
               schema:
@@ -7494,7 +7567,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property sort in drives
+      summary: Update used range sort
+      description: Update the properties of the sort in the used range.
       operationId: drives.items.workbook.worksheets.usedRange.UpdateSort-5ff6
       parameters:
       - name: workbook-session-id
@@ -7507,7 +7581,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The used range sort properties to update
         content:
           application/json:
             schema:
@@ -7515,7 +7589,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated used range sort
           content:
             application/json:
               schema:
@@ -7584,6 +7658,8 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function usedRange
+      description: "Retrieve the used range of the worksheet, optionally restricted\
+        \ to cells that contain values."
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.usedRange-63c8
       parameters:
       - name: workbook-session-id
@@ -7597,7 +7673,8 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: "The retrieved used range, restricted to cells that contain\
+            \ values"
           content:
             application/json:
               schema:
@@ -7763,7 +7840,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to names for drives
+      summary: Create worksheet named item
+      description: Create a new named item in the worksheet.
       operationId: drives.items.workbook.worksheets.CreateNames
       parameters:
       - name: workbook-session-id
@@ -7776,7 +7854,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The worksheet named item to create
         content:
           application/json:
             schema:
@@ -7784,7 +7862,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created worksheet named item.
           content:
             application/json:
               schema:
@@ -7865,7 +7943,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet named item
           content:
             application/json:
               schema:
@@ -7878,7 +7956,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property names for drives
+      summary: Delete worksheet named item
+      description: Delete the named item from the worksheet.
       operationId: drives.items.workbook.worksheets.DeleteNames
       parameters:
       - name: If-Match
@@ -7909,7 +7988,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property names in drives
+      summary: Update worksheet named item
+      description: Update the properties of the named item in the worksheet.
       operationId: drives.items.workbook.worksheets.UpdateNames
       parameters:
       - name: workbook-session-id
@@ -7922,7 +8002,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The worksheet named item properties to update
         content:
           application/json:
             schema:
@@ -7930,7 +8010,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated worksheet named item
           content:
             application/json:
               schema:
@@ -8001,7 +8081,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved worksheet named item range
           content:
             application/json:
               schema:
@@ -8108,7 +8188,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet
           content:
             application/json:
               schema:
@@ -8163,6 +8243,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of named items in the worksheet.
       operationId: drives.items.workbook.worksheets.names.GetCount-b666
       parameters:
       - $ref: "#/components/parameters/search"
@@ -8242,7 +8323,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created worksheet named item
           content:
             application/json:
               schema:
@@ -8321,7 +8402,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created worksheet named item
           content:
             application/json:
               schema:
@@ -8432,7 +8513,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to pivotTables for drives
+      summary: Create PivotTable
+      description: Create a new PivotTable in the worksheet.
       operationId: drives.items.workbook.worksheets.CreatePivotTables
       parameters:
       - name: workbook-session-id
@@ -8445,7 +8527,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The PivotTable to create
         content:
           application/json:
             schema:
@@ -8453,7 +8535,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created PivotTable.
           content:
             application/json:
               schema:
@@ -8534,7 +8616,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved PivotTable
           content:
             application/json:
               schema:
@@ -8547,7 +8629,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property pivotTables for drives
+      summary: Delete PivotTable
+      description: Delete the PivotTable from the worksheet.
       operationId: drives.items.workbook.worksheets.DeletePivotTables
       parameters:
       - name: If-Match
@@ -8578,7 +8661,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property pivotTables in drives
+      summary: Update PivotTable
+      description: Update the properties of the PivotTable in the worksheet.
       operationId: drives.items.workbook.worksheets.UpdatePivotTables
       parameters:
       - name: workbook-session-id
@@ -8591,7 +8675,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The PivotTable properties to update
         content:
           application/json:
             schema:
@@ -8599,7 +8683,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated PivotTable
           content:
             application/json:
               schema:
@@ -8755,7 +8839,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet
           content:
             application/json:
               schema:
@@ -8808,6 +8892,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of PivotTables in the worksheet.
       operationId: drives.items.workbook.worksheets.pivotTables.GetCount-d7ec
       parameters:
       - $ref: "#/components/parameters/search"
@@ -8956,7 +9041,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet protection
           content:
             application/json:
               schema:
@@ -8969,7 +9054,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property protection in drives
+      summary: Update worksheet protection
+      description: Update the properties of the worksheet protection in the worksheet.
       operationId: drives.items.workbook.worksheets.UpdateProtection
       parameters:
       - name: workbook-session-id
@@ -8982,7 +9068,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The worksheet protection properties to update
         content:
           application/json:
             schema:
@@ -8990,7 +9076,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated worksheet protection
           content:
             application/json:
               schema:
@@ -9220,7 +9306,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to tables for drives
+      summary: Create worksheet table
+      description: Create a new table in the worksheet.
       operationId: drives.items.workbook.worksheets.CreateTables
       parameters:
       - name: workbook-session-id
@@ -9233,7 +9320,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The worksheet table to create
         content:
           application/json:
             schema:
@@ -9241,7 +9328,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created worksheet table.
           content:
             application/json:
               schema:
@@ -9322,7 +9409,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet table
           content:
             application/json:
               schema:
@@ -9335,7 +9422,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property tables for drives
+      summary: Delete worksheet table
+      description: Delete the table from the worksheet.
       operationId: drives.items.workbook.worksheets.DeleteTables
       parameters:
       - name: If-Match
@@ -9366,7 +9454,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property tables in drives
+      summary: Update worksheet table
+      description: Update the properties of the table in the worksheet.
       operationId: drives.items.workbook.worksheets.UpdateTables
       parameters:
       - name: workbook-session-id
@@ -9379,7 +9468,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The worksheet table properties to update
         content:
           application/json:
             schema:
@@ -9387,7 +9476,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated worksheet table
           content:
             application/json:
               schema:
@@ -9505,7 +9594,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to columns for drives
+      summary: Create table column
+      description: Create a new table column in the table.
       operationId: drives.items.workbook.worksheets.tables.CreateColumns
       parameters:
       - name: workbook-session-id
@@ -9518,7 +9608,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The table column to create
         content:
           application/json:
             schema:
@@ -9526,7 +9616,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created table column.
           content:
             application/json:
               schema:
@@ -9620,7 +9710,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved table column
           content:
             application/json:
               schema:
@@ -9633,7 +9723,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property columns for drives
+      summary: Delete table column
+      description: Delete the table column from the table.
       operationId: drives.items.workbook.worksheets.tables.DeleteColumns
       parameters:
       - name: If-Match
@@ -9664,7 +9755,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property columns in drives
+      summary: Update table column
+      description: Update the properties of the table column in the table.
       operationId: drives.items.workbook.worksheets.tables.UpdateColumns
       parameters:
       - name: workbook-session-id
@@ -9677,7 +9769,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The table column properties to update
         content:
           application/json:
             schema:
@@ -9685,7 +9777,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated table column
           content:
             application/json:
               schema:
@@ -9786,7 +9878,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved table column filter
           content:
             application/json:
               schema:
@@ -9799,7 +9891,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property filter in drives
+      summary: Update table column filter
+      description: Update the properties of the filter in the table column.
       operationId: drives.items.workbook.worksheets.tables.columns.UpdateFilter
       parameters:
       - name: workbook-session-id
@@ -9812,7 +9905,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The table column filter properties to update
         content:
           application/json:
             schema:
@@ -9820,7 +9913,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated table column filter
           content:
             application/json:
               schema:
@@ -9972,6 +10065,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyBottomItemsFilter
+      description: Apply a bottom-N-items filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyBottomItemsFilter
       parameters:
       - name: workbook-session-id
@@ -10052,6 +10146,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyBottomPercentFilter
+      description: Apply a bottom-N-percent filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyBottomPercentFilter
       parameters:
       - name: workbook-session-id
@@ -10132,6 +10227,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyCellColorFilter
+      description: Apply a cell-color filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyCellColorFilter
       parameters:
       - name: workbook-session-id
@@ -10212,6 +10308,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyCustomFilter
+      description: Apply a custom criteria filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyCustomFilter
       parameters:
       - name: workbook-session-id
@@ -10292,6 +10389,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyDynamicFilter
+      description: Apply a dynamic filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyDynamicFilter
       parameters:
       - name: workbook-session-id
@@ -10372,6 +10470,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyFontColorFilter
+      description: Apply a font-color filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyFontColorFilter
       parameters:
       - name: workbook-session-id
@@ -10452,6 +10551,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyIconFilter
+      description: Apply an icon filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyIconFilter
       parameters:
       - name: workbook-session-id
@@ -10532,6 +10632,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyTopItemsFilter
+      description: Apply a top-N-items filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyTopItemsFilter
       parameters:
       - name: workbook-session-id
@@ -10612,6 +10713,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyTopPercentFilter
+      description: Apply a top-N-percent filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyTopPercentFilter
       parameters:
       - name: workbook-session-id
@@ -10692,6 +10794,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke action applyValuesFilter
+      description: Apply a values filter to the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.workbookTableColumn.filter.applyValuesFilter
       parameters:
       - name: workbook-session-id
@@ -10909,7 +11012,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved column data body range
           content:
             application/json:
               schema:
@@ -10996,7 +11099,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved column header row range
           content:
             application/json:
               schema:
@@ -11083,7 +11186,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved column range
           content:
             application/json:
               schema:
@@ -11178,7 +11281,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved column total row range
           content:
             application/json:
               schema:
@@ -11272,7 +11375,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created table column
           content:
             application/json:
               schema:
@@ -11335,6 +11438,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the table column.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.columns.count
       parameters:
       - name: workbook-session-id
@@ -11348,7 +11452,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The number of table columns
           content:
             application/json:
               schema:
@@ -11498,7 +11602,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The range the table was converted into
           content:
             application/json:
               schema:
@@ -11572,7 +11676,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved table data body range
           content:
             application/json:
               schema:
@@ -11650,7 +11754,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved table header row range
           content:
             application/json:
               schema:
@@ -11728,7 +11832,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved table range
           content:
             application/json:
               schema:
@@ -11884,7 +11988,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved table total row range
           content:
             application/json:
               schema:
@@ -12010,7 +12114,8 @@ paths:
     post:
       tags:
       - drives.driveItem
-      summary: Create new navigation property to rows for drives
+      summary: Create table row
+      description: Create a new table row in the table.
       operationId: drives.items.workbook.worksheets.tables.CreateRows
       parameters:
       - name: workbook-session-id
@@ -12023,7 +12128,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property
+        description: The table row to create
         content:
           application/json:
             schema:
@@ -12031,7 +12136,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Created navigation property.
+          description: The created table row.
           content:
             application/json:
               schema:
@@ -12125,7 +12230,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved table row
           content:
             application/json:
               schema:
@@ -12138,7 +12243,8 @@ paths:
     delete:
       tags:
       - drives.driveItem
-      summary: Delete navigation property rows for drives
+      summary: Delete table row
+      description: Delete the table row from the table.
       operationId: drives.items.workbook.worksheets.tables.DeleteRows
       parameters:
       - name: If-Match
@@ -12169,7 +12275,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property rows in drives
+      summary: Update table row
+      description: Update the properties of the table row in the table.
       operationId: drives.items.workbook.worksheets.tables.UpdateRows
       parameters:
       - name: workbook-session-id
@@ -12182,7 +12289,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The table row properties to update
         content:
           application/json:
             schema:
@@ -12190,7 +12297,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated table row
           content:
             application/json:
               schema:
@@ -12254,6 +12361,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function range
+      description: Retrieve the range of cells associated with the table row.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.rows.workbookTableRow.range
       parameters:
       - name: workbook-session-id
@@ -12267,7 +12375,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The retrieved table row range
           content:
             application/json:
               schema:
@@ -12375,7 +12483,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created table row
           content:
             application/json:
               schema:
@@ -12438,6 +12546,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the table row.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.workbookTable.rows.count
       parameters:
       - name: workbook-session-id
@@ -12451,7 +12560,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The number of table rows
           content:
             application/json:
               schema:
@@ -12551,7 +12660,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved table sort
           content:
             application/json:
               schema:
@@ -12564,7 +12673,8 @@ paths:
     patch:
       tags:
       - drives.driveItem
-      summary: Update the navigation property sort in drives
+      summary: Update table sort
+      description: Update the properties of the sort in the table.
       operationId: drives.items.workbook.worksheets.tables.UpdateSort
       parameters:
       - name: workbook-session-id
@@ -12577,7 +12687,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: New navigation property values
+        description: The table sort properties to update
         content:
           application/json:
             schema:
@@ -12585,7 +12695,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The updated table sort
           content:
             application/json:
               schema:
@@ -12936,7 +13046,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Retrieved navigation property
+          description: The retrieved worksheet
           content:
             application/json:
               schema:
@@ -13020,7 +13130,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created worksheet table
           content:
             application/json:
               schema:
@@ -13074,6 +13184,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Invoke function count
+      description: Retrieve the number of count in the table.
       operationId: drives.drive.items.driveItem.workbook.worksheets.workbookWorksheet.tables.count
       parameters:
       - name: workbook-session-id
@@ -13087,7 +13198,7 @@ paths:
           type: string
       responses:
         "2XX":
-          description: Success
+          description: The number of worksheet tables
           content:
             application/json:
               schema:
@@ -13141,6 +13252,7 @@ paths:
       tags:
       - drives.driveItem
       summary: Get the number of the resource
+      description: Retrieve the number of worksheets in the workbook.
       operationId: drives.items.workbook.worksheets.GetCount-98c0
       parameters:
       - $ref: "#/components/parameters/search"
@@ -13212,7 +13324,7 @@ paths:
         required: true
       responses:
         "2XX":
-          description: Success
+          description: The created worksheet
           content:
             application/json:
               schema:
@@ -17191,6 +17303,6 @@ components:
           tokenUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
           refreshUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
           scopes:
+            Files.Read: Read the signed-in user's files
             Files.ReadWrite: Read and write the signed-in user's files
-            Files.ReadWrite.All: Read and write all files the signed-in user can access
             offline_access: Maintain access to data you have given it access to

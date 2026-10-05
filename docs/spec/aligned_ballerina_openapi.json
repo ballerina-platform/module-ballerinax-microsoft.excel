@@ -116,6 +116,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update workbook",
+                "description": "Update the properties of the workbook.",
                 "operationId": "updateWorkbook",
                 "parameters": [
                     {
@@ -160,8 +161,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -197,6 +197,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Get application from drives",
+                "description": "Retrieve the Excel application object in the workbook.",
                 "operationId": "getApplication",
                 "parameters": [
                     {
@@ -262,14 +263,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Retrieve the Excel application object in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update Excel application",
+                "description": "Update the properties of the Excel application object in the workbook.",
                 "operationId": "updateApplication",
                 "parameters": [
                     {
@@ -314,8 +315,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the Excel application object in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -530,6 +530,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create workbook comment",
+                "description": "Create a new comment in the workbook.",
                 "operationId": "createComment",
                 "parameters": [
                     {
@@ -574,8 +575,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new comment in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -684,6 +684,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete workbook comment",
+                "description": "Delete the comment from the workbook.",
                 "operationId": "deleteComment",
                 "parameters": [
                     {
@@ -722,14 +723,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the comment from the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update workbook comment",
+                "description": "Update the properties of the comment in the workbook.",
                 "operationId": "updateComment",
                 "parameters": [
                     {
@@ -774,8 +775,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the comment in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -924,6 +924,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create comment reply",
+                "description": "Create a new comment reply in the comment.",
                 "operationId": "createReply",
                 "parameters": [
                     {
@@ -968,8 +969,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new comment reply in the comment."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -1090,6 +1090,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete comment reply",
+                "description": "Delete the comment reply from the comment.",
                 "operationId": "deleteReply",
                 "parameters": [
                     {
@@ -1128,14 +1129,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the comment reply from the comment."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update comment reply",
+                "description": "Update the properties of the comment reply in the comment.",
                 "operationId": "updateReply",
                 "parameters": [
                     {
@@ -1180,8 +1181,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the comment reply in the comment."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -1241,6 +1241,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Get the number of the resource",
+                "description": "Retrieve the number of comment replies in the comment.",
                 "operationId": "countReplies",
                 "parameters": [
                     {
@@ -1272,8 +1273,7 @@
                     "5XX": {
                         "$ref": "#/components/responses/error"
                     }
-                },
-                "description": "Retrieve the number of comment replies in the comment."
+                }
             },
             "parameters": [
                 {
@@ -1321,6 +1321,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Get the number of the resource",
+                "description": "Retrieve the number of comments in the workbook.",
                 "operationId": "countComments",
                 "parameters": [
                     {
@@ -1352,8 +1353,7 @@
                     "5XX": {
                         "$ref": "#/components/responses/error"
                     }
-                },
-                "description": "Retrieve the number of comments in the workbook."
+                }
             },
             "parameters": [
                 {
@@ -1594,6 +1594,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function sessionInfoResource",
+                "description": "Retrieve workbook session information for the given key.",
                 "operationId": "getSessionInfo",
                 "parameters": [
                     {
@@ -1627,8 +1628,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve workbook session information for the given key."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -1861,6 +1861,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create named item",
+                "description": "Create a new named item in the workbook.",
                 "operationId": "createNamedItem",
                 "parameters": [
                     {
@@ -1905,8 +1906,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new named item in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -2015,6 +2015,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete named item",
+                "description": "Delete the named item from the workbook.",
                 "operationId": "deleteNamedItem",
                 "parameters": [
                     {
@@ -2053,14 +2054,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the named item from the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update named item",
+                "description": "Update the properties of the named item in the workbook.",
                 "operationId": "updateNamedItem",
                 "parameters": [
                     {
@@ -2105,8 +2106,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the named item in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -2374,6 +2374,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Get the number of the resource",
+                "description": "Retrieve the number of named items in the workbook.",
                 "operationId": "countNamedItems",
                 "parameters": [
                     {
@@ -2405,8 +2406,7 @@
                     "5XX": {
                         "$ref": "#/components/responses/error"
                     }
-                },
-                "description": "Retrieve the number of named items in the workbook."
+                }
             },
             "parameters": [
                 {
@@ -2727,6 +2727,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create workbook operation",
+                "description": "Create a new workbook operation in the workbook.",
                 "operationId": "createOperation",
                 "parameters": [
                     {
@@ -2771,8 +2772,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new workbook operation in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -2881,6 +2881,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete workbook operation",
+                "description": "Delete the workbook operation from the workbook.",
                 "operationId": "deleteOperation",
                 "parameters": [
                     {
@@ -2919,14 +2920,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the workbook operation from the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update workbook operation",
+                "description": "Update the properties of the workbook operation in the workbook.",
                 "operationId": "updateOperation",
                 "parameters": [
                     {
@@ -2971,8 +2972,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the workbook operation in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -3020,6 +3020,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Get the number of the resource",
+                "description": "Retrieve the number of workbook operations in the workbook.",
                 "operationId": "countOperations",
                 "parameters": [
                     {
@@ -3051,8 +3052,7 @@
                     "5XX": {
                         "$ref": "#/components/responses/error"
                     }
-                },
-                "description": "Retrieve the number of workbook operations in the workbook."
+                }
             },
             "parameters": [
                 {
@@ -3189,6 +3189,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create table",
+                "description": "Create a new table in the workbook.",
                 "operationId": "createTable",
                 "parameters": [
                     {
@@ -3233,8 +3234,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new table in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -3371,6 +3371,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create worksheet",
+                "description": "Create a new worksheet in the workbook.",
                 "operationId": "createWorksheet",
                 "parameters": [
                     {
@@ -3415,8 +3416,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new worksheet in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -3525,6 +3525,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete worksheet",
+                "description": "Delete the worksheet from the workbook.",
                 "operationId": "deleteWorksheet",
                 "parameters": [
                     {
@@ -3563,14 +3564,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the worksheet from the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update worksheet",
+                "description": "Update the properties of the worksheet in the workbook.",
                 "operationId": "updateWorksheet",
                 "parameters": [
                     {
@@ -3615,8 +3616,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the worksheet in the workbook."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -3765,6 +3765,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create chart",
+                "description": "Create a new chart in the worksheet.",
                 "operationId": "createChart",
                 "parameters": [
                     {
@@ -3809,8 +3810,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new chart in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -3931,6 +3931,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete chart",
+                "description": "Delete the chart from the worksheet.",
                 "operationId": "deleteChart",
                 "parameters": [
                     {
@@ -3969,14 +3970,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the chart from the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update chart",
+                "description": "Update the properties of the chart in the worksheet.",
                 "operationId": "updateChart",
                 "parameters": [
                     {
@@ -4021,8 +4022,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the chart in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -4155,6 +4155,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update chart axes",
+                "description": "Update the properties of the chart axes in the chart.",
                 "operationId": "updateChartAxes",
                 "parameters": [
                     {
@@ -4199,8 +4200,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the chart axes in the chart."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -4337,6 +4337,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update category axis",
+                "description": "Update the properties of the category axis in the chart axes.",
                 "operationId": "updateCategoryAxis",
                 "parameters": [
                     {
@@ -4381,8 +4382,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the category axis in the chart axes."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -4515,6 +4515,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update series axis",
+                "description": "Update the properties of the series axis in the chart axes.",
                 "operationId": "updateSeriesAxis",
                 "parameters": [
                     {
@@ -4559,8 +4560,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the series axis in the chart axes."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -4693,6 +4693,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update value axis",
+                "description": "Update the properties of the value axis in the chart axes.",
                 "operationId": "updateValueAxis",
                 "parameters": [
                     {
@@ -4737,8 +4738,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the value axis in the chart axes."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -4871,6 +4871,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update chart data labels",
+                "description": "Update the properties of the data labels in the chart.",
                 "operationId": "updateDataLabels",
                 "parameters": [
                     {
@@ -4915,8 +4916,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the data labels in the chart."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -5053,6 +5053,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update chart format",
+                "description": "Update the properties of the format in the chart.",
                 "operationId": "updateChartFormat",
                 "parameters": [
                     {
@@ -5097,8 +5098,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the format in the chart."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -5235,6 +5235,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update chart legend",
+                "description": "Update the properties of the chart legend in the chart.",
                 "operationId": "updateLegend",
                 "parameters": [
                     {
@@ -5279,8 +5280,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the chart legend in the chart."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -5344,6 +5344,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function image",
+                "description": "Render the chart as a base64-encoded image.",
                 "operationId": "getChartImage",
                 "parameters": [
                     {
@@ -5377,8 +5378,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Render the chart as a base64-encoded image."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -5451,6 +5451,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function image",
+                "description": "Render the chart as a base64-encoded image scaled to the given width and height using the specified fitting mode.",
                 "operationId": "getChartImageFitted",
                 "parameters": [
                     {
@@ -5484,8 +5485,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Render the chart as a base64-encoded image scaled to the given width and height using the specified fitting mode."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -5597,6 +5597,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function image",
+                "description": "Render the chart as a base64-encoded image scaled to the given width and height.",
                 "operationId": "getChartImageBySize",
                 "parameters": [
                     {
@@ -5630,8 +5631,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Render the chart as a base64-encoded image scaled to the given width and height."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -5732,6 +5732,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function image",
+                "description": "Render the chart as a base64-encoded image scaled to the given width.",
                 "operationId": "getChartImageByWidth",
                 "parameters": [
                     {
@@ -5765,8 +5766,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Render the chart as a base64-encoded image scaled to the given width."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -6166,6 +6166,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create chart series",
+                "description": "Create a new chart series in the chart.",
                 "operationId": "createChartSeries",
                 "parameters": [
                     {
@@ -6210,8 +6211,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new chart series in the chart."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -6348,6 +6348,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete chart series",
+                "description": "Delete the chart series from the chart.",
                 "operationId": "deleteChartSeries",
                 "parameters": [
                     {
@@ -6386,14 +6387,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the chart series from the chart."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update chart series",
+                "description": "Update the properties of the chart series in the chart.",
                 "operationId": "updateChartSeries",
                 "parameters": [
                     {
@@ -6438,8 +6439,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the chart series in the chart."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -6511,6 +6511,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function count",
+                "description": "Retrieve the number of count in the chart series.",
                 "operationId": "countChartSeries",
                 "parameters": [
                     {
@@ -6544,8 +6545,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the number of count in the chart series."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -6689,6 +6689,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update chart title",
+                "description": "Update the properties of the chart title in the chart.",
                 "operationId": "updateChartTitle",
                 "parameters": [
                     {
@@ -6733,8 +6734,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the chart title in the chart."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -7036,6 +7036,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function count",
+                "description": "Retrieve the number of count in the chart.",
                 "operationId": "countCharts",
                 "parameters": [
                     {
@@ -7069,8 +7070,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the number of count in the chart."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -7269,6 +7269,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function range",
+                "description": "Retrieve the range of cells associated with the worksheet.",
                 "operationId": "getRange",
                 "parameters": [
                     {
@@ -7302,8 +7303,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the range of cells associated with the worksheet."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -7441,6 +7441,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update range format",
+                "description": "Update the properties of the format in the range.",
                 "operationId": "updateRangeFormat",
                 "parameters": [
                     {
@@ -7485,8 +7486,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the format in the range."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -7560,6 +7560,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action clear",
+                "description": "Clear the contents, formatting, or both from the range.",
                 "operationId": "clearRange",
                 "parameters": [
                     {
@@ -7597,8 +7598,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Clear the contents, formatting, or both from the range."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -7692,6 +7692,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action delete",
+                "description": "Delete the range and shift the surrounding cells.",
                 "operationId": "deleteRange",
                 "parameters": [
                     {
@@ -7729,8 +7730,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Delete the range and shift the surrounding cells."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -7804,6 +7804,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action insert",
+                "description": "Insert a new range and shift the surrounding cells.",
                 "operationId": "insertRange",
                 "parameters": [
                     {
@@ -7848,8 +7849,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Insert a new range and shift the surrounding cells."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -7923,6 +7923,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action merge",
+                "description": "Merge the cells of the range into a single cell.",
                 "operationId": "mergeRange",
                 "parameters": [
                     {
@@ -7960,8 +7961,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Merge the cells of the range into a single cell."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -8035,6 +8035,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action unmerge",
+                "description": "Unmerge the merged cells of the range.",
                 "operationId": "unmergeRange",
                 "parameters": [
                     {
@@ -8061,8 +8062,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Unmerge the merged cells of the range."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -8209,6 +8209,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update range sort",
+                "description": "Update the properties of the sort in the range.",
                 "operationId": "updateRangeSort",
                 "parameters": [
                     {
@@ -8253,8 +8254,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the sort in the range."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -8328,6 +8328,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function range",
+                "description": "Retrieve a range of cells identified by its address, such as A1:D5.",
                 "operationId": "getRangeByAddress",
                 "parameters": [
                     {
@@ -8361,8 +8362,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve a range of cells identified by its address, such as A1:D5."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -8512,6 +8512,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update addressed range format",
+                "description": "Update the properties of the format in the range.",
                 "operationId": "updateRangeByAddressFormat",
                 "parameters": [
                     {
@@ -8556,8 +8557,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the format in the range."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -8643,6 +8643,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action clear",
+                "description": "Clear the contents, formatting, or both from the range.",
                 "operationId": "clearRangeByAddress",
                 "parameters": [
                     {
@@ -8680,8 +8681,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Clear the contents, formatting, or both from the range."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -8787,6 +8787,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action delete",
+                "description": "Delete the range and shift the surrounding cells.",
                 "operationId": "deleteRangeByAddress",
                 "parameters": [
                     {
@@ -8824,8 +8825,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Delete the range and shift the surrounding cells."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -8911,6 +8911,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action insert",
+                "description": "Insert a new range and shift the surrounding cells.",
                 "operationId": "insertRangeByAddress",
                 "parameters": [
                     {
@@ -8955,8 +8956,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Insert a new range and shift the surrounding cells."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -9042,6 +9042,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action merge",
+                "description": "Merge the cells of the range into a single cell.",
                 "operationId": "mergeRangeByAddress",
                 "parameters": [
                     {
@@ -9079,8 +9080,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Merge the cells of the range into a single cell."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -9166,6 +9166,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action unmerge",
+                "description": "Unmerge the merged cells of the range.",
                 "operationId": "unmergeRangeByAddress",
                 "parameters": [
                     {
@@ -9192,8 +9193,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Unmerge the merged cells of the range."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -9352,6 +9352,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update addressed range sort",
+                "description": "Update the properties of the sort in the range.",
                 "operationId": "updateRangeByAddressSort",
                 "parameters": [
                     {
@@ -9396,8 +9397,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the sort in the range."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -9483,6 +9483,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function usedRange",
+                "description": "Retrieve the used range of the worksheet.",
                 "operationId": "getUsedRange",
                 "parameters": [
                     {
@@ -9516,8 +9517,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the used range of the worksheet."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -9687,6 +9687,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update used range format",
+                "description": "Update the properties of the format in the used range.",
                 "operationId": "updateUsedRangeFormat",
                 "parameters": [
                     {
@@ -9731,8 +9732,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the format in the used range."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -9806,6 +9806,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action clear",
+                "description": "Clear the contents, formatting, or both from the used range.",
                 "operationId": "clearUsedRange",
                 "parameters": [
                     {
@@ -9843,8 +9844,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Clear the contents, formatting, or both from the used range."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -9938,6 +9938,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action delete",
+                "description": "Delete the used range and shift the surrounding cells.",
                 "operationId": "deleteUsedRange",
                 "parameters": [
                     {
@@ -9975,8 +9976,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Delete the used range and shift the surrounding cells."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -10050,6 +10050,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action insert",
+                "description": "Insert a new used range and shift the surrounding cells.",
                 "operationId": "insertUsedRange",
                 "parameters": [
                     {
@@ -10094,8 +10095,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Insert a new used range and shift the surrounding cells."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -10169,6 +10169,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action merge",
+                "description": "Merge the cells of the used range into a single cell.",
                 "operationId": "mergeUsedRange",
                 "parameters": [
                     {
@@ -10206,8 +10207,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Merge the cells of the used range into a single cell."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -10281,6 +10281,7 @@
                     "drives.drive.Actions"
                 ],
                 "summary": "Invoke action unmerge",
+                "description": "Unmerge the merged cells of the used range.",
                 "operationId": "unmergeUsedRange",
                 "parameters": [
                     {
@@ -10307,8 +10308,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Unmerge the merged cells of the used range."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -10455,6 +10455,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update used range sort",
+                "description": "Update the properties of the sort in the used range.",
                 "operationId": "updateUsedRangeSort",
                 "parameters": [
                     {
@@ -10499,8 +10500,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the sort in the used range."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -10574,6 +10574,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function usedRange",
+                "description": "Retrieve the used range of the worksheet, optionally restricted to cells that contain values.",
                 "operationId": "getUsedRangeValuesOnly",
                 "parameters": [
                     {
@@ -10607,8 +10608,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the used range of the worksheet, optionally restricted to cells that contain values."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -10818,6 +10818,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create worksheet named item",
+                "description": "Create a new named item in the worksheet.",
                 "operationId": "createWorksheetNamedItem",
                 "parameters": [
                     {
@@ -10862,8 +10863,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new named item in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -10984,6 +10984,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete worksheet named item",
+                "description": "Delete the named item from the worksheet.",
                 "operationId": "deleteWorksheetNamedItem",
                 "parameters": [
                     {
@@ -11022,14 +11023,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the named item from the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update worksheet named item",
+                "description": "Update the properties of the named item in the worksheet.",
                 "operationId": "updateWorksheetNamedItem",
                 "parameters": [
                     {
@@ -11074,8 +11075,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the named item in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -11379,6 +11379,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Get the number of the resource",
+                "description": "Retrieve the number of named items in the worksheet.",
                 "operationId": "countWorksheetNamedItems",
                 "parameters": [
                     {
@@ -11410,8 +11411,7 @@
                     "5XX": {
                         "$ref": "#/components/responses/error"
                     }
-                },
-                "description": "Retrieve the number of named items in the worksheet."
+                }
             },
             "parameters": [
                 {
@@ -11768,6 +11768,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create PivotTable",
+                "description": "Create a new PivotTable in the worksheet.",
                 "operationId": "createPivotTable",
                 "parameters": [
                     {
@@ -11812,8 +11813,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new PivotTable in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -11934,6 +11934,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete PivotTable",
+                "description": "Delete the PivotTable from the worksheet.",
                 "operationId": "deletePivotTable",
                 "parameters": [
                     {
@@ -11972,14 +11973,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the PivotTable from the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update PivotTable",
+                "description": "Update the properties of the PivotTable in the worksheet.",
                 "operationId": "updatePivotTable",
                 "parameters": [
                     {
@@ -12024,8 +12025,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the PivotTable in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -12302,6 +12302,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Get the number of the resource",
+                "description": "Retrieve the number of PivotTables in the worksheet.",
                 "operationId": "countPivotTables",
                 "parameters": [
                     {
@@ -12333,8 +12334,7 @@
                     "5XX": {
                         "$ref": "#/components/responses/error"
                     }
-                },
-                "description": "Retrieve the number of PivotTables in the worksheet."
+                }
             },
             "parameters": [
                 {
@@ -12534,6 +12534,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update worksheet protection",
+                "description": "Update the properties of the worksheet protection in the worksheet.",
                 "operationId": "updateProtection",
                 "parameters": [
                     {
@@ -12578,8 +12579,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the worksheet protection in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -12897,6 +12897,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create worksheet table",
+                "description": "Create a new table in the worksheet.",
                 "operationId": "createWorksheetTable",
                 "parameters": [
                     {
@@ -12941,8 +12942,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new table in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -13063,6 +13063,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete worksheet table",
+                "description": "Delete the table from the worksheet.",
                 "operationId": "deleteWorksheetTable",
                 "parameters": [
                     {
@@ -13101,14 +13102,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the table from the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update worksheet table",
+                "description": "Update the properties of the table in the worksheet.",
                 "operationId": "updateWorksheetTable",
                 "parameters": [
                     {
@@ -13153,8 +13154,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the table in the worksheet."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -13315,6 +13315,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create table column",
+                "description": "Create a new table column in the table.",
                 "operationId": "createColumn",
                 "parameters": [
                     {
@@ -13359,8 +13360,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new table column in the table."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -13498,6 +13498,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete table column",
+                "description": "Delete the table column from the table.",
                 "operationId": "deleteColumn",
                 "parameters": [
                     {
@@ -13536,14 +13537,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the table column from the table."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update table column",
+                "description": "Update the properties of the table column in the table.",
                 "operationId": "updateColumn",
                 "parameters": [
                     {
@@ -13588,8 +13589,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the table column in the table."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -13737,6 +13737,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update table column filter",
+                "description": "Update the properties of the filter in the table column.",
                 "operationId": "updateColumnFilter",
                 "parameters": [
                     {
@@ -13781,8 +13782,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the filter in the table column."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -13978,6 +13978,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyBottomItemsFilter",
+                "description": "Apply a bottom-N-items filter to the table column.",
                 "operationId": "applyBottomItemsFilter",
                 "parameters": [
                     {
@@ -14015,8 +14016,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a bottom-N-items filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14091,6 +14091,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyBottomPercentFilter",
+                "description": "Apply a bottom-N-percent filter to the table column.",
                 "operationId": "applyBottomPctFilter",
                 "parameters": [
                     {
@@ -14128,8 +14129,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a bottom-N-percent filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14204,6 +14204,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyCellColorFilter",
+                "description": "Apply a cell-color filter to the table column.",
                 "operationId": "applyCellColorFilter",
                 "parameters": [
                     {
@@ -14241,8 +14242,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a cell-color filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14317,6 +14317,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyCustomFilter",
+                "description": "Apply a custom criteria filter to the table column.",
                 "operationId": "applyCustomFilter",
                 "parameters": [
                     {
@@ -14354,8 +14355,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a custom criteria filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14430,6 +14430,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyDynamicFilter",
+                "description": "Apply a dynamic filter to the table column.",
                 "operationId": "applyDynamicFilter",
                 "parameters": [
                     {
@@ -14467,8 +14468,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a dynamic filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14543,6 +14543,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyFontColorFilter",
+                "description": "Apply a font-color filter to the table column.",
                 "operationId": "applyFontColorFilter",
                 "parameters": [
                     {
@@ -14580,8 +14581,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a font-color filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14656,6 +14656,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyIconFilter",
+                "description": "Apply an icon filter to the table column.",
                 "operationId": "applyIconFilter",
                 "parameters": [
                     {
@@ -14693,8 +14694,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply an icon filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14769,6 +14769,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyTopItemsFilter",
+                "description": "Apply a top-N-items filter to the table column.",
                 "operationId": "applyTopItemsFilter",
                 "parameters": [
                     {
@@ -14806,8 +14807,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a top-N-items filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14882,6 +14882,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyTopPercentFilter",
+                "description": "Apply a top-N-percent filter to the table column.",
                 "operationId": "applyTopPctFilter",
                 "parameters": [
                     {
@@ -14919,8 +14920,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a top-N-percent filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -14995,6 +14995,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke action applyValuesFilter",
+                "description": "Apply a values filter to the table column.",
                 "operationId": "applyValuesFilter",
                 "parameters": [
                     {
@@ -15032,8 +15033,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "action",
-                "description": "Apply a values filter to the table column."
+                "x-ms-docs-operation-type": "action"
             },
             "parameters": [
                 {
@@ -15861,6 +15861,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function count",
+                "description": "Retrieve the number of count in the table column.",
                 "operationId": "countColumns",
                 "parameters": [
                     {
@@ -15894,8 +15895,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the number of count in the table column."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -16798,6 +16798,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Create table row",
+                "description": "Create a new table row in the table.",
                 "operationId": "createRow",
                 "parameters": [
                     {
@@ -16842,8 +16843,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Create a new table row in the table."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -16981,6 +16981,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Delete table row",
+                "description": "Delete the table row from the table.",
                 "operationId": "deleteRow",
                 "parameters": [
                     {
@@ -17019,14 +17020,14 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Delete the table row from the table."
+                "x-ms-docs-operation-type": "operation"
             },
             "patch": {
                 "tags": [
                     "drives.driveItem"
                 ],
                 "summary": "Update table row",
+                "description": "Update the properties of the table row in the table.",
                 "operationId": "updateRow",
                 "parameters": [
                     {
@@ -17071,8 +17072,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the table row in the table."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -17147,6 +17147,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function range",
+                "description": "Retrieve the range of cells associated with the table row.",
                 "operationId": "getTableRowRange",
                 "parameters": [
                     {
@@ -17180,8 +17181,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the range of cells associated with the table row."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -17390,6 +17390,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function count",
+                "description": "Retrieve the number of count in the table row.",
                 "operationId": "countRows",
                 "parameters": [
                     {
@@ -17423,8 +17424,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the number of count in the table row."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -17568,6 +17568,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Update table sort",
+                "description": "Update the properties of the sort in the table.",
                 "operationId": "updateTableSort",
                 "parameters": [
                     {
@@ -17612,8 +17613,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "operation",
-                "description": "Update the properties of the sort in the table."
+                "x-ms-docs-operation-type": "operation"
             },
             "parameters": [
                 {
@@ -18255,6 +18255,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Invoke function count",
+                "description": "Retrieve the number of count in the table.",
                 "operationId": "countWorksheetTables",
                 "parameters": [
                     {
@@ -18288,8 +18289,7 @@
                         "$ref": "#/components/responses/error"
                     }
                 },
-                "x-ms-docs-operation-type": "function",
-                "description": "Retrieve the number of count in the table."
+                "x-ms-docs-operation-type": "function"
             },
             "parameters": [
                 {
@@ -18348,6 +18348,7 @@
                     "drives.driveItem"
                 ],
                 "summary": "Get the number of the resource",
+                "description": "Retrieve the number of worksheets in the workbook.",
                 "operationId": "countWorksheets",
                 "parameters": [
                     {
@@ -18379,8 +18380,7 @@
                     "5XX": {
                         "$ref": "#/components/responses/error"
                     }
-                },
-                "description": "Retrieve the number of worksheets in the workbook."
+                }
             },
             "parameters": [
                 {
