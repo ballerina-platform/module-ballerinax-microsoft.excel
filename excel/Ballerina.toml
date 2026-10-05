@@ -2,9 +2,9 @@
 distribution = "2201.4.1"
 org= "ballerinax"
 name= "microsoft.excel"
-version= "2.4.0"
+version= "2.4.1"
 license= ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["Productivity/Spreadsheets", "Cost/Free", "Vendor/Microsoft"]
+keywords = ["Productivity/Spreadsheets", "Cost/Free", "Vendor/Microsoft", "Area/Productivity & Collaboration", "Type/Connector", "Name/Microsoft Excel"]
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.excel"
