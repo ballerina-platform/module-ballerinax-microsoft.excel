@@ -57,8 +57,14 @@ allprojects {
 
 def moduleVersion = project.version.replace("-SNAPSHOT", "")
 
-task build {
-    dependsOn(':microsoft.excel-ballerina:build')
+if (!tasks.names.contains('build')) {
+    tasks.register('build') {
+        dependsOn(':microsoft.excel-ballerina:build')
+    }
+} else {
+    tasks.named('build') {
+        dependsOn(':microsoft.excel-ballerina:build')
+    }
 }
 
 release {
