@@ -2,13 +2,28 @@
 
 The `ballerinax/microsoft.excel` connector provides practical examples illustrating usage in various scenarios.
 
-[//]: # (TODO: Add examples)
-1. 
-2. 
+| Example | Description |
+|---------|-------------|
+| [`workbook_session_summary`](./workbook_session_summary/workbook_session_summary.md) | List the worksheets in a workbook and report each one's used range, inside a single workbook session. |
+| [`expense_table_ingestion`](./expense_table_ingestion/expense_table_ingestion.md) | Add a worksheet, define a table over its header range, and append expense rows to it. |
+| [`revenue_chart_export`](./revenue_chart_export/revenue_chart_export.md) | Create a chart from a range of revenue figures, position it, and export it as a base64-encoded image. |
+| [`inventory_table_audit`](./inventory_table_audit/inventory_table_audit.md) | List the tables on a worksheet with their columns and header/total row ranges. |
 
 ## Prerequisites
 
-[//]: # (TODO: Add prerequisites)
+1. Follow the [Setup guide](../ballerina/README.md#setup-guide) to register an application with the Microsoft identity platform and obtain a refresh token.
+
+2. For each example, create a `Config.toml` file in its directory with your credentials and the identifiers of the workbook to operate on:
+
+    ```toml
+    clientId = "<CLIENT_ID>"
+    clientSecret = "<CLIENT_SECRET>"
+    refreshToken = "<REFRESH_TOKEN>"
+    # your tenant id for a single-tenant app, or "common" for a multi-tenant one
+    refreshUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
+    driveId = "<DRIVE_ID>"
+    driveItemId = "<DRIVE_ITEM_ID>"
+    ```
 
 ## Running an example
 

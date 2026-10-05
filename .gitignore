@@ -45,6 +45,9 @@ generated/
 .ballerina
 **/Config.toml
 
+# Example packages resolve their own dependency graph on each build
+examples/*/Dependencies.toml
+
 # Ignore Gradle project-specific cache directory
 .gradle
 
