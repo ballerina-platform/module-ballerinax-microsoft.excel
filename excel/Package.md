@@ -1,9 +1,16 @@
 Connects to Microsoft Excel from Ballerina
 
-## Package overview
-The `microsoft.excel` is a [Ballerina](https://ballerina.io/) connector for Microsoft Excel.
+## Overview
 
-This package provides the capability to perform CRUD operations in Microsoft Excel worksheet table, and chart.
+[Microsoft Excel](https://www.microsoft.com/en-ww/microsoft-365/excel) is a spreadsheet application developed by Microsoft in Microsoft Office 365.
+
+The `microsoft.excel` package is a [Ballerina](https://ballerina.io/) connector that connects to the Microsoft Graph API (v1.0) Excel endpoints, enabling programmatic access to Excel workbooks stored in Microsoft 365.
+
+### Key Features
+
+- Perform CRUD operations on Microsoft Excel worksheet tables
+- Create and manage charts in Excel worksheets
+- Connect to Excel workbooks over the Microsoft Graph API v1.0
 
 ### Compatibility
 |                     | Version            |
