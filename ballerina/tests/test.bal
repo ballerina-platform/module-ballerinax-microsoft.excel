@@ -1,6 +1,6 @@
-// Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -15,384 +15,296 @@
 // under the License.
 
 import ballerina/os;
-import ballerina/log;
 import ballerina/test;
 
-configurable string clientId = os:getEnv("CLIENT_ID");
-configurable string clientSecret = os:getEnv("CLIENT_SECRET");
-configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
-configurable string refreshUrl = os:getEnv("REFRESH_URL");
-configurable string workbookIdOrPath = os:getEnv("WORKBOOK_PATH");
+final boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
 
-ConnectionConfig configuration = {
-    auth: {
-        clientId: clientId,
-        clientSecret: clientSecret,
-        refreshToken: refreshToken,
-        refreshUrl: refreshUrl
-    }
-};
+final string serviceUrl = isLiveServer ? "https://graph.microsoft.com/v1.0" : "http://localhost:9090";
 
-Client excelClient = check new (configuration);
-string workBookId = workbookIdOrPath;
-string worksheetName = "testSheet";
-string tableName = EMPTY_STRING;
-string chartName = EMPTY_STRING;
-string sessionId = EMPTY_STRING;
+final string token = isLiveServer ? os:getEnv("MS_EXCEL_ACCESS_TOKEN") : "test_token";
 
-@test:BeforeSuite
-function testCreateSession() {
-    log:printInfo("excelClient -> createSession()");
-    string|error response = excelClient->createSession(workBookId);
-    if (response is string) {
-        sessionId = response;
-        test:assertNotEquals(response, EMPTY_STRING, "Session is not created");
-    } else {
-        test:assertFail(response.toString());
-    }
+final string driveId = isLiveServer ? os:getEnv("MS_EXCEL_DRIVE_ID") : "b!testDriveId";
+final string driveItemId = isLiveServer ? os:getEnv("MS_EXCEL_ITEM_ID") : "01BYE5RZYRQEQ6EJ6DVJHZDF6TYMLRQKAP";
+final string worksheetId = isLiveServer ? os:getEnv("MS_EXCEL_WORKSHEET_ID") : "{00000000-0001-0000-0000-000000000000}";
+final string tableId = isLiveServer ? os:getEnv("MS_EXCEL_TABLE_ID") : "1";
+final string rowId = isLiveServer ? os:getEnv("MS_EXCEL_ROW_ID") : "0";
+final string chartId = isLiveServer ? os:getEnv("MS_EXCEL_CHART_ID") : "{6F6D2F1A-0000-0000-0000-000000000000}";
+
+final Client excelClient = check initClient();
+
+isolated function initClient() returns Client|error {
+    return new ({auth: {token}}, serviceUrl);
 }
 
-@test:Config {}
-function testAddWorksheet() {
-    log:printInfo("excelClient -> addWorksheet()");
-    Worksheet|error response = excelClient->addWorksheet(workBookId, worksheetName, sessionId);
-    if (response is Worksheet) {
-        string name = response?.name ?: EMPTY_STRING;
-        test:assertEquals(name, worksheetName, "Unmatch worksheet name");
-    } else {
-        test:assertFail(response.toString());
-    }
+// ---------------------------------------------------------------- workbook --
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetWorkbook() returns error? {
+    Workbook response = check excelClient->getWorkbook(driveId, driveItemId);
+    test:assertTrue(response?.id !is (), "workbook should have an id");
 }
 
-@test:Config {dependsOn: [testAddWorksheet]}
-function testGetWorksheet() {
-    Worksheet|error response = excelClient->getWorksheet(workBookId, worksheetName, sessionId);
-    if (response is Worksheet) {
-        string name = response?.name ?: EMPTY_STRING;
-        test:assertEquals(name, worksheetName, "Worksheet not found");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetApplication() returns error? {
+    Application response = check excelClient->getApplication(driveId, driveItemId);
+    test:assertTrue(response?.calculationMode !is (), "application should report a calculation mode");
 }
 
-@test:Config {dependsOn: [testGetWorksheet]}
-function testListWorksheets() {
-    log:printInfo("excelClient -> listWorksheets()");
-    Worksheet[]|error response = excelClient->listWorksheets(workBookId, sessionId = sessionId);
-    if (response is Worksheet[]) {
-        string responseWorksheetName = response[0]?.name ?: EMPTY_STRING;
-        test:assertNotEquals(responseWorksheetName, EMPTY_STRING, "Found 0 worksheets");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testCalculateApplication() returns error? {
+    error? response = excelClient->calculateApplication(driveId, driveItemId, {calculationType: "Full"});
+    test:assertTrue(response is (), "calculate should complete without a body");
 }
 
-int sheetPosition = 1;
-Worksheet sheet = {position: sheetPosition};
+// ---------------------------------------------------------------- sessions --
 
-@test:Config {dependsOn: [testDeleteTable]}
-function testUpdateWorksheet() {
-    log:printInfo("excelClient -> updateWorksheet()");
-    Worksheet|error response = excelClient->updateWorksheet(workBookId, worksheetName, sheet, sessionId);
-    if (response is Worksheet) {
-        int responsePosition = response?.position ?: 0;
-        test:assertEquals(responsePosition, sheetPosition, "Unmatch worksheet position");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testCreateSession() returns error? {
+    SessionInfoResponse response = check excelClient->createSession(driveId, driveItemId, {persistChanges: true});
+    test:assertTrue(response !is (), "createSession should return session info");
 }
 
-int rowIndex = 2;
-
-@test:Config {dependsOn: [testGetWorksheet]}
-function testGetCell() {
-    log:printInfo("excelClient -> getCell()");
-    Cell|error response = excelClient->getCell(workBookId, worksheetName, rowIndex, 7, sessionId);
-    if (response is Cell) {
-        int row = response.rowIndex;
-        test:assertEquals(row, rowIndex, "Unmatch worksheet position");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testRefreshSession() returns error? {
+    string sessionId = check createTestSession();
+    error? response =
+        excelClient->refreshSession(driveId, driveItemId, {workbookSessionId: sessionId});
+    test:assertTrue(response is (), "refreshSession should complete without a body");
+    check excelClient->closeSession(driveId, driveItemId, {workbookSessionId: sessionId});
 }
 
-@test:AfterSuite {}
-function testDeleteWorksheet() {
-    log:printInfo("excelClient -> deleteWorksheet()");
-    error? response = excelClient->deleteWorksheet(workBookId, worksheetName, sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testCloseSession() returns error? {
+    string sessionId = check createTestSession();
+    error? response =
+        excelClient->closeSession(driveId, driveItemId, {workbookSessionId: sessionId});
+    test:assertTrue(response is (), "closeSession should complete without a body");
 }
 
-@test:Config {dependsOn: [testGetWorksheet]}
-function testAddTable() {
-    log:printInfo("excelClient -> addTable()");
-    Table|error response = excelClient->addTable(workBookId, worksheetName, "A1:C3", sessionId = sessionId);
-    if (response is Table) {
-        tableName = response?.name ?: EMPTY_STRING;
-        test:assertNotEquals(tableName, EMPTY_STRING, "Table is not created");
-    } else {
-        test:assertFail(response.toString());
+# Creates a fresh non-persistent workbook session and returns its ID. Each test that needs a
+# session creates its own, so no session ID is shared between tests.
+#
+# + return - The ID of the newly created session
+isolated function createTestSession() returns string|error {
+    SessionInfoResponse session =
+        check excelClient->createSession(driveId, driveItemId, {persistChanges: false});
+    if session !is SessionInfo {
+        return error("createSession did not return session information");
     }
+    return session?.id ?: "";
 }
 
-@test:Config {dependsOn: [testAddTable]}
-function testGetTable() {
-    log:printInfo("excelClient -> getTable()");
-    Table|error response = excelClient->getTable(workBookId, worksheetName, tableName, sessionId = sessionId);
-    if (response is Table) {
-        string responseTableName = response?.name ?: EMPTY_STRING;
-        test:assertEquals(tableName, responseTableName, "Table is not created");
-    } else {
-        test:assertFail(response.toString());
-    }
+// -------------------------------------------------------------- worksheets --
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListWorksheets() returns error? {
+    WorksheetCollectionResponse response = check excelClient->listWorksheets(driveId, driveItemId);
+    test:assertTrue(response.value !is (), "worksheet collection should have a value array");
 }
 
-@test:Config {dependsOn: [testGetTable]}
-function testListTable() {
-    log:printInfo("excelClient -> listTables()");
-    Table[]|error response = excelClient->listTables(workBookId, sessionId = sessionId);
-    if (response is Table[]) {
-        string responseTableName = response[0]?.name ?: EMPTY_STRING;
-        test:assertNotEquals(responseTableName, EMPTY_STRING, "Found 0 tables");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetWorksheet() returns error? {
+    Worksheet response = check excelClient->getWorksheet(driveId, driveItemId, worksheetId);
+    test:assertTrue(response?.name !is (), "worksheet should have a name");
 }
 
-boolean showHeaders = false;
-Table updateTable = {
-    showHeaders: showHeaders,
-    showTotals: false
-};
-
-@test:Config {dependsOn: [testGetTable]}
-function testUpdateTable() {
-    log:printInfo("excelClient -> updateTable()");
-    Table|error response = excelClient->updateTable(workBookId, worksheetName, tableName, updateTable, sessionId);
-    if (response is Table) {
-        boolean responseTable = response?.showHeaders ?: true;
-        test:assertEquals(responseTable, showHeaders, "Table is not updated");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testAddWorksheet() returns error? {
+    AddWorksheetResponse response = check excelClient->addWorksheet(driveId, driveItemId, {name: "Sheet1"});
+    test:assertTrue(response !is (), "addWorksheet should return the created worksheet");
 }
 
-int rowInputIndex = 1;
-
-@test:Config {dependsOn: [testUpdateTable]}
-function testCreateRow() {
-    log:printInfo("excelClient -> createRow()");
-    Row|error response = excelClient->createRow(workBookId, worksheetName, tableName, [[1, 2, 3]], rowInputIndex,
-    sessionId);
-    if (response is Row) {
-        int responseIndex = response.index;
-        test:assertEquals(responseIndex, rowInputIndex, "Row is not added");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testUpdateWorksheet() returns error? {
+    Worksheet payload = {atOdataType: "#microsoft.graph.workbookWorksheet", name: "Renamed"};
+    Worksheet response = check excelClient->updateWorksheet(driveId, driveItemId, worksheetId, payload);
+    test:assertTrue(response?.name !is (), "updated worksheet should have a name");
 }
 
-@test:Config {dependsOn: [testCreateRow]}
-function testListRows() {
-    log:printInfo("excelClient -> listRows()");
-    Row[]|error response = excelClient->listRows(workBookId, worksheetName, tableName, sessionId = sessionId);
-    if (response is Row[]) {
-        int responseIndex = response[1].index;
-        test:assertEquals(responseIndex, rowInputIndex, "Found 0 rows");
-    } else {
-        test:assertFail(response.toString());
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testDeleteWorksheet() returns error? {
+    AddWorksheetResponse created =
+        check excelClient->addWorksheet(driveId, driveItemId, {name: "ToDelete"});
+    if created !is Worksheet {
+        return error("addWorksheet did not return the created worksheet");
     }
+    error? response = excelClient->deleteWorksheet(driveId, driveItemId, created.id ?: "");
+    test:assertTrue(response is (), "deleteWorksheet should return no content");
 }
 
-@test:Config {dependsOn: [testCreateRow]}
-function testUpdateRow() {
-    string value = "testValue";
-    log:printInfo("excelClient -> updateRow()");
-    Row|error response = excelClient->updateRow(workBookId, worksheetName, tableName, rowInputIndex, [[(), (), value]],
-    sessionId);
-    if (response is Row) {
-        json updatedValue = response.values[0][2];
-        test:assertEquals(updatedValue.toString(), value, "Row is not updated");
-    } else {
-        test:assertFail(response.toString());
-    }
+// ------------------------------------------------------------------ tables --
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListWorksheetTables() returns error? {
+    TableCollectionResponse response = check excelClient->listWorksheetTables(driveId, driveItemId, worksheetId);
+    test:assertTrue(response.value !is (), "table collection should have a value array");
 }
 
-@test:Config {dependsOn: [testUpdateRow, testListRows]}
-function testDeleteRow() {
-    log:printInfo("excelClient -> deleteRow()");
-    error? response = excelClient->deleteRow(workBookId, worksheetName, tableName, rowInputIndex, sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetWorksheetTable() returns error? {
+    Table response = check excelClient->getWorksheetTable(driveId, driveItemId, worksheetId, tableId);
+    test:assertTrue(response?.name !is (), "table should have a name");
 }
 
-int columnInputIndex = 2;
-
-@test:Config {dependsOn: [testDeleteRow]}
-function testCreateColumn() {
-    log:printInfo("excelClient -> createColumn()");
-    Column|error response = excelClient->createColumn(workBookId, worksheetName, tableName, [["a3"], ["c3"], ["aa"]], 
-    columnInputIndex, sessionId);
-    if (response is Column) {
-        int responseIndex = response.index;
-        test:assertEquals(responseIndex, columnInputIndex, "Column is not added");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testAddWorksheetTable() returns error? {
+    // Own the worksheet so the new table never overlaps a table on the configured worksheet.
+    string ownWorksheetId = check createOwnedWorksheet("AddTableSheet");
+    AddTableResponse|error response = excelClient->addWorksheetTable(driveId, driveItemId, ownWorksheetId,
+        {address: "A1:C3", hasHeaders: true});
+    check excelClient->deleteWorksheet(driveId, driveItemId, ownWorksheetId);
+    AddTableResponse created = check response;
+    test:assertTrue(created !is (), "addWorksheetTable should return the created table");
 }
 
-@test:Config {dependsOn: [testCreateColumn]}
-function testListColumn() {
-    log:printInfo("excelClient -> listColumns()");
-    Column[]|error response = excelClient->listColumns(workBookId, worksheetName, tableName, sessionId = sessionId);
-    if (response is Column[]) {
-        int responseIndex = response[2].index;
-        test:assertEquals(responseIndex, columnInputIndex, "Found 0 columns");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testUpdateWorksheetTable() returns error? {
+    Table payload = {atOdataType: "#microsoft.graph.workbookTable", name: "RenamedTable"};
+    Table response = check excelClient->updateWorksheetTable(driveId, driveItemId, worksheetId, tableId, payload);
+    test:assertTrue(response?.name !is (), "updated table should have a name");
 }
 
-@test:Config {dependsOn: [testCreateColumn]}
-function testUpdateColumn() {
-    string value = "testName";
-    log:printInfo("excelClient -> updateColumn()");
-    Column|error response = excelClient->updateColumn(workBookId, worksheetName, tableName, columnInputIndex, 
-    [[()], [()], [value]], sessionId = sessionId);
-    if (response is Column) {
-        json updatedValue = response.values[2][0];
-        test:assertEquals(updatedValue.toString(), value, "Column is not updated");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testDeleteWorksheetTable() returns error? {
+    // Own the worksheet so the new table never overlaps a table on the configured worksheet.
+    string ownWorksheetId = check createOwnedWorksheet("DeleteTableSheet");
+    error? response = deleteOwnedTable(ownWorksheetId);
+    check excelClient->deleteWorksheet(driveId, driveItemId, ownWorksheetId);
+    test:assertTrue(response is (), "deleteWorksheetTable should return no content");
 }
 
-@test:Config {dependsOn: [testUpdateColumn, testListColumn]}
-function testDeleteColumn() {
-    log:printInfo("excelClient -> deleteColumn()");
-    error? response = excelClient->deleteColumn(workBookId, worksheetName, tableName, columnInputIndex, sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
+isolated function deleteOwnedTable(string ownWorksheetId) returns error? {
+    AddTableResponse created = check excelClient->addWorksheetTable(
+            driveId, driveItemId, ownWorksheetId, {address: "A1:C3", hasHeaders: true});
+    if created !is Table {
+        return error("addWorksheetTable did not return the created table");
     }
+    return excelClient->deleteWorksheetTable(driveId, driveItemId, ownWorksheetId, created.id ?: "");
 }
 
-@test:Config {dependsOn: [testDeleteColumn, testDeleteRow, testListTable, testUpdateTable]}
-function testDeleteTable() {
-    log:printInfo("excelClient -> deleteTable()");
-    error? response = excelClient->deleteTable(workBookId, worksheetName, tableName, sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
+isolated function createOwnedWorksheet(string name) returns string|error {
+    AddWorksheetResponse created = check excelClient->addWorksheet(driveId, driveItemId, {name});
+    if created !is Worksheet {
+        return error("addWorksheet did not return the created worksheet");
     }
+    return created.id ?: "";
 }
 
-@test:Config {dependsOn: [testCreateRow]}
-function testAddChart() {
-    log:printInfo("excelClient -> addChart()");
-    Chart|error response = excelClient->addChart(workBookId, worksheetName, "ColumnStacked", "A1:B2", AUTO, sessionId);
-    if (response is Chart) {
-        chartName = <string>response?.name;
-        test:assertNotEquals(chartName, EMPTY_STRING, "Chart is not created");
-    } else {
-        test:assertFail(response.toString());
-    }
+// -------------------------------------------------------------------- rows --
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListRows() returns error? {
+    TableRowCollectionResponse response = check excelClient->listRows(driveId, driveItemId, worksheetId, tableId);
+    test:assertTrue(response.value !is (), "row collection should have a value array");
 }
 
-@test:Config {dependsOn: [testAddChart]}
-function testGetChart() {
-    log:printInfo("excelClient -> getChart()");
-    Chart|error response = excelClient->getChart(workBookId, worksheetName, chartName, sessionId = sessionId);
-    if (response is Chart) {
-        string chartId = response?.id ?: EMPTY_STRING;
-        test:assertNotEquals(chartId, EMPTY_STRING, "Chart not found");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testAddRow() returns error? {
+    TableRowOperationResponse response = check excelClient->addRow(driveId, driveItemId, worksheetId, tableId,
+        {index: 0, values: [["EMEA", "Q1", 15000]]});
+    test:assertTrue(response !is (), "addRow should return the created row");
 }
 
-@test:Config {dependsOn: [testGetChart]}
-function testListChart() {
-    log:printInfo("excelClient -> listCharts()");
-    Chart[]|error response = excelClient->listCharts(workBookId, worksheetName, sessionId = sessionId);
-    if (response is Chart[]) {
-        string chartId = response[0]?.id ?: EMPTY_STRING;
-        test:assertNotEquals(chartId, EMPTY_STRING, "Found 0 charts");
-    } else {
-        test:assertFail(response.toString());
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testDeleteRow() returns error? {
+    // Own the table so the row being deleted is never one another test relies on.
+    AddTableResponse ownTable = check excelClient->addWorksheetTable(
+            driveId, driveItemId, worksheetId, {address: "A1:C3", hasHeaders: true});
+    if ownTable !is Table {
+        return error("addWorksheetTable did not return the created table");
     }
+    string ownTableId = ownTable.id ?: "";
+    TableRowOperationResponse _ = check excelClient->addRow(
+            driveId, driveItemId, worksheetId, ownTableId, {index: 0, values: [["a", "b", "c"]]});
+
+    error? response =
+        excelClient->deleteRow(driveId, driveItemId, worksheetId, ownTableId, rowId);
+    test:assertTrue(response is (), "deleteRow should return no content");
 }
 
-float height = 99;
-Chart updateChart = {
-    height: height,
-    left: 99
-};
+// ----------------------------------------------------------------- columns --
 
-@test:Config {dependsOn: [testListChart]}
-function testUpdateChart() {
-    log:printInfo("excelClient -> updateChart()");
-    Chart|error response = excelClient->updateChart(workBookId, worksheetName, chartName, updateChart, sessionId);
-    if (response is Chart) {
-        float responseHeight = response?.height ?: 0;
-        test:assertEquals(responseHeight, height, "Chart is not updated");
-    } else {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListColumns() returns error? {
+    TableColumnCollectionResponse response = check excelClient->listColumns(driveId, driveItemId, worksheetId, tableId);
+    test:assertTrue(response.value !is (), "column collection should have a value array");
 }
 
-@test:Config {dependsOn: [testUpdateChart]}
-function testGetChartImage() {
-    log:printInfo("excelClient -> getChartImage()");
-    string|error response = excelClient->getChartImage(workBookId, worksheetName, chartName, sessionId = sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testAddColumn() returns error? {
+    AddColumnResponse response = check excelClient->addColumn(driveId, driveItemId, worksheetId, tableId,
+        {name: "Region", index: 0, values: [["Region"], ["EMEA"]]});
+    test:assertTrue(response !is (), "addColumn should return the created column");
 }
 
-@test:Config {dependsOn: [testGetChartImage]}
-function testResetData() {
-    log:printInfo("excelClient -> resetChartData()");
-    error? response = excelClient->resetChartData(workBookId, worksheetName, chartName, "A1:B3", AUTO, sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testDeleteColumn() returns error? {
+    AddColumnResponse created = check excelClient->addColumn(
+            driveId, driveItemId, worksheetId, tableId, {name: "ToDelete", values: [["ToDelete"]]});
+    if created !is TableColumn {
+        return error("addColumn did not return the created column");
     }
+    error? response = excelClient->deleteColumn(
+            driveId, driveItemId, worksheetId, tableId, created.id ?: "");
+    test:assertTrue(response is (), "deleteColumn should return no content");
 }
 
-@test:Config {dependsOn: [testResetData]}
-function testSetPosition() {
-    log:printInfo("excelClient -> setChartPosition()");
-    error? response = excelClient->setChartPosition(workBookId, worksheetName, chartName, "D3", sessionId = sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
-    }
+// ------------------------------------------------------------------ charts --
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListCharts() returns error? {
+    ChartCollectionResponse response = check excelClient->listCharts(driveId, driveItemId, worksheetId);
+    test:assertTrue(response.value !is (), "chart collection should have a value array");
 }
 
-@test:Config {dependsOn: [testSetPosition]}
-function testDeleteChart() {
-    log:printInfo("excelClient -> deleteChart()");
-    error? response = excelClient->deleteChart(workBookId, worksheetName, chartName, sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetChart() returns error? {
+    Chart response = check excelClient->getChart(driveId, driveItemId, worksheetId, chartId);
+    test:assertTrue(response?.name !is (), "chart should have a name");
 }
 
-@test:Config {}
-function testGetWorkbookApplication() {
-    log:printInfo("excelClient -> getWorkbookApplication()");
-
-    WorkbookApplication|error response = excelClient->getWorkbookApplication(workBookId, sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
-    }
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testAddChart() returns error? {
+    AddChartResponse response = check excelClient->addChart(driveId, driveItemId, worksheetId,
+        {'type: "ColumnClustered", sourceData: "Sheet1!A1:C3", seriesBy: "Auto"});
+    test:assertTrue(response !is (), "addChart should return the created chart");
 }
 
-@test:Config {}
-function testCalculateWorkbookApplication() {
-    log:printInfo("excelClient -> calculateWorkbookApplication()");
-    error? response = excelClient->calculateWorkbookApplication(workBookId, FULL, sessionId);
-    if (response is error) {
-        test:assertFail(response.toString());
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testUpdateChart() returns error? {
+    Chart payload = {atOdataType: "#microsoft.graph.workbookChart", name: "Revenue by region"};
+    Chart response = check excelClient->updateChart(driveId, driveItemId, worksheetId, chartId, payload);
+    test:assertTrue(response?.name !is (), "updated chart should have a name");
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testDeleteChart() returns error? {
+    AddChartResponse created = check excelClient->addChart(driveId, driveItemId, worksheetId,
+            {'type: "ColumnClustered", sourceData: "A1:C3", seriesBy: "Auto"});
+    if created !is Chart {
+        return error("addChart did not return the created chart");
     }
+    error? response =
+        excelClient->deleteChart(driveId, driveItemId, worksheetId, created.id ?: "");
+    test:assertTrue(response is (), "deleteChart should return no content");
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetChartImage() returns error? {
+    ChartImageResponse response = check excelClient->getChartImage(driveId, driveItemId, worksheetId, chartId);
+    test:assertTrue(response?.value !is (), "chart image should return a base64 payload");
+}
+
+// ------------------------------------------------------------------ ranges --
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetRange() returns error? {
+    RangeResponse response = check excelClient->getRange(driveId, driveItemId, worksheetId);
+    test:assertTrue(response !is (), "getRange should return a range");
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetUsedRange() returns error? {
+    RangeResponse response = check excelClient->getUsedRange(driveId, driveItemId, worksheetId);
+    test:assertTrue(response !is (), "getUsedRange should return the used range");
 }
