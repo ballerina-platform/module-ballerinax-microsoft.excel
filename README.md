@@ -21,15 +21,15 @@ To use the Microsoft Excel connector, you need access to a Microsoft 365 busines
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
 2. Navigate to **Entra ID** > **App registrations** and click **New registration**.
 
-   ![App registrations](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/main/docs/resources/setup-guide-1.jpg)
+   ![App registrations](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/refs/heads/master/docs/resources/setup-guide-1.jpg)
 
 3. Enter a name of your choice and select the account types appropriate for your organization. Add a **Redirect URI** under the **Web** platform — this is where the sign-in flow returns the authorization code (a Microsoft-hosted page such as `https://jwt.ms` is a convenient choice for Step 4). The **Web** platform is required because the connector redeems the code using a client secret; the public "Mobile and desktop applications" platform does not accept one. Click **Register**.
 
-   ![Register an application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/main/docs/resources/setup-guide-2.jpeg)
+   ![Register an application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/refs/heads/master/docs/resources/setup-guide-2.jpeg)
 
 4. On the app's **Overview** page, note the **Application (client) ID** and the **Directory (tenant) ID** — you need the client ID for `Config.toml`, and the tenant ID to build the token endpoint in Step 4.
 
-   ![Overview of application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/main/docs/resources/setup-guide-3.jpeg)
+   ![Overview of application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/refs/heads/master/docs/resources/setup-guide-3.jpeg)
 
 ### Step 2: Add Microsoft Graph permissions
 
@@ -37,7 +37,7 @@ The Excel API is **delegated-only** — it supports no application (app-only) pe
 
 1. In the registered application, go to **API permissions** > **Add a permission** > **Microsoft Graph**.
 
-   ![Select Microsoft Graph](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/main/docs/resources/setup-guide-5.jpeg)
+   ![Select Microsoft Graph](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/refs/heads/master/docs/resources/setup-guide-5.jpeg)
 
 2. Choose **Delegated permissions** and add the scopes your integration needs:
 
@@ -49,21 +49,21 @@ The Excel API is **delegated-only** — it supports no application (app-only) pe
 
    `Files.ReadWrite` is the least-privileged permission Microsoft documents for the Excel API, and there is no higher-privileged alternative — request only what your integration needs. Click **Add permissions**.
 
-   ![Request API permissions](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/main/docs/resources/setup-guide-4.jpeg)
+   ![Request API permissions](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/refs/heads/master/docs/resources/setup-guide-4.jpeg)
 
 3. Back on the **API permissions** page, click **Grant admin consent for \<your tenant\>** and confirm **Yes**. Each permission should then show **Granted for \<your tenant\>** in the **Status** column.
 
-   ![Grant admin consent](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/main/docs/resources/setup-guide-6.jpeg)
+   ![Grant admin consent](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/refs/heads/master/docs/resources/setup-guide-6.jpeg)
 
 ### Step 3: Create a client secret
 
 1. Go to **Certificates & secrets** > **New client secret**, add a description and an expiry, and click **Add**.
 
-   ![Add a client secret](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/main/docs/resources/setup-guide-8.jpeg)
+   ![Add a client secret](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/refs/heads/master/docs/resources/setup-guide-8.jpeg)
 
 2. Copy the secret **Value** immediately — it is shown only once. (The **Secret ID** next to it is just a label, not a credential.)
 
-   ![Certificates & secrets](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/main/docs/resources/setup-guide-7.jpeg)
+   ![Certificates & secrets](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.excel/refs/heads/master/docs/resources/setup-guide-7.jpeg)
 
 ### Step 4: Obtain a refresh token
 
